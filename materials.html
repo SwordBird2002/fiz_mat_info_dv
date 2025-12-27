@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Материалы | TutorPro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        /* ВАШИ СТИЛИ ИЗ INDEX.HTML */
+        :root { --primary-color: #4f46e5; --secondary-color: #0ea5e9; --dark-bg: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        
+        /* Стили логотипа */
+        .logo-circle {
+            width: 36px; height: 36px; border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
+            position: relative; box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+        }
+        .logo-circle::after {
+            content: "f"; position: absolute; inset: 0; display: flex;
+            align-items: center; justify-content: center; font-weight: 700;
+            color: #0b1120; font-size: 20px;
+        }
+
+        /* Стили ЛЕНТЫ МАТЕРИАЛОВ */
+        .feed-container { max-width: 800px; margin: 0 auto; } /* Центрируем ленту */
+        
+        .material-card {
+            border: none; border-radius: 16px;
+            background: white; margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            overflow: hidden; transition: transform 0.2s;
+        }
+        .material-card:hover { transform: translateY(-5px); }
+        
+        .card-header-custom {
+            padding: 20px; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .subject-badge {
+            padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+        }
+        .badge-math { background: #e0f2fe; color: #0284c7; }
+        .badge-cs { background: #dcfce7; color: #16a34a; }
+        .badge-phys { background: #fef9c3; color: #ca8a04; }
+        
+        .card-content { padding: 25px; }
+        .download-box {
+            background: #f8f9fa; border-radius: 10px; padding: 15px;
+            display: flex; align-items: center; margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+        .download-icon { font-size: 2rem; margin-right: 15px; color: #dc3545; }
+        
+        /* Фильтры */
+        .filters { position: sticky; top: 80px; z-index: 100; background: #f8f9fa; padding: 10px 0; }
+        .filter-btn { border-radius: 20px; padding: 8px 20px; margin-right: 10px; border: none; font-weight: 500; transition: 0.3s; background: white; shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: white; }
+        
+        /* Скрытие карточек при фильтрации */
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- НАВИГАЦИЯ (Такая же как на главной) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" style="background-color: var(--dark-bg) !important;">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+                <div class="logo-circle"></div> <span>TutorPro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Главная</a></li>
+                    <!-- Здесь активная ссылка, т.к. мы на этой странице -->
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="materials.html">Материалы</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        
+        <!-- ЗАГОЛОВОК И ФИЛЬТРЫ -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold">Библиотека знаний</h1>
+            <p class="text-muted">Разборы задач, шпаргалки и домашние задания</p>
+            
+            <div class="filters mt-4" id="filterContainer">
+                <button class="filter-btn active" onclick="filterSelection('all')">Все</button>
+                <button class="filter-btn" onclick="filterSelection('math')">Математика</button>
+                <button class="filter-btn" onclick="filterSelection('cs')">Информатика</button>
+                <button class="filter-btn" onclick="filterSelection('phys')">Физика</button>
+            </div>
+        </div>
+
+        <!-- ЛЕНТА (FEED) -->
+        <div class="feed-container">
+
+            <!-- ПОСТ 1: КАРТИНКА + ТЕКСТ (Информатика) -->
+            <div class="material-card filterDiv cs">
+                <div class="card-header-custom">
+                    <span class="subject-badge badge-cs">Информатика</span>
+                    <small class="text-muted">27 дек 2025</small>
+                </div>
+                <div class="card-content">
+                    <h4>Шпаргалка по методам строк в Python</h4>
+                    <p>Подготовил для вас удобную таблицу со всеми основными методами: de>.split()</code>, de>.join()</code>, de>.strip()</code> и другими. Сохраняйте себе!</p>
+                    <!-- Картинка (если есть) -->
+                    <img src="https://via.placeholder.com/800x400?text=Python+Cheatsheet" class="img-fluid rounded mt-2 mb-3" alt="Шпаргалка">
+                    
+                    <a href="#" class="btn btn-outline-primary w-100">Открыть изображение</a>
+                </div>
+            </div>
+
+            <!-- ПОСТ 2: ФАЙЛ (Математика) -->
+            <div class="material-card filterDiv math">
+                <div class="card-header-custom">
+                    <span class="subject-badge badge-math">Математика</span>
+                    <small class="text-muted">25 дек 2025</small>
+                </div>
+                <div class="card-content">
+                    <h4>Тригонометрия: Формулы приведения</h4>
+                    <p>Разбор сложной темы простыми словами. В файле — теория и 20 задач для тренировки с ответами.</p>
+                    
+                    <!-- Блок скачивания файла -->
+                    <div class="download-box">
+                        <i class="bi bi-file-earmark-pdf-fill download-icon"></i>
+                        <div>
+                            <div class="fw-bold">Trigonometry_Pack.pdf</div>
+                            <div class="text-muted small">PDF, 2.4 MB</div>
+                        </div>
+                        <a href="files/trigonometry.pdf" class="btn btn-primary ms-auto btn-sm" download>Скачать</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПОСТ 3: ТЕКСТ (Физика) -->
+            <div class="material-card filterDiv phys">
+                <div class="card-header-custom">
+                    <span class="subject-badge badge-phys">Физика</span>
+                    <small class="text-muted">20 дек 2025</small>
+                </div>
+                <div class="card-content">
+                    <h4>Важная новость по ЕГЭ</h4>
+                    <p>В экзамен 2026 года добавили новое задание на статику. Разберем его на следующем занятии во вторник. Прошу всех повторить Закон Архимеда.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- СКРИПТ ФИЛЬТРАЦИИ -->
+    <script>
+        function filterSelection(c) {
+            var x, i;
+            x = document.getElementsByClassName("material-card");
+            var btns = document.getElementsByClassName("filter-btn");
+            
+            // Логика переключения кнопок
+            for (var b = 0; b < btns.length; b++) {
+                btns[b].classList.remove("active");
+                if (btns[b].innerText === event.target.innerText) {
+                    btns[b].classList.add("active");
+                }
+            }
+            if (c == "all") c = ""; // Если all, показываем всё
+
+            // Логика скрытия карточек
+            for (i = 0; i < x.length; i++) {
+                x[i].classList.remove("hidden");
+                if (x[i].className.indexOf(c) == -1) {
+                    x[i].classList.add("hidden");
+                }
+            }
+        }
+        
+        // Подсветка кнопки при загрузке (костыль для JS event)
+        // Можно удалить, так как active прописан в HTML
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
