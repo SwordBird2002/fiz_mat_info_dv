@@ -143,6 +143,29 @@
     /* Исправление цветов для темной темы */
     [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
     [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color: #f1f5f9; }
+/* --- ЭФФЕКТ СНЕГА --- */
+    .snowflake {
+        position: fixed;
+        top: -10px;
+        color: white; /* Цвет снега */
+        text-shadow: 0 0 5px rgba(255,255,255,0.8); /* Легкое свечение */
+        z-index: 9999; /* Чтобы снег был поверх всего (или поставьте -1, если хотите на фоне) */
+        pointer-events: none; /* Чтобы сквозь снег можно было кликать */
+        animation-name: fall;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+    
+    /* В светлой теме снег можно сделать чуть серым, чтобы было видно */
+    [data-theme="light"] .snowflake {
+        color: #a3e3ff; /* Голубоватый оттенок */
+    }
+    
+    @keyframes fall {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
 </style>
 
 </head>
@@ -375,9 +398,53 @@
         }
     }
 </script>
+<script>
+    // Настройки снега
+    const snowConfig = {
+        count: 50,          // Количество снежинок
+        minSize: 10,        // Мин. размер (px)
+        maxSize: 24,        // Макс. размер (px)
+        minSpeed: 5,        // Мин. скорость падения (сек)
+        maxSpeed: 10        // Макс. скорость падения (сек)
+    };
+
+    function createSnow() {
+        const body = document.body;
+        
+        for (let i = 0; i < snowConfig.count; i++) {
+            const flake = document.createElement('div');
+            flake.classList.add('snowflake');
+            flake.innerHTML = '❄'; // Символ снежинки
+            
+            // Случайные параметры
+            const size = Math.random() * (snowConfig.maxSize - snowConfig.minSize) + snowConfig.minSize;
+            const left = Math.random() * 100; // Позиция по горизонтали (%)
+            const duration = Math.random() * (snowConfig.maxSpeed - snowConfig.minSpeed) + snowConfig.minSpeed;
+            const delay = Math.random() * 5; // Случайная задержка перед стартом
+
+            // Применяем стили
+            flake.style.left = left + '%';
+            flake.style.fontSize = size + 'px';
+            flake.style.animationDuration = duration + 's';
+            flake.style.animationDelay = delay + 's';
+            
+            // Немного размытия для глубины
+            if (Math.random() > 0.5) {
+                flake.style.filter = 'blur(1px)';
+            }
+
+            body.appendChild(flake);
+        }
+    }
+
+    // Запускаем снег
+    document.addEventListener('DOMContentLoaded', createSnow);
+</script>
+
 
 </body>
 </html>
+
 
 
 
