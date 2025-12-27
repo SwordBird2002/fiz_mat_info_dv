@@ -8,60 +8,66 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
-        /* ВАШИ СТИЛИ ИЗ INDEX.HTML */
-        :root { --primary-color: #4f46e5; --secondary-color: #0ea5e9; --dark-bg: #0f172a; }
-        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
-        
-        /* Стили логотипа */
-        .logo-circle {
-            width: 36px; height: 36px; border-radius: 999px;
-            background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
-            position: relative; box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
-        }
-        .logo-circle::after {
-            content: "f"; position: absolute; inset: 0; display: flex;
-            align-items: center; justify-content: center; font-weight: 700;
-            color: #0b1120; font-size: 20px;
-        }
+    :root {
+        /* Светлая тема (по умолчанию) */
+        --bg-color: #f8f9fa;
+        --text-color: #212529;
+        --card-bg: rgba(255, 255, 255, 0.4); /* Полупрозрачный белый */
+        --navbar-bg: rgba(33, 37, 41, 0.95);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+        --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
 
-        /* Стили ЛЕНТЫ МАТЕРИАЛОВ */
-        .feed-container { max-width: 800px; margin: 0 auto; } /* Центрируем ленту */
-        
-        .material-card {
-            border: none; border-radius: 16px;
-            background: white; margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            overflow: hidden; transition: transform 0.2s;
-        }
-        .material-card:hover { transform: translateY(-5px); }
-        
-        .card-header-custom {
-            padding: 20px; border-bottom: 1px solid #eee;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .subject-badge {
-            padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600;
-        }
-        .badge-math { background: #e0f2fe; color: #0284c7; }
-        .badge-cs { background: #dcfce7; color: #16a34a; }
-        .badge-phys { background: #fef9c3; color: #ca8a04; }
-        
-        .card-content { padding: 25px; }
-        .download-box {
-            background: #f8f9fa; border-radius: 10px; padding: 15px;
-            display: flex; align-items: center; margin-top: 20px;
-            border: 1px solid #e9ecef;
-        }
-        .download-icon { font-size: 2rem; margin-right: 15px; color: #dc3545; }
-        
-        /* Фильтры */
-        .filters { position: sticky; top: 80px; z-index: 100; background: #f8f9fa; padding: 10px 0; }
-        .filter-btn { border-radius: 20px; padding: 8px 20px; margin-right: 10px; border: none; font-weight: 500; transition: 0.3s; background: white; shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: white; }
-        
-        /* Скрытие карточек при фильтрации */
-        .hidden { display: none; }
-    </style>
+    [data-theme="dark"] {
+        /* Темная тема */
+        --bg-color: #0f172a;
+        --text-color: #e2e8f0;
+        --card-bg: rgba(30, 41, 59, 0.6); /* Полупрозрачный темный */
+        --navbar-bg: rgba(15, 23, 42, 0.95);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+        overflow-x: hidden; /* Чтобы шары не расширяли экран */
+        position: relative;
+    }
+
+       
+
+    /* --- СТЕКЛЯННЫЕ КАРТОЧКИ --- */
+    .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px); /* Эффект матового стекла */
+        -webkit-backdrop-filter: blur(12px); /* Для Safari */
+        border: var(--glass-border);
+        box-shadow: var(--shadow);
+        border-radius: 16px;
+    }
+
+    /* Твой логотип-шар */
+    .logo-circle {
+        width: 36px; height: 36px; border-radius: 999px;
+        background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
+        position: relative; box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+    }
+    .logo-circle::after {
+        content: "f"; position: absolute; inset: 0; display: flex;
+        align-items: center; justify-content: center; font-weight: 700; color: #0b1120; font-size: 20px;
+    }
+
+    /* Кнопка темы */
+    .theme-toggle {
+        background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;
+    }
+    
+    /* Исправление цветов для темной темы */
+    [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color: #f1f5f9; }
+</style>
 </head>
 <body>
 
@@ -140,5 +146,6 @@
     <script src="main.js"></script>
 </body>
 </html>
+
 
 
