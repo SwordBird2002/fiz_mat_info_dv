@@ -37,55 +37,65 @@
         position: relative;
     }
 
-    /* --- ФОНОВЫЕ ШАРЫ --- */
+        /* --- ФОНОВЫЕ ШАРЫ  --- */
     .background-orbs {
-        position: fixed; /* Фиксируем, чтобы они не скроллились */
+        position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        z-index: -1; /* Убираем НАЗАД */
+        z-index: -1;
         overflow: hidden;
-        pointer-events: none; /* Чтобы клики проходили сквозь них */
+        pointer-events: none;
     }
 
     .orb {
         position: absolute;
         border-radius: 50%;
         opacity: 0.6;
-        filter: blur(60px); /* Сильное размытие для мягкости */
-        animation: floatOrb 20s infinite ease-in-out alternate;
+        filter: blur(80px); /* Сильнее размытие */
+        will-change: transform; /* Оптимизация для браузера */
     }
 
-    /* Шар 1: Синий */
+    /* Шар 1: Синий (двигается по диагонали) */
     .orb-1 {
         width: 400px; height: 400px;
         background: radial-gradient(circle, #4f46e5, #0ea5e9);
         top: -10%; left: -10%;
-        animation-duration: 25s;
+        animation: moveDiagonal 12s infinite alternate ease-in-out;
     }
 
-    /* Шар 2: Голубой */
+    /* Шар 2: Голубой (плавает вверх-вниз) */
     .orb-2 {
         width: 300px; height: 300px;
         background: radial-gradient(circle, #06b6d4, #3b82f6);
         bottom: 10%; right: -5%;
-        animation-duration: 18s;
-        animation-delay: -5s;
+        animation: moveVertical 10s infinite alternate ease-in-out;
     }
 
-    /* Шар 3: Фиолетовый (акцент) */
+    /* Шар 3: Фиолетовый (пульсирует и ходит по кругу) */
     .orb-3 {
-        width: 200px; height: 200px;
+        width: 250px; height: 250px;
         background: radial-gradient(circle, #8b5cf6, #6366f1);
         top: 40%; left: 40%;
-        animation-duration: 22s;
-        animation-delay: -2s;
+        animation: moveCircular 15s infinite linear;
     }
 
-    @keyframes floatOrb {
+    /* --- АНИМАЦИИ --- */
+    
+    @keyframes moveDiagonal {
         0% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(30px, -50px) scale(1.1); }
-        66% { transform: translate(-20px, 20px) scale(0.9); }
-        100% { transform: translate(0, 0) scale(1); }
+        100% { transform: translate(300px, 200px) scale(1.1); }
     }
+
+    @keyframes moveVertical {
+        0% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-150px) scale(0.9); }
+        100% { transform: translateY(50px) scale(1.1); }
+    }
+
+    @keyframes moveCircular {
+        0% { transform: rotate(0deg) translate(100px) rotate(0deg); }
+        100% { transform: rotate(360deg) translate(100px) rotate(-360deg); }
+    }
+
 
     /* --- СТЕКЛЯННЫЕ КАРТОЧКИ --- */
     .glass-card {
@@ -141,19 +151,20 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <!-- Ваши старые ссылки -->
-                    <li class="nav-item"><a class="nav-link" href="#about">Обо мне</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#subjects">Предметы</a></li>
-                    <li class="nav-item"><a class="nav-link" href="materials.html">Материалы</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
-                    
-                    <!-- Кнопка темы -->
-                    <li class="nav-item ms-3">
-                        <button class="theme-toggle" onclick="toggleTheme()">
-                            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
-                        </button>
-                    </li>
-                </ul>
+    <!-- Ваши старые ссылки -->
+    <li class="nav-item"><a class="nav-link" href="#about">Обо мне</a></li>
+    <li class="nav-item"><a class="nav-link" href="#subjects">Предметы</a></li>
+    <li class="nav-item"><a class="nav-link" href="materials.html">Материалы</a></li>
+    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+    
+    <!-- Кнопка темы -->
+    <li class="nav-item ms-3">
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+        </button>
+    </li>
+</ul>
+
 
             </div>
         </div>
@@ -197,7 +208,7 @@
             <div class="row g-4">
                 <!-- Математика -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm subject-card">
+                    <div class="card h-100 border-0 shadow-sm subject-card glass-card">
                         <div class="card-body text-center p-4">
                             <i class="bi bi-calculator display-4 text-primary mb-3"></i>
                             <h4 class="card-title">Математика</h4>
@@ -207,7 +218,7 @@
                 </div>
                 <!-- Информатика -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm subject-card">
+                    <div class="card h-100 border-0 shadow-sm subject-card glass-card">
                         <div class="card-body text-center p-4">
                             <i class="bi bi-laptop display-4 text-success mb-3"></i>
                             <h4 class="card-title">Информатика</h4>
@@ -217,7 +228,7 @@
                 </div>
                 <!-- Физика -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm subject-card">
+                    <div class="card h-100 border-0 shadow-sm subject-card glass-card">
                         <div class="card-body text-center p-4">
                             <i class="bi bi-lightning-charge display-4 text-warning mb-3"></i>
                             <h4 class="card-title">Физика</h4>
@@ -321,8 +332,38 @@
 
     <!-- Скрипты Bootstrap (для работы меню и вкладок) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Проверяем, сохранена ли тема, или берем системную
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme); // Сохраняем выбор
+        updateIcon(newTheme);
+    }
+
+    function updateIcon(theme) {
+        const icon = document.getElementById('themeIcon');
+        if (theme === 'dark') {
+            icon.classList.remove('bi-moon-stars-fill');
+            icon.classList.add('bi-sun-fill');
+        } else {
+            icon.classList.remove('bi-sun-fill');
+            icon.classList.add('bi-moon-stars-fill');
+        }
+    }
+</script>
+
 </body>
 </html>
+
 
 
 
