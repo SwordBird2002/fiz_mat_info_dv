@@ -8,49 +8,123 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Иконки -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        /* Небольшие кастомные стили */
-        /* Вставьте это внутри тега <style> */
+<style>
+    :root {
+        /* Светлая тема (по умолчанию) */
+        --bg-color: #f8f9fa;
+        --text-color: #212529;
+        --card-bg: rgba(255, 255, 255, 0.6); /* Полупрозрачный белый */
+        --navbar-bg: rgba(33, 37, 41, 0.95);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+        --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
 
-        .logo-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 999px; /* Делает круг */
-            /* Градиент, создающий эффект объемного шара */
-            background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
-            position: relative;
-            /* Свечение вокруг шара */
-            box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
-        }
-       
+    [data-theme="dark"] {
+        /* Темная тема */
+        --bg-color: #0f172a;
+        --text-color: #e2e8f0;
+        --card-bg: rgba(30, 41, 59, 0.6); /* Полупрозрачный темный */
+        --navbar-bg: rgba(15, 23, 42, 0.95);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
 
-        .logo-circle::after {
-            content: "f";            /* Буква, которая будет внутри */
-            position: absolute;      /* Позволяет наложить букву поверх шара */
-            inset: 0;                /* Растягивает контейнер буквы на весь шар */
-            display: flex;           /* Включает режим выравнивания */
-            align-items: center;     /* Центрирует по вертикали */
-            justify-content: center; /* Центрирует по горизонтали */
-            font-weight: 700;        /* Жирный шрифт */
-            color: #0b1120;          /* Темно-синий цвет текста */
-            font-size: 20px;         /* Размер буквы */
-        }
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+        overflow-x: hidden; /* Чтобы шары не расширяли экран */
+        position: relative;
+    }
 
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
-            color: white;
-            padding: 80px 0;
-        }
-        .subject-card:hover {
-            transform: translateY(-5px);
-            transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .file-icon { font-size: 1.5rem; margin-right: 10px; color: #dc3545; }
-        .footer { background: #343a40; color: #fff; padding: 20px 0; }
-    </style>
+    /* --- ФОНОВЫЕ ШАРЫ --- */
+    .background-orbs {
+        position: fixed; /* Фиксируем, чтобы они не скроллились */
+        top: 0; left: 0; width: 100%; height: 100%;
+        z-index: -1; /* Убираем НАЗАД */
+        overflow: hidden;
+        pointer-events: none; /* Чтобы клики проходили сквозь них */
+    }
+
+    .orb {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.6;
+        filter: blur(60px); /* Сильное размытие для мягкости */
+        animation: floatOrb 20s infinite ease-in-out alternate;
+    }
+
+    /* Шар 1: Синий */
+    .orb-1 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, #4f46e5, #0ea5e9);
+        top: -10%; left: -10%;
+        animation-duration: 25s;
+    }
+
+    /* Шар 2: Голубой */
+    .orb-2 {
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, #06b6d4, #3b82f6);
+        bottom: 10%; right: -5%;
+        animation-duration: 18s;
+        animation-delay: -5s;
+    }
+
+    /* Шар 3: Фиолетовый (акцент) */
+    .orb-3 {
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, #8b5cf6, #6366f1);
+        top: 40%; left: 40%;
+        animation-duration: 22s;
+        animation-delay: -2s;
+    }
+
+    @keyframes floatOrb {
+        0% { transform: translate(0, 0) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0, 0) scale(1); }
+    }
+
+    /* --- СТЕКЛЯННЫЕ КАРТОЧКИ --- */
+    .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(12px); /* Эффект матового стекла */
+        -webkit-backdrop-filter: blur(12px); /* Для Safari */
+        border: var(--glass-border);
+        box-shadow: var(--shadow);
+        border-radius: 16px;
+    }
+
+    /* Твой логотип-шар */
+    .logo-circle {
+        width: 36px; height: 36px; border-radius: 999px;
+        background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
+        position: relative; box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+    }
+    .logo-circle::after {
+        content: "f"; position: absolute; inset: 0; display: flex;
+        align-items: center; justify-content: center; font-weight: 700; color: #0b1120; font-size: 20px;
+    }
+
+    /* Кнопка темы */
+    .theme-toggle {
+        background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;
+    }
+    
+    /* Исправление цветов для темной темы */
+    [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
+    [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color: #f1f5f9; }
+</style>
+
 </head>
 <body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
 
     <!-- Навигация -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -66,12 +140,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <!-- Ваши старые ссылки -->
                     <li class="nav-item"><a class="nav-link" href="#about">Обо мне</a></li>
                     <li class="nav-item"><a class="nav-link" href="#subjects">Предметы</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#materials">Материалы</a></li>
+                    <li class="nav-item"><a class="nav-link" href="materials.html">Материалы</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+                    
+                    <!-- Кнопка темы -->
+                    <li class="nav-item ms-3">
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
                 </ul>
+
             </div>
         </div>
     </nav>
@@ -240,6 +323,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 
 
 
