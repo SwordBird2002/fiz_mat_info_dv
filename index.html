@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Репетитор | Математика Информатика Физика</title>
+    <!-- Подключаем Bootstrap 5 (стили) через CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        /* Небольшие кастомные стили */
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+            color: white;
+            padding: 80px 0;
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .file-icon { font-size: 1.5rem; margin-right: 10px; color: #dc3545; }
+        .footer { background: #343a40; color: #fff; padding: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-mortarboard-fill"></i> TutorPro</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">Обо мне</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#subjects">Предметы</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#materials">Материалы</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Главный экран (Hero) -->
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Понятная физика и информатика</h1>
+            <p class="lead mb-4">Подготовка к ЕГЭ, ОГЭ и университетской программе без стресса.</p>
+            <a href="#contacts" class="btn btn-light btn-lg px-4 fw-bold text-primary">Записаться на урок</a>
+        </div>
+    </header>
+
+    <!-- Обо мне -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="mb-4">Давайте знакомиться</h2>
+                    <p class="fs-5">Меня зовут <strong>Иван Иванов</strong>. Я помогаю школьникам и студентам разбираться в точных науках уже более 5 лет.</p>
+                    <p>Мой подход — это не зубрежка формул, а понимание принципов. На моих занятиях мы пишем код, решаем задачи из реальной жизни и учимся думать логически.</p>
+                    <ul class="list-unstyled mt-3">
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Высшее техническое образование</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Средний балл учеников на ЕГЭ: 85+</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Онлайн и оффлайн занятия</li>
+                    </ul>
+                </div>
+                <div class="col-md-6 text-center">
+                    <!-- Замените ссылку ниже на ваше фото -->
+                    <img src="https://via.placeholder.com/400x300?text=Ваше+фото" class="img-fluid rounded shadow" alt="Фото репетитора">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Предметы (Карточки) -->
+    <section id="subjects" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Чему я учу</h2>
+            <div class="row g-4">
+                <!-- Математика -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm subject-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-calculator display-4 text-primary mb-3"></i>
+                            <h4 class="card-title">Математика</h4>
+                            <p class="card-text">Алгебра, геометрия, мат. анализ. Устранение пробелов и подготовка к экзаменам.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Информатика -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm subject-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-laptop display-4 text-success mb-3"></i>
+                            <h4 class="card-title">Информатика</h4>
+                            <p class="card-text">Python, C++, Pascal. Решение задач на программирование, алгоритмы, ЕГЭ.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Физика -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm subject-card">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-lightning-charge display-4 text-warning mb-3"></i>
+                            <h4 class="card-title">Физика</h4>
+                            <p class="card-text">Механика, оптика, электричество. Лабораторные работы и решение задач.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Материалы (Вкладки) -->
+    <section id="materials" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Полезные материалы</h2>
+            <p class="text-center text-muted mb-5">Скачивайте лекции и задачи бесплатно</p>
+
+            <!-- Навигация вкладок -->
+            <ul class="nav nav-tabs justify-content-center mb-4" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="math-tab" data-bs-toggle="tab" data-bs-target="#math" type="button">Математика</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="cs-tab" data-bs-toggle="tab" data-bs-target="#cs" type="button">Информатика</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="phys-tab" data-bs-toggle="tab" data-bs-target="#phys" type="button">Физика</button>
+                </li>
+            </ul>
+
+            <!-- Содержимое вкладок -->
+            <div class="tab-content" id="myTabContent">
+                
+                <!-- Вкладка Математика -->
+                <div class="tab-pane fade show active" id="math" role="tabpanel">
+                    <div class="list-group w-75 mx-auto">
+                        <!-- Пример файла. Замените href="file.pdf" на путь к вашему файлу -->
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="bi bi-file-earmark-pdf file-icon"></i>
+                            <div class="flex-grow-1">Формулы сокращенного умножения (PDF)</div>
+                            <span class="badge bg-secondary">Скачать</span>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="bi bi-file-earmark-word file-icon text-primary"></i>
+                            <div class="flex-grow-1">ДЗ: Тригонометрия (DOCX)</div>
+                            <span class="badge bg-secondary">Скачать</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Вкладка Информатика -->
+                <div class="tab-pane fade" id="cs" role="tabpanel">
+                    <div class="list-group w-75 mx-auto">
+                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <i class="bi bi-file-earmark-code file-icon text-success"></i>
+                            <div class="flex-grow-1">Шпаргалка по Python (PY)</div>
+                            <span class="badge bg-secondary">Скачать</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Вкладка Физика -->
+                <div class="tab-pane fade" id="phys" role="tabpanel">
+                    <div class="alert alert-info text-center w-75 mx-auto">
+                        В этот раздел скоро будут добавлены новые материалы по оптике.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contacts" class="py-5 bg-dark text-white text-center">
+        <div class="container">
+            <h2 class="mb-4">Записаться на занятие</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <p class="fs-5 mb-4">Готовы начать? Напишите мне в мессенджеры или позвоните.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://t.me/ваш_ник" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-telegram"></i> Telegram
+                        </a>
+                        <a href="https://wa.me/ваш_номер" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="mailto:email@example.com" class="btn btn-primary btn-lg">
+                            <i class="bi bi-envelope-fill"></i> Написать Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <small>&copy; 2025 TutorPro. Все права защищены.</small>
+        </div>
+    </footer>
+
+    <!-- Скрипты Bootstrap (для работы меню и вкладок) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
