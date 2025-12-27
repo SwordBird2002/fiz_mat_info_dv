@@ -100,60 +100,12 @@
         </div>
 
         <!-- ЛЕНТА (FEED) -->
-        <div class="feed-container">
-
-            <!-- ПОСТ 1: КАРТИНКА + ТЕКСТ (Информатика) -->
-            <div class="material-card filterDiv cs">
-                <div class="card-header-custom">
-                    <span class="subject-badge badge-cs">Информатика</span>
-                    <small class="text-muted">27 дек 2025</small>
-                </div>
-                <div class="card-content">
-                    <h4>Шпаргалка по методам строк в Python</h4>
-                    <p>Подготовил для вас удобную таблицу со всеми основными методами: de>.split()</code>, de>.join()</code>, de>.strip()</code> и другими. Сохраняйте себе!</p>
-                    <!-- Картинка (если есть) -->
-                    <img src="https://via.placeholder.com/800x400?text=Python+Cheatsheet" class="img-fluid rounded mt-2 mb-3" alt="Шпаргалка">
-                    
-                    <a href="#" class="btn btn-outline-primary w-100">Открыть изображение</a>
-                </div>
-            </div>
-
-            <!-- ПОСТ 2: ФАЙЛ (Математика) -->
-            <div class="material-card filterDiv math">
-                <div class="card-header-custom">
-                    <span class="subject-badge badge-math">Математика</span>
-                    <small class="text-muted">25 дек 2025</small>
-                </div>
-                <div class="card-content">
-                    <h4>Тригонометрия: Формулы приведения</h4>
-                    <p>Разбор сложной темы простыми словами. В файле — теория и 20 задач для тренировки с ответами.</p>
-                    
-                    <!-- Блок скачивания файла -->
-                    <div class="download-box">
-                        <i class="bi bi-file-earmark-pdf-fill download-icon"></i>
-                        <div>
-                            <div class="fw-bold">Trigonometry_Pack.pdf</div>
-                            <div class="text-muted small">PDF, 2.4 MB</div>
-                        </div>
-                        <a href="files/trigonometry.pdf" class="btn btn-primary ms-auto btn-sm" download>Скачать</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ПОСТ 3: ТЕКСТ (Физика) -->
-            <div class="material-card filterDiv phys">
-                <div class="card-header-custom">
-                    <span class="subject-badge badge-phys">Физика</span>
-                    <small class="text-muted">20 дек 2025</small>
-                </div>
-                <div class="card-content">
-                    <h4>Важная новость по ЕГЭ</h4>
-                    <p>В экзамен 2026 года добавили новое задание на статику. Разберем его на следующем занятии во вторник. Прошу всех повторить Закон Архимеда.</p>
-                </div>
-            </div>
-
-        </div>
+        <div class="feed-container" id="feed-container">
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Загрузка материалов...</p>
     </div>
+</div>
 
     <!-- СКРИПТ ФИЛЬТРАЦИИ -->
     <script>
@@ -185,5 +137,7 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
+
