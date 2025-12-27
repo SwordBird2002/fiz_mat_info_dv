@@ -13,7 +13,7 @@
         /* Светлая тема (по умолчанию) */
         --bg-color: #f8f9fa;
         --text-color: #212529;
-        --card-bg: rgba(255, 255, 255, 0.6); /* Полупрозрачный белый */
+        --card-bg: rgba(255, 255, 255, 0.4); /* Полупрозрачный белый */
         --navbar-bg: rgba(33, 37, 41, 0.95);
         --glass-border: 1px solid rgba(255, 255, 255, 0.3);
         --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
@@ -77,6 +77,15 @@
         top: 40%; left: 40%;
         animation: moveCircular 15s infinite linear;
     }
+    .orb-4 {
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, #f59e0b, #ef4444); /* Оранжевый -> Красный */
+    bottom: 20%; left: 20%; /* Начальная позиция */
+    animation: moveWild 14s infinite ease-in-out; /* Своя уникальная анимация */
+    opacity: 0.5; /* Чуть прозрачнее остальных, чтобы не резал глаз */
+    }
+
+    
 
     /* --- АНИМАЦИИ --- */
     
@@ -94,6 +103,14 @@
     @keyframes moveCircular {
         0% { transform: rotate(0deg) translate(100px) rotate(0deg); }
         100% { transform: rotate(360deg) translate(100px) rotate(-360deg); }
+    }
+
+    @keyframes moveWild {
+        0% { transform: translate(0, 0) scale(1); }
+        25% { transform: translate(100px, -100px) scale(1.2); }
+        50% { transform: translate(200px, 50px) scale(0.8); }
+        75% { transform: translate(-50px, 150px) scale(1.1); }
+        100% { transform: translate(0, 0) scale(1); }
     }
 
 
@@ -134,6 +151,7 @@
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
     </div>
 
     <!-- Навигация -->
@@ -360,6 +378,7 @@
 
 </body>
 </html>
+
 
 
 
