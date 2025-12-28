@@ -28,12 +28,13 @@
     "title": "Важная новость по ЕГЭ",
     "text": "В экзамен 2026 года добавили новое задание на статику."
   },
-  {
+   {
     "id": 4,
-    "date": "20 дек 2025",
+    "date": "28 дек 2025",
     "subject": "phys",
     "title": "Важная новость по ЕГЭ",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    "text": "⚛️ Задача ЕГЭ про искусственный спутник на круговой орбите. 🔸 Удобная ассоциация: любое тело, находящееся на орбите планеты, все время падает на нее за счет центростремительного ускорения. Как правило, оно настолько мало, что некоторыми его параметрами можно просто пренебречь."
   }
 ]
+
 
