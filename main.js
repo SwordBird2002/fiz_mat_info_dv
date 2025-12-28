@@ -1,5 +1,5 @@
 /* =========================================
-   1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+   1. НАСТРОЙКИ
    ========================================= */
 let allMaterials = [];
 let shownCount = 0;
@@ -7,339 +7,236 @@ const step = 6;
 let isHomeworkMode = false;
 let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false';
 
-// Ссылки на данные
-const HOMEWORK_URL_REMOTE = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json";
-const HOMEWORK_URL_LOCAL = "homework.json"; // Запасной вариант
+// Ссылка на JSON
+const HW_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json";
 
 /* =========================================
-   2. ИНИЦИАЛИЗАЦИЯ
+   2. СТАРТ
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     init3DButton();
     
-    // Инициализация фильтров
-    const filterContainer = document.getElementById('filterContainer');
-    if (filterContainer) {
-        const btns = filterContainer.querySelectorAll('.filter-btn');
-        btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                btns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                const category = btn.getAttribute('data-filter');
-                const wrappers = document.querySelectorAll('.filterDiv'); 
-                
-                wrappers.forEach(wrapper => {
-                    if (category === 'all') {
-                        wrapper.classList.remove('hidden');
-                    } else {
-                        if (wrapper.classList.contains(category)) wrapper.classList.remove('hidden');
-                        else wrapper.classList.add('hidden');
-                    }
-                });
+    // Логика фильтров
+    const btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const cat = btn.getAttribute('data-filter');
+            document.querySelectorAll('.filterDiv').forEach(div => {
+                if(cat === 'all' || div.classList.contains(cat)) div.classList.remove('hidden');
+                else div.classList.add('hidden');
             });
         });
-    }
+    });
 
     loadMaterials();
 });
 
 /* =========================================
-   3. ЗАГРУЗКА И ОТРИСОВКА НОВОСТЕЙ
+   3. ЛЕНТА НОВОСТЕЙ
    ========================================= */
 async function loadMaterials() {
     const container = document.getElementById('feed-container');
-    if (!container) return;
-
-    // УБИРАЕМ justify-content-center, чтобы вернуть старую сетку (слева направо)
-    container.classList.remove('justify-content-center'); 
-
+    if(!container) return;
+    
     try {
         if (allMaterials.length === 0) {
-            const response = await fetch('data.json'); 
-            if (!response.ok) throw new Error('Ошибка HTTP');
-            allMaterials = await response.json();
+            const res = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json');
+            if(!res.ok) throw new Error('Ошибка data.json');
+            allMaterials = await res.json();
             container.innerHTML = '';
         }
         renderNextBatch();
-    } catch (error) {
-        console.error('Ошибка:', error);
-        container.innerHTML = `<p class="text-center text-danger">Не удалось загрузить ленту</p>`;
+    } catch(e) {
+        container.innerHTML = '<p class="text-center text-danger">Ошибка загрузки новостей</p>';
     }
 }
 
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
-    const loadMoreBtn = document.getElementById('loadMoreContainer');
+    const loadMore = document.getElementById('loadMoreContainer');
+    if(!allMaterials.length) return;
+
+    const items = allMaterials.slice(shownCount, shownCount + step);
     
-    if (!allMaterials || allMaterials.length === 0) return;
-
-    const nextItems = allMaterials.slice(shownCount, shownCount + step);
-
-    nextItems.forEach(item => {
-        // ВОЗВРАЩАЕМ СТАРУЮ СЕТКУ
-        const cardWrapper = document.createElement('div');
-        // col-md-6 = 2 в ряд, col-lg-4 = 3 в ряд. Это стандарт Bootstrap.
-        cardWrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`;
-
+    items.forEach(item => {
+        // Сетка Bootstrap: col-md-6 (2 в ряд), col-lg-4 (3 в ряд)
+        const wrapper = document.createElement('div');
+        wrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`;
+        
         const card = document.createElement('div');
-        // h-100 растягивает карточку на всю высоту ряда
-        card.className = `material-card glass-card p-4 h-100 d-flex flex-column`;
+        card.className = 'material-card glass-card p-4 h-100 d-flex flex-column';
         card.style.cursor = 'pointer';
 
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
-            VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
+            VanillaTilt.init(card, { max: 5, speed: 400, glare: true, "max-glare": 0.2 });
         }
-
-        let badgeClass = 'bg-secondary';
-        let subjectName = 'Общее';
-        if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
-        else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
-        else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
-
-        let mediaHtml = '';
-        if (item.image) {
-            mediaHtml = `<div class="mb-3 rounded overflow-hidden" style="height: 180px;">
-                <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>`;
-        }
+        
+        let imgHtml = item.image ? `<div class="mb-3 rounded overflow-hidden" style="height:180px"><img src="${item.image}" style="width:100%;height:100%;object-fit:cover"></div>` : '';
 
         card.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="subject-badge ${badgeClass}">${subjectName}</span>
-                <small class="text-muted">${item.date || ''}</small>
+            <div class="d-flex justify-content-between mb-3">
+                <span class="badge bg-secondary">${item.subject}</span>
+                <small class="text-muted">${item.date}</small>
             </div>
-            ${mediaHtml}
+            ${imgHtml}
             <h4 class="fw-bold mb-2">${item.title}</h4>
-            <div class="text-muted opacity-75 mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                ${item.text || ''}
-            </div>
+            <div class="text-muted opacity-75 mb-3 flex-grow-1" style="overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;">${item.text}</div>
             <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
         `;
-
-        card.onclick = (e) => {
-            if(e.target.tagName === 'A' || e.target.closest('a')) return;
-            openModal(item);
-        };
-
-        cardWrapper.appendChild(card);
-        container.appendChild(cardWrapper);
+        
+        card.onclick = (e) => { if(!e.target.closest('a')) openModal(item); };
+        wrapper.appendChild(card);
+        container.appendChild(wrapper);
     });
-    
-    if (window.MathJax && MathJax.typesetPromise) {
-         MathJax.typesetPromise([container]).catch(err => console.log(err));
-    }
 
-    shownCount += nextItems.length;
+    if(window.MathJax) MathJax.typesetPromise([container]).catch(()=>{});
 
-    if (loadMoreBtn) {
-        if (shownCount >= allMaterials.length) loadMoreBtn.classList.add('hidden');
-        else loadMoreBtn.classList.remove('hidden');
+    shownCount += items.length;
+    if(loadMore) {
+        if(shownCount >= allMaterials.length) loadMore.classList.add('hidden');
+        else loadMore.classList.remove('hidden');
     }
 }
 
 /* =========================================
-   4. ДОМАШНЕЕ ЗАДАНИЕ (С ЗАПАСНЫМ ВАРИАНТОМ)
+   4. ДОМАШНЕЕ ЗАДАНИЕ (С ССЫЛКИ)
    ========================================= */
 async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
     const feed = document.getElementById('feed-container');
-    const hwContainer = document.getElementById('homework-container');
+    const hwWrap = document.getElementById('homework-container');
     const loadMore = document.getElementById('loadMoreContainer');
-    const filterContainer = document.getElementById('filterContainer'); 
-    
-    const allFilterBtn = document.querySelector('[data-filter="all"]');
-    if(allFilterBtn) allFilterBtn.click();
+    const filters = document.getElementById('filterContainer');
+
+    // Проверка, чтобы не было ошибки "btn is null"
+    if(!btn || !feed) return; 
 
     if (!isHomeworkMode) {
-        // ВКЛЮЧАЕМ РЕЖИМ ДЗ
+        // -> ВКЛЮЧАЕМ ДЗ
         feed.classList.add('hidden');
         if(loadMore) loadMore.classList.add('hidden');
-        if(filterContainer) filterContainer.classList.add('hidden');
-        
-        if(hwContainer) {
-            hwContainer.classList.remove('hidden');
-            hwContainer.className = 'container mt-4 d-flex flex-column align-items-center';
-        }
+        if(filters) filters.classList.add('hidden'); // Прячем фильтры
+        hwWrap.classList.remove('hidden');
         
         btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        // Запускаем загрузку
-        await loadPersonalHomework();
+        await loadRealHomework();
         isHomeworkMode = true;
     } else {
-        // ВОЗВРАТ В ЛЕНТУ
+        // -> НАЗАД
         feed.classList.remove('hidden');
         if(loadMore && shownCount < allMaterials.length) loadMore.classList.remove('hidden');
-        if(filterContainer) filterContainer.classList.remove('hidden');
-        
-        if(hwContainer) hwContainer.classList.add('hidden');
+        if(filters) filters.classList.remove('hidden');
+        hwWrap.classList.add('hidden');
         
         btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
         isHomeworkMode = false;
     }
 }
 
-async function loadPersonalHomework() {
+async function loadRealHomework() {
     const container = document.getElementById('personal-homework-feed');
     if(!container) return;
     container.innerHTML = '<div class="spinner-border text-primary"></div>';
-    container.style.maxWidth = '800px'; 
-    container.style.width = '100%';
     
-    let data = null;
-
-    // 1. Пробуем загрузить с удаленного сервера
     try {
-        const response = await fetch(HOMEWORK_URL_REMOTE);
-        if(response.ok) {
-            data = await response.json();
-        } else {
-            throw new Error('Remote fail');
-        }
-    } catch(e) {
-        console.warn('Не удалось загрузить с VK Cloud, пробую локальный файл...');
-        // 2. Если не вышло (CORS или ошибка), грузим локальный файл
-        try {
-            const localResponse = await fetch(HOMEWORK_URL_LOCAL);
-            if(localResponse.ok) {
-                data = await localResponse.json();
-            }
-        } catch(localErr) {
-            console.error('Локальный файл тоже недоступен', localErr);
-        }
-    }
-
-    // Если данных нет ниоткуда
-    if (!data) {
-        container.innerHTML = '<div class="alert alert-warning text-center">Не удалось загрузить задания. Проверьте файлы.</div>';
-        return;
-    }
-
-    // Обработка структуры JSON
-    let tasks = [];
-    if (Array.isArray(data)) tasks = data;
-    else if (data.group1) tasks = data.group1; // Если структура { group1: [...] }
-    else tasks = Object.values(data)[0] || [];
-
-    container.innerHTML = '';
-    
-    if(tasks.length === 0) {
-        container.innerHTML = '<p class="text-center text-muted">Нет активных заданий</p>';
-        return;
-    }
-
-    tasks.forEach(task => {
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 mb-3 w-100'; 
+        // Попытка загрузить с вашей ссылки
+        const res = await fetch(HW_URL);
+        if(!res.ok) throw new Error('Ошибка сети');
+        const data = await res.json();
         
-        card.innerHTML = `
-            <div class="d-flex justify-content-between mb-2">
-                <span class="badge bg-danger">${task.subject || 'ДЗ'}</span>
-                <small class="text-muted">Дедлайн: ${task.deadline || ''}</small>
-            </div>
-            <h5 class="fw-bold mt-2">${task.title}</h5>
-            <p class="opacity-75">${task.task}</p>
-            <a href="${task.link}" target="_blank" class="btn btn-outline-primary btn-sm w-100">Выполнить</a>
-        `;
-        container.appendChild(card);
-    });
+        // Пытаемся достать массив. Либо это data, либо data.group1
+        const tasks = Array.isArray(data) ? data : (data.group1 || []);
+        
+        container.innerHTML = '';
+        if(!tasks.length) {
+            container.innerHTML = '<p class="text-muted">Нет заданий</p>';
+            return;
+        }
+
+        tasks.forEach(task => {
+            const div = document.createElement('div');
+            div.className = 'glass-card p-4 mb-3 w-100';
+            div.innerHTML = `
+                <div class="d-flex justify-content-between">
+                    <span class="badge bg-danger">${task.subject || 'ДЗ'}</span>
+                    <small class="text-muted">${task.deadline || ''}</small>
+                </div>
+                <h5 class="fw-bold mt-2">${task.title}</h5>
+                <p>${task.task}</p>
+                <a href="${task.link}" target="_blank" class="btn btn-outline-primary btn-sm w-100">Выполнить</a>
+            `;
+            container.appendChild(div);
+        });
+    } catch(e) {
+        // Если ссылка не сработала, пробуем локальный файл
+        console.log('Пробую локальный файл...');
+        try {
+            const localRes = await fetch('homework.json');
+            const localData = await localRes.json();
+            const localTasks = localData.group1 || [];
+            // Рендер локальных (тот же код)
+            container.innerHTML = '';
+             localTasks.forEach(task => {
+                const div = document.createElement('div');
+                div.className = 'glass-card p-4 mb-3 w-100';
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between"><span class="badge bg-danger">${task.subject}</span></div>
+                    <h5 class="fw-bold mt-2">${task.title}</h5>
+                    <p>${task.task}</p>
+                    <a href="${task.link}" class="btn btn-outline-primary btn-sm w-100">Выполнить</a>
+                `;
+                container.appendChild(div);
+            });
+        } catch(err2) {
+            container.innerHTML = '<p class="text-danger">Не удалось загрузить задания.</p>';
+        }
+    }
 }
 
 /* =========================================
-   5. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+   5. УТИЛИТЫ
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
-    const modalBody = document.getElementById('modalBody');
-    if (!modal || !modalBody) return;
+    const body = document.getElementById('modalBody');
+    if(!modal || !body) return;
     
-    let mediaHtml = item.image ? `<img src="${item.image}" class="img-fluid rounded mb-4 w-100">` : '';
-    let fileHtml = item.file ? `<div class="alert alert-secondary mt-3"><i class="bi bi-file-earmark-arrow-down me-2"></i>${item.file.name} <a href="${item.file.url}" class="float-end" download>Скачать</a></div>` : '';
-    let linkHtml = item.link ? `<a href="${item.link}" target="_blank" class="btn btn-outline-primary w-100 mt-3">${item.linkText || 'Перейти'}</a>` : '';
-
-    modalBody.innerHTML = `
-        <span class="subject-badge badge-${item.subject} mb-3 d-inline-block">
-            ${item.subject === 'math' ? 'Математика' : item.subject === 'cs' ? 'Информатика' : 'Физика'}
-        </span>
-        <h2 class="fw-bold mb-3">${item.title}</h2>
-        <p class="text-muted mb-4">${item.date}</p>
-        ${mediaHtml}
-        <div class="fs-5" style="line-height: 1.6;">${item.text}</div>
-        ${fileHtml}
-        ${linkHtml}
-    `;
-
-    if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([modalBody]);
-    if (typeof Prism !== 'undefined') Prism.highlightAll();
+    let img = item.image ? `<img src="${item.image}" class="img-fluid rounded mb-3 w-100">` : '';
+    body.innerHTML = `<h3>${item.title}</h3><p class="text-muted">${item.date}</p>${img}<div class="fs-5">${item.text}</div>`;
     
-    addCopyButtons(modalBody);
+    if(window.MathJax) MathJax.typesetPromise([body]);
+    if(window.Prism) Prism.highlightAll();
+    
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
-
 function closeModal() {
-    const modal = document.getElementById('newsModal');
-    if(modal) modal.classList.remove('active');
+    document.getElementById('newsModal').classList.remove('active');
     document.body.style.overflow = '';
 }
-
 function initTheme() {
-    const saved = localStorage.getItem('theme') || 'light';
-    document.body.setAttribute('data-theme', saved);
-    updateThemeIcon(saved);
+    const s = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', s);
 }
 function toggleTheme() {
-    const current = document.body.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateThemeIcon(next);
+    const n = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', n);
+    localStorage.setItem('theme', n);
 }
-function updateThemeIcon(theme) {
-    const icon = document.getElementById('themeIcon');
-    if(icon) icon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
-}
-
-function init3DButton() {
-    update3DIcon();
-    if (!is3DEnabled) disableAllTilt();
-}
+function init3DButton() { if(!is3DEnabled) disableAllTilt(); }
 function toggle3D() {
     is3DEnabled = !is3DEnabled;
     localStorage.setItem('3d_enabled', is3DEnabled);
     if(is3DEnabled) location.reload();
-    else { disableAllTilt(); update3DIcon(); }
+    else disableAllTilt();
 }
 function disableAllTilt() {
     document.querySelectorAll('.material-card').forEach(c => {
         if(c.vanillaTilt) c.vanillaTilt.destroy();
         c.style.transform = 'none';
-    });
-}
-function update3DIcon() {
-    const btn = document.getElementById('btn3D');
-    const icon = document.getElementById('icon3D');
-    if(!btn) return;
-    if(is3DEnabled) {
-        btn.classList.remove('btn-outline-secondary'); btn.classList.add('btn-outline-primary');
-        icon.className = 'bi bi-box-fill';
-    } else {
-        btn.classList.remove('btn-outline-primary'); btn.classList.add('btn-outline-secondary');
-        icon.className = 'bi bi-box';
-    }
-}
-function addCopyButtons(container) {
-    container.querySelectorAll('pre').forEach(pre => {
-        pre.style.position = 'relative';
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-sm btn-dark position-absolute top-0 end-0 m-2';
-        btn.innerHTML = '<i class="bi bi-clipboard"></i>';
-        btn.onclick = () => {
-            const code = pre.querySelector('code');
-            if(code) navigator.clipboard.writeText(code.innerText);
-        };
-        pre.appendChild(btn);
     });
 }
