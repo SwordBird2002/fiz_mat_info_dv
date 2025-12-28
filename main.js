@@ -122,32 +122,26 @@ function renderNextBatch() {
     const container = document.getElementById('feed-container');
     const loadMoreBtn = document.getElementById('loadMoreContainer');
     
-    // Берем следующую порцию
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
-    
-    // Список новых карточек для рендеринга формул
-    const newCardsElements = [];
 
     nextItems.forEach(item => {
-        // 1. Стили бейджика
+        // --- Стили бейджика ---
         let badgeClass = 'bg-secondary';
         let subjectName = 'Общее';
-        
         if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
         else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
-        // 2. Создаем карточку
+        // --- Создание карточки ---
         const card = document.createElement('div');
         card.className = `material-card glass-card p-4 mb-4 filterDiv ${item.subject}`;
         card.style.cursor = 'pointer';
 
-        // 3. 3D эффект
         if (typeof is3DEnabled !== 'undefined' && is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
         }
 
-        // 4. Превью картинки
+        // --- Картинка ---
         let mediaPreview = '';
         if (item.image) {
             mediaPreview = `
@@ -156,8 +150,25 @@ function renderNextBatch() {
             </div>`;
         }
 
-        // 5. HTML Контент
-        // ИСПРАВЛЕНИЕ: Используем max-height вместо line-clamp, чтобы формулы не исчезали
+        // ============================================================
+        // ⚡ ОЧИСТКА ТЕКСТА ДЛЯ ПРЕВЬЮ (Замена формул на значок)
+        // ============================================================
+        let previewText = item.text;
+
+        // 1. Заменяем блочные формулы $$...$$ и \[...\]
+        previewText = previewText.replace(/(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\])/g, 
+            '<span class="badge bg-dark text-warning border border-warning mx-1"><i class="bi bi-calculator"></i> Формула</span>');
+
+        // 2. Заменяем строчные формулы $...$ и \(...\)
+        previewText = previewText.replace(/(\$[^$]*\$|\\\([\s\S]*?\\\))/g, 
+            '<span class="badge bg-dark text-warning border border-warning mx-1" style="font-size: 0.8em;">ƒ(x)</span>');
+
+        // 3. Заменяем блоки кода <pre>...</pre> на значок "Код"
+        previewText = previewText.replace(/<pre[\s\S]*?<\/pre>/g, 
+            '<div class="badge bg-secondary text-light my-2"><i class="bi bi-code-slash"></i> Фрагмент кода</div>');
+        
+        // ============================================================
+
         card.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="subject-badge ${badgeClass}">${subjectName}</span>
@@ -168,38 +179,27 @@ function renderNextBatch() {
 
             <h4 class="fw-bold mb-2 text-white">${item.title}</h4>
             
-            <!-- БЛОК С ТЕКСТОМ И ФОРМУЛАМИ -->
-            <!-- max-height: 4.5em примерно равно 3 строкам текста. overflow: hidden обрезает лишнее -->
-            <div class="text-light opacity-75 mb-3" style="max-height: 4.5em; overflow: hidden; position: relative;">
-                ${item.text}
-                <!-- Градиент внизу для красоты (эффект исчезновения) -->
-                <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1.5em; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1));"></div>
+            <!-- Показываем очищенный текст -->
+            <div class="text-light opacity-75 mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                ${previewText}
             </div>
 
             <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
         `;
 
-        // 6. Клик
         card.onclick = (e) => {
             if(e.target.tagName === 'A' || e.target.closest('a')) return;
+            // В модалку передаем ОРИГИНАЛЬНЫЙ item (с формулами), а не previewText
             openModal(item);
         };
 
-        // Добавляем в DOM и в список для MathJax
         container.appendChild(card);
-        newCardsElements.push(card);
     });
 
-    // === 7. РЕНДЕРИНГ ФОРМУЛ ===
-    // Вызываем MathJax только для новых элементов
-    if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise(newCardsElements).catch(err => console.log('MathJax error:', err));
-    }
+    // MathJax здесь вызывать НЕ НУЖНО, так как формул в превью больше нет!
 
-    // 8. Обновляем счетчики
     shownCount += nextItems.length;
 
-    // 9. Кнопка "Показать еще"
     if (loadMoreBtn) {
         if (shownCount >= allMaterials.length) {
             loadMoreBtn.classList.add('hidden');
@@ -456,6 +456,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
