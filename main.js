@@ -122,82 +122,38 @@ function renderNextBatch() {
     const container = document.getElementById('feed-container');
     const loadMoreBtn = document.getElementById('loadMoreContainer');
     
-    // Проверка, есть ли данные
+    // Проверка данных
     if (!allMaterials || allMaterials.length === 0) return;
 
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
 
     nextItems.forEach(item => {
-        try {
-            // --- Стили бейджика ---
-            let badgeClass = 'bg-secondary';
-            let subjectName = 'Общее';
-            if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
-            else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
-            else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
+        // Создаем карточку
+        const card = document.createElement('div');
+        // Упрощенные классы для теста
+        card.className = `material-card glass-card p-4 mb-4 filterDiv ${item.subject || ''}`;
+        
+        // Формируем HTML (Без сложной обработки текста)
+        card.innerHTML = `
+            <h4 class="fw-bold mb-2 text-white">${item.title}</h4>
+            <div class="text-light opacity-75 mb-3" style="max-height: 100px; overflow: hidden;">
+                ${item.text || 'Нет текста'}
+            </div>
+            <button class="btn btn-outline-primary btn-sm w-100">Подробнее</button>
+        `;
 
-            const card = document.createElement('div');
-            card.className = `material-card glass-card p-4 mb-4 filterDiv ${item.subject || ''}`;
-            card.style.cursor = 'pointer';
-
-            if (typeof is3DEnabled !== 'undefined' && is3DEnabled && typeof VanillaTilt !== 'undefined') {
-                VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
-            }
-
-            let mediaPreview = '';
-            if (item.image) {
-                mediaPreview = `
-                <div class="mb-3" style="height: 180px; overflow: hidden; border-radius: 12px;">
-                    <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="preview">
-                </div>`;
-            }
-
-            // --- БЕЗОПАСНАЯ ОБРАБОТКА ТЕКСТА ---
-            let previewText = item.text || ""; // Если текста нет, ставим пустую строку
-
-            if (previewText) {
-                // Заменяем формулы на значки (упрощенный regex, чтобы не падал)
-                // $$...$$ -> [Формула]
-                previewText = previewText.replace(/\$\$[\s\S]*?\$\$/g, '<span class="badge bg-warning text-dark">Формула</span>');
-                
-                // $...$ -> f(x)
-                previewText = previewText.replace(/\$[^$]*\$/g, '<span class="badge bg-dark text-warning">ƒ(x)</span>');
-                
-                // <pre>...</pre> -> [Код]
-                previewText = previewText.replace(/<pre[\s\S]*?<\/pre>/g, '<span class="badge bg-secondary">Код</span>');
-            }
-
-            card.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="subject-badge ${badgeClass}">${subjectName}</span>
-                    <small class="text-muted">${item.date || ''}</small>
-                </div>
-                ${mediaPreview}
-                <h4 class="fw-bold mb-2 text-white">${item.title || 'Без заголовка'}</h4>
-                <div class="text-light opacity-75 mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    ${previewText}
-                </div>
-                <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
-            `;
-
-            card.onclick = (e) => {
-                if(e.target.tagName === 'A' || e.target.closest('a')) return;
-                openModal(item);
-            };
-
-            container.appendChild(card);
-        } catch (err) {
-            console.error("Ошибка при рендеринге карточки:", item, err);
-        }
+        card.onclick = () => openModal(item);
+        container.appendChild(card);
     });
 
     shownCount += nextItems.length;
-
+    
+    // Управление кнопкой "Показать еще"
+    // Если loadMoreBtn не существует в HTML, код не упадет
     if (loadMoreBtn) {
+        loadMoreBtn.classList.remove('hidden');
         if (shownCount >= allMaterials.length) {
             loadMoreBtn.classList.add('hidden');
-        } else {
-            loadMoreBtn.classList.remove('hidden');
         }
     }
 }
@@ -449,6 +405,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
