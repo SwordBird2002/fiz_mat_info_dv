@@ -302,9 +302,19 @@
 
     
     <!-- ЛОКАЛЬНЫЙ СКРИПТ ФИЛЬТРАЦИИ (Если вы не перенесли его в main.js) -->
-    
+<!-- МОДАЛЬНОЕ ОКНО (Скрыто по умолчанию) -->
+<div id="newsModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content glass-card">
+        <button class="close-btn" onclick="closeModal(true)">&times;</button>
+        
+        <!-- Сюда JS будет вставлять контент -->
+        <div id="modalBody"></div>
+    </div>
+</div>
+ 
 </body>
 </html>
+
 
 
 
