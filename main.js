@@ -1,4 +1,13 @@
 /* =========================================
+   ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+   ========================================= */
+let allMaterials = [];
+let shownCount = 0;
+const step = 6;
+let isLoading = false;       // Флаг защиты от двойной загрузки
+let currentActiveItem = null; // Хранит текущую открытую новость (для возврата фокуса)
+
+/* =========================================
    1. УПРАВЛЕНИЕ ТЕМОЙ
    ========================================= */
 function initTheme() {
@@ -47,7 +56,7 @@ function toggle3D() {
     update3DIcon();
     
     if (is3DEnabled) {
-        location.reload(); // Перезагрузка для включения
+        location.reload(); 
     } else {
         disableAllTilt();
     }
@@ -83,19 +92,20 @@ document.addEventListener('DOMContentLoaded', init3DButton);
 /* =========================================
    3. ЗАГРУЗКА МАТЕРИАЛОВ (С ПАГИНАЦИЕЙ)
    ========================================= */
-let allMaterials = [];
-let shownCount = 0;
-const step = 6;
-
 async function loadMaterials(restoreCount) {
-    const container = document.getElementById('feed-container');
-    if (!container) return; 
+    if (isLoading) return; // Защита от повторного вызова
+    isLoading = true;
 
+    const container = document.getElementById('feed-container');
+    if (!container) { isLoading = false; return; }
+
+    // Добавляем кнопку "Показать еще"
     let loadMoreContainer = document.getElementById('loadMoreContainer');
     if (!loadMoreContainer) {
         loadMoreContainer = document.createElement('div');
         loadMoreContainer.id = 'loadMoreContainer';
         loadMoreContainer.className = 'text-center mt-4 mb-5 hidden';
+        // Кнопка вызывает renderNextBatch() без аргументов -> подгрузка следующей порции
         loadMoreContainer.innerHTML = `
             <button onclick="renderNextBatch()" class="btn btn-outline-primary px-4 py-2 rounded-pill">
                 Показать еще материалы
@@ -105,39 +115,52 @@ async function loadMaterials(restoreCount) {
     }
 
     try {
+        // Если массив пуст (первая загрузка или обновление), качаем с сервера
         if (allMaterials.length === 0) {
             const timestamp = Date.now();
+            // cache: 'no-store' + timestamp гарантируют свежесть данных
             const response = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json?t=${timestamp}`, {
                 cache: "no-store"
             });
+            if (!response.ok) throw new Error('Ошибка сети');
             allMaterials = await response.json();
             container.innerHTML = '';
         }
-        
-        // Если передали число для восстановления (например, 12), рендерим их сразу
-        if (restoreCount && typeof restoreCount === 'number') {
+
+        // Логика отрисовки:
+        // Если передали restoreCount (число) — восстанавливаем ленту до этого числа.
+        // Иначе (обычный старт) — рисуем только если еще ничего не нарисовано (shownCount === 0).
+        if (typeof restoreCount === 'number') {
             renderNextBatch(restoreCount);
         } else {
-            // Иначе обычная загрузка (первые 6)
-            renderNextBatch();
+            if (shownCount === 0) {
+                renderNextBatch();
+            }
         }
-        
     } catch (error) {
         console.error('Ошибка загрузки:', error);
         container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
+    } finally {
+        isLoading = false; // Снимаем флаг
     }
 }
-
 
 function renderNextBatch(customCount) {
     const container = document.getElementById('feed-container');
     const btnContainer = document.getElementById('loadMoreContainer');
     
-    // Если передали customCount (при восстановлении), используем его.
-    // Иначе используем стандартный шаг (step = 6).
-    const batchSize = customCount || step;
+    if (!allMaterials || allMaterials.length === 0) return;
 
-    const nextItems = allMaterials.slice(shownCount, shownCount + batchSize);
+    // Определяем сколько карточек добавить
+    // Если customCount передан (восстановление), рисуем столько сразу.
+    // Иначе добавляем стандартный шаг (step = 6).
+    let countToAdd = step;
+    if (typeof customCount === 'number') {
+        countToAdd = customCount; 
+        // В случае восстановления shownCount был сброшен в 0, так что slice(0, customCount) вернет всё, что нужно.
+    }
+
+    const nextItems = allMaterials.slice(shownCount, shownCount + countToAdd);
 
     nextItems.forEach(item => {
         let badgeClass = '', subjectName = '';
@@ -146,6 +169,9 @@ function renderNextBatch(customCount) {
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
         const card = document.createElement('div');
+        // ВАЖНО: Метка заголовка для поиска при возврате
+        card.dataset.title = item.title;
+        
         card.className = `material-card glass-card filterDiv ${item.subject}`;
         card.style.cursor = 'pointer';
 
@@ -181,16 +207,22 @@ function renderNextBatch(customCount) {
 
     shownCount += nextItems.length;
 
+    // Управление видимостью кнопки "Показать еще"
     if (shownCount >= allMaterials.length) {
-        if(btnContainer) btnContainer.classList.add('hidden');
+        if (btnContainer) btnContainer.classList.add('hidden');
     } else {
-        if(btnContainer) btnContainer.classList.remove('hidden');
+        if (btnContainer) btnContainer.classList.remove('hidden');
     }
 
+    // Инициализация кода и формул для новых карточек
     initCodeBlocks(container);
     if (typeof MathJax !== 'undefined') {
-        MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
+        MathJax.typesetPromise([container]).catch(err => console.log('MathJax feed error:', err));
     }
+}
+
+if (document.getElementById('feed-container')) {
+    document.addEventListener('DOMContentLoaded', () => loadMaterials());
 }
 
 
@@ -198,11 +230,13 @@ function renderNextBatch(customCount) {
    4. МОДАЛЬНОЕ ОКНО
    ========================================= */
 function openModal(item) {
+    currentActiveItem = item; // Запоминаем текущую новость
+
     const modal = document.getElementById('newsModal');
     const modalBody = document.getElementById('modalBody');
     if (!modal || !modalBody) return;
     
-    // 1. Генерируем контент
+    // Генерируем контент
     let mediaHtml = '';
     if (item.image) mediaHtml = `<img src="${item.image}" class="img-fluid rounded mb-4 w-100">`;
     
@@ -239,43 +273,54 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // === 2. Инициализируем блоки с кодом (Prism + Copy Button) ===
+    // Инициализация кода и формул в модалке
     initCodeBlocks(modalBody);
-
-    // === 3. Рендеринг формул (MathJax) ===
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([modalBody]).catch(err => console.log('MathJax modal error:', err));
     }
 
-    // 4. Показываем окно
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; 
 }
 
-function closeModal(force) {
+async function closeModal(force) {
     const modal = document.getElementById('newsModal');
     
+    // Если нажали крестик или фон
     if (force || (window.event && window.event.target === modal)) {
         modal.classList.remove('active');
         document.body.style.overflow = ''; 
         
-        // 1. ЗАПОМИНАЕМ, сколько карточек сейчас на экране
-        // Если shownCount был 0 (странно, но вдруг), берем хотя бы шаг (6)
+        // 1. Сохраняем данные для восстановления
+        const targetTitle = currentActiveItem ? currentActiveItem.title : null;
+        // Если shownCount=0 (странно), восстанавливаем хотя бы 6
         const countToRestore = shownCount > 0 ? shownCount : step;
         
-        // 2. Сбрасываем массив и счетчик
+        // 2. Сброс данных
         allMaterials = []; 
         shownCount = 0;
         
-        // 3. Очищаем контейнер
         const container = document.getElementById('feed-container');
         if (container) {
-            // Можно поставить спиннер, чтобы пользователь видел обновление
             container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
         }
 
-        // 4. Загружаем свежие данные и просим вернуть countToRestore карточек
-        loadMaterials(countToRestore);
+        // 3. Перезагрузка данных (ждем завершения)
+        await loadMaterials(countToRestore);
+
+        // 4. Прокрутка к закрытой новости
+        if (targetTitle) {
+            // Небольшая задержка для надежности отрисовки
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.material-card');
+                for (const card of cards) {
+                    if (card.dataset.title === targetTitle) {
+                        card.scrollIntoView({ behavior: 'auto', block: 'center' });
+                        break;
+                    }
+                }
+            }, 100);
+        }
     }
 }
 
@@ -296,7 +341,6 @@ async function toggleHomeworkView() {
 
     if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
 
-    // Загружаем ДЗ
     await loadHomework();
 
     isHomeworkMode = true;
@@ -336,8 +380,8 @@ async function loadHomework() {
             `;
             container.appendChild(card);
         });
-
-        // Инициализируем формулы в ДЗ (если там есть)
+        
+        // Формулы в ДЗ
         if (typeof MathJax !== 'undefined') {
             MathJax.typesetPromise([container]).catch(err => console.log('MathJax hw error:', err));
         }
@@ -387,29 +431,23 @@ document.addEventListener('DOMContentLoaded', () => {
 function initCodeBlocks(container) {
     if (!container) return;
     
-    // Находим все блоки <pre> внутри переданного контейнера
     const blocks = container.querySelectorAll('pre');
     
     blocks.forEach(pre => {
-        // Если кнопка уже есть, не добавляем (защита от дублей)
         if (pre.parentNode.classList.contains('code-wrapper')) return;
         
-        // Создаем обертку
         const wrapper = document.createElement('div');
         wrapper.className = 'code-wrapper position-relative mb-3';
         
-        // Кнопка копирования
         const btn = document.createElement('button');
         btn.className = 'btn btn-sm btn-dark position-absolute top-0 end-0 m-2 opacity-75';
         btn.innerHTML = '<i class="bi bi-clipboard"></i>';
         btn.style.zIndex = '10';
         
-        // Логика копирования
         btn.onclick = () => {
             const code = pre.innerText;
             navigator.clipboard.writeText(code);
             
-            // Анимация "Скопировано!"
             btn.innerHTML = '<i class="bi bi-check2"></i>';
             btn.classList.remove('btn-dark');
             btn.classList.add('btn-success');
@@ -421,16 +459,12 @@ function initCodeBlocks(container) {
             }, 2000);
         };
         
-        // Вставляем обертку в DOM
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
         wrapper.appendChild(btn);
     });
     
-    // Запускаем подсветку синтаксиса Prism
     if (window.Prism) {
         Prism.highlightAllUnder(container);
     }
 }
-
-
