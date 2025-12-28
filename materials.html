@@ -152,28 +152,23 @@
             backdrop-filter: blur(5px); /* Легкое размытие под кнопками */
             border-radius: 0 0 15px 15px;
         }
-        .filter-btn {
-            border-radius: 20px;
-            padding: 8px 20px;
-            margin: 5px;
-            border: none;
-            font-weight: 500;
+        /* Фильтры */
+            .filter-btn { 
+                border-radius: 20px; 
+                padding: 8px 20px; 
+                margin-right: 10px; 
+                border: none; 
+                font-weight: 500; 
+                transition: 0.3s; /* Стандартная базовая плавность */
+                background: white; 
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            }
             
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            
-            /* ВОТ ЭТА СТРОКА ДЕЛАЕТ ПЛАВНОСТЬ */
-            transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s;
-        }
-        
-        .filter-btn:hover {
-            transform: translateY(-2px); /* Легкое всплытие при наведении */
-        }
-        
-        .filter-btn.active {
-            background: var(--primary-color);
-            color: white;
-        }
+            .filter-btn.active, .filter-btn:hover { 
+                background: var(--primary-color); 
+                color: white; 
+            }
+
 
     </style>
 </head>
@@ -300,6 +295,7 @@
     </script>
 </body>
 </html>
+
 
 
 
