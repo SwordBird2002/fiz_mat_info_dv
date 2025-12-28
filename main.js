@@ -173,7 +173,10 @@ function renderNextBatch() {
         btnContainer.classList.remove('hidden');
     }
 
-    // === NEW: Рендеринг формул (MathJax) ===
+    // === 1. Инициализируем блоки с кодом (Prism) ===
+    initCodeBlocks(container);
+
+    // === 2. Рендеринг формул (MathJax) ===
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
     }
@@ -229,19 +232,17 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // 2. Инициализируем блоки с кодом
-    if (typeof initCodeBlocks === 'function') {
-        initCodeBlocks(modalBody);
-    }
+    // === 2. Инициализируем блоки с кодом (Prism + Copy Button) ===
+    initCodeBlocks(modalBody);
 
-    // === NEW: Рендеринг формул в модальном окне ===
+    // === 3. Рендеринг формул (MathJax) ===
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([modalBody]).catch(err => console.log('MathJax modal error:', err));
     }
 
-    // 3. Показываем окно
+    // 4. Показываем окно
     modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+    document.body.style.overflow = 'hidden'; 
 }
 
 function closeModal(force) {
@@ -310,7 +311,7 @@ async function loadHomework() {
             container.appendChild(card);
         });
 
-        // === NEW: Рендеринг формул в ДЗ ===
+        // Инициализируем формулы в ДЗ (если там есть)
         if (typeof MathJax !== 'undefined') {
             MathJax.typesetPromise([container]).catch(err => console.log('MathJax hw error:', err));
         }
@@ -352,3 +353,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+/* =========================================
+   7. ФУНКЦИЯ ДЛЯ БЛОКОВ КОДА (PRISM + COPY)
+   ========================================= */
+function initCodeBlocks(container) {
+    if (!container) return;
+    
+    // Находим все блоки <pre> внутри переданного контейнера
+    const blocks = container.querySelectorAll('pre');
+    
+    blocks.forEach(pre => {
+        // Если кнопка уже есть, не добавляем (защита от дублей)
+        if (pre.parentNode.classList.contains('code-wrapper')) return;
+        
+        // Создаем обертку
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-wrapper position-relative mb-3';
+        
+        // Кнопка копирования
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-sm btn-dark position-absolute top-0 end-0 m-2 opacity-75';
+        btn.innerHTML = '<i class="bi bi-clipboard"></i>';
+        btn.style.zIndex = '10';
+        
+        // Логика копирования
+        btn.onclick = () => {
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code);
+            
+            // Анимация "Скопировано!"
+            btn.innerHTML = '<i class="bi bi-check2"></i>';
+            btn.classList.remove('btn-dark');
+            btn.classList.add('btn-success');
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="bi bi-clipboard"></i>';
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-dark');
+            }, 2000);
+        };
+        
+        // Вставляем обертку в DOM
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        wrapper.appendChild(btn);
+    });
+    
+    // Запускаем подсветку синтаксиса Prism
+    if (window.Prism) {
+        Prism.highlightAllUnder(container);
+    }
+}
