@@ -16,6 +16,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
+        /* Текст: тёмно-серый по умолчанию (светлая тема) */
+        .text-adaptive {
+            color: #495057 !important; /* Серый */
+        }
+        .text-adaptive-muted {
+            color: #6c757d !important; /* Светло-серый */
+        }
+        
+        /* Текст: белый в тёмной теме */
+        [data-theme="dark"] .text-adaptive {
+            color: #ffffff !important;
+        }
+        [data-theme="dark"] .text-adaptive-muted {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
         /* Анимация "живого" круга */
         @keyframes blob-bounce {
           0% { transform: scale(1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
@@ -439,6 +455,7 @@
 
 </body>
 </html>
+
 
 
 
