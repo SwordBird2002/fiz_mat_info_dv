@@ -107,7 +107,7 @@ async function loadMaterials() {
 
     try {
         if (allMaterials.length === 0) {
-            const response = await fetch('data.json');
+            const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json');
             allMaterials = await response.json();
             container.innerHTML = '';
         }
@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
