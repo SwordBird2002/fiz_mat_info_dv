@@ -363,6 +363,52 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+/* =========================================
+   ФУНКЦИЯ ДОБАВЛЕНИЯ КНОПОК КОПИРОВАНИЯ
+   ========================================= */
+function addCopyButtons(container) {
+    // Находим все блоки pre внутри контейнера
+    const preBlocks = container.querySelectorAll('pre');
+
+    preBlocks.forEach(pre => {
+        // Если кнопка уже есть, пропускаем
+        if (pre.querySelector('.copy-btn')) return;
+
+        // Создаем контейнер-обертку (чтобы позиционировать кнопку)
+        // Но проще просто сделать pre relative
+        pre.style.position = 'relative';
+
+        // Создаем кнопку
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn btn btn-sm btn-dark position-absolute top-0 end-0 m-2';
+        btn.innerHTML = '<i class="bi bi-clipboard"></i>';
+        btn.title = 'Копировать код';
+        btn.style.zIndex = '10';
+        btn.style.opacity = '0.7';
+
+        // Логика клика
+        btn.onclick = () => {
+            const code = pre.querySelector('code');
+            if (!code) return;
+
+            // Копируем текст
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                // Успех: меняем иконку
+                btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-clipboard"></i>';
+                }, 2000);
+            }).catch(err => {
+                console.error('Ошибка копирования:', err);
+                btn.innerHTML = '<i class="bi bi-x-lg text-danger"></i>';
+            });
+        };
+
+        // Добавляем кнопку в блок
+        pre.appendChild(btn);
+    });
+}
+
 
 
 
