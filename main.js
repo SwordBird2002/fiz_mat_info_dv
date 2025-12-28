@@ -3,11 +3,11 @@
    ========================================= */
 let allMaterials = [];
 let shownCount = 0;
-const step = 6;
+const step = 5; // Чуть меньше шаг, раз карточки большие
 let isHomeworkMode = false;
 let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false';
 
-// Ссылки (Ваш бакет для домашки)
+// Ссылка на ДЗ (VK Cloud)
 const HOMEWORK_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json";
 
 /* =========================================
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     init3DButton();
     
-    // Фильтры
+    // Инициализация фильтров
     const filterContainer = document.getElementById('filterContainer');
     if (filterContainer) {
         const btns = filterContainer.querySelectorAll('.filter-btn');
@@ -27,10 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
                 
                 const category = btn.getAttribute('data-filter');
-                const wrappers = document.querySelectorAll('.filterDiv');
+                const wrappers = document.querySelectorAll('.filterDiv'); 
                 
                 wrappers.forEach(wrapper => {
-                    // Логика фильтрации: показываем или скрываем КОЛОНКУ (wrapper)
                     if (category === 'all') {
                         wrapper.classList.remove('hidden');
                     } else {
@@ -45,24 +44,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Загрузка новостей при старте
     loadMaterials();
 });
 
 /* =========================================
-   3. ЗАГРУЗКА И ОТРИСОВКА НОВОСТЕЙ (СЕТКА)
+   3. ЗАГРУЗКА НОВОСТЕЙ
    ========================================= */
 async function loadMaterials() {
     const container = document.getElementById('feed-container');
     if (!container) return;
 
-    // Очистка классов центровки, чтобы вернуть сетку слева-направо
+    // Убираем центровку, оставляем просто row
     container.classList.remove('justify-content-center'); 
-    container.classList.add('row'); // Гарантируем класс row
+    container.classList.add('row');
 
     try {
         if (allMaterials.length === 0) {
-            // Загружаем локальный data.json (новости)
             const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json'); 
             if (!response.ok) throw new Error('Ошибка HTTP data.json');
             allMaterials = await response.json();
@@ -70,14 +67,14 @@ async function loadMaterials() {
         }
         renderNextBatch();
     } catch (error) {
-        console.error('Ошибка loadMaterials:', error);
-        container.innerHTML = `<div class="col-12 text-center text-danger py-5">
-            <h4>Не удалось загрузить новости</h4>
-            <p>${error.message}</p>
-        </div>`;
+        console.error('Ошибка:', error);
+        container.innerHTML = `<p class="text-center text-danger">Не удалось загрузить ленту</p>`;
     }
 }
 
+/* =========================================
+   4. ОТРИСОВКА (СТРОГО ДРУГ ПОД ДРУГОМ)
+   ========================================= */
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
     const loadMoreBtn = document.getElementById('loadMoreContainer');
@@ -87,29 +84,28 @@ function renderNextBatch() {
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
 
     nextItems.forEach(item => {
-        // === СТРУКТУРА СЕТКИ (КАК БЫЛО РАНЬШЕ) ===
-        // col-md-6 (2 колонки), col-lg-4 (3 колонки).
+        // === ИЗМЕНЕНИЕ: col-12 ===
+        // Это заставляет карточку занимать 100% ширины (друг под другом)
         const cardWrapper = document.createElement('div');
-        cardWrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`;
+        cardWrapper.className = `col-12 mb-4 filterDiv ${item.subject}`;
 
         const card = document.createElement('div');
-        card.className = `material-card glass-card p-4 h-100 d-flex flex-column`;
+        card.className = `material-card glass-card p-4`; // Убрал h-100, тут не нужно
         card.style.cursor = 'pointer';
 
-        // 3D
+        // 3D эффект (чуть меньше наклон для широких карт)
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
-            VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
+            VanillaTilt.init(card, { max: 3, speed: 400, glare: true, "max-glare": 0.1, scale: 1.01 });
         }
 
-        // Превью
+        // Превью картинки (сделаем её широкой, но не слишком высокой)
         let mediaHtml = '';
         if (item.image) {
-            mediaHtml = `<div class="mb-3 rounded overflow-hidden" style="height: 180px;">
+            mediaHtml = `<div class="mb-3 rounded overflow-hidden" style="height: 250px;">
                 <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;">
             </div>`;
         }
 
-        // Бейджи
         let badgeClass = 'bg-secondary';
         let subjectName = item.subject || 'Общее';
         if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
@@ -121,12 +117,16 @@ function renderNextBatch() {
                 <span class="subject-badge ${badgeClass}">${subjectName}</span>
                 <small class="text-muted">${item.date || ''}</small>
             </div>
+            
             ${mediaHtml}
-            <h4 class="fw-bold mb-2">${item.title}</h4>
-            <div class="text-muted opacity-75 mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+
+            <h3 class="fw-bold mb-2">${item.title}</h3>
+            
+            <div class="text-muted opacity-75 mb-3 fs-5">
                 ${item.text || ''}
             </div>
-            <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
+
+            <button class="btn btn-outline-primary w-100">Читать подробнее</button>
         `;
 
         card.onclick = (e) => {
@@ -137,8 +137,8 @@ function renderNextBatch() {
         cardWrapper.appendChild(card);
         container.appendChild(cardWrapper);
     });
-
-    // MathJax
+    
+    // Рендер формул
     if (window.MathJax && MathJax.typesetPromise) {
          MathJax.typesetPromise([container]).catch(err => console.log(err));
     }
@@ -152,39 +152,43 @@ function renderNextBatch() {
 }
 
 /* =========================================
-   4. ДОМАШНЕЕ ЗАДАНИЕ (ГИБРИДНАЯ ЗАГРУЗКА)
+   5. ДОМАШНЕЕ ЗАДАНИЕ (ПЕРЕКЛЮЧЕНИЕ)
    ========================================= */
 async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
     const loadMore = document.getElementById('loadMoreContainer');
-    const filterContainer = document.getElementById('filterContainer');
+    const filterContainer = document.getElementById('filterContainer'); 
 
-    // Сброс фильтра
+    // Сброс фильтра на "Все" перед переключением
     const allFilterBtn = document.querySelector('[data-filter="all"]');
     if(allFilterBtn) allFilterBtn.click();
 
     if (!isHomeworkMode) {
-        // --- ВКЛЮЧАЕМ РЕЖИМ ДЗ ---
+        // --- ВКЛЮЧАЕМ ДЗ ---
         if(feed) feed.classList.add('hidden');
         if(loadMore) loadMore.classList.add('hidden');
-        if(filterContainer) filterContainer.classList.add('hidden'); // Прячем фильтры
+        
+        // Скрываем фильтры, так как в ДЗ они не нужны
+        if(filterContainer) filterContainer.classList.add('hidden');
         
         if(hwContainer) {
             hwContainer.classList.remove('hidden');
-            // Центрируем колонку ДЗ
-            hwContainer.className = 'd-flex flex-column align-items-center mt-4';
+            // Центрируем ДЗ
+            hwContainer.className = 'container mt-4 d-flex flex-column align-items-center';
         }
         
         if(btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        loadPersonalHomework(); // Грузим данные
+        loadPersonalHomework(); 
         isHomeworkMode = true;
     } else {
         // --- ВОЗВРАТ В ЛЕНТУ ---
         if(feed) feed.classList.remove('hidden');
         if(loadMore && shownCount < allMaterials.length) loadMore.classList.remove('hidden');
+        
+        // Возвращаем фильтры
         if(filterContainer) filterContainer.classList.remove('hidden');
         
         if(hwContainer) hwContainer.classList.add('hidden');
@@ -198,69 +202,57 @@ async function toggleHomeworkView() {
 async function loadPersonalHomework() {
     const container = document.getElementById('personal-homework-feed');
     if(!container) return;
-    
     container.innerHTML = '<div class="spinner-border text-primary my-3"></div>';
+    
+    // Ограничиваем ширину ДЗ (оно красивее узким списком, чем на весь экран)
     container.style.width = '100%';
-    container.style.maxWidth = '800px'; // Ограничиваем ширину для красоты
+    container.style.maxWidth = '800px'; 
     
     let data = null;
 
-    // 1. Попытка загрузить с БАКЕТА (удаленно)
+    // 1. Попытка загрузить с БАКЕТА
     try {
         const response = await fetch(HOMEWORK_URL);
-        if (response.ok) {
+        if(response.ok) {
             data = await response.json();
-            console.log("Загружено с облака");
         } else {
             throw new Error('Cloud fail');
         }
-    } catch (cloudErr) {
-        console.warn("Облако недоступно (CORS?), пробую локальный файл...");
-        // 2. Если облако не отдало (CORS), пробуем ЛОКАЛЬНЫЙ файл
+    } catch(e) {
+        console.warn('Облако недоступно, пробую локально...');
+        // 2. Локальный файл
         try {
-            const localRes = await fetch('homework.json');
-            if (localRes.ok) {
-                data = await localRes.json();
-                console.log("Загружено локально");
-            }
-        } catch (localErr) {
-            console.error("Везде ошибка");
-        }
+            const local = await fetch('homework.json');
+            if(local.ok) data = await local.json();
+        } catch(err) { console.error(err); }
     }
 
-    // Рендер
     container.innerHTML = '';
     
     if (!data) {
-        container.innerHTML = '<div class="alert alert-danger">Не удалось загрузить домашнее задание.</div>';
+        container.innerHTML = '<div class="alert alert-warning text-center">Не удалось загрузить задания</div>';
         return;
     }
 
-    // Разбор структуры: ищем массив
+    // Ищем массив задач
     let tasks = [];
-    if (Array.isArray(data)) {
-        tasks = data;
-    } else if (data.group1) {
-        tasks = data.group1;
-    } else {
-        // Если структура неизвестна, пробуем взять первое значение
-        tasks = Object.values(data)[0]; 
-    }
+    if (Array.isArray(data)) tasks = data;
+    else if (data.group1) tasks = data.group1;
+    else tasks = Object.values(data)[0] || [];
 
-    if (!tasks || tasks.length === 0) {
-        container.innerHTML = '<p class="text-center text-muted">Нет заданий</p>';
+    if (tasks.length === 0) {
+        container.innerHTML = '<p class="text-center text-muted">Нет активных заданий</p>';
         return;
     }
 
-    // Рисуем карточки
     tasks.forEach(task => {
         const card = document.createElement('div');
-        card.className = 'glass-card p-4 mb-3 w-100';
+        card.className = 'glass-card p-4 mb-3 w-100'; 
         
         card.innerHTML = `
             <div class="d-flex justify-content-between mb-2">
                 <span class="badge bg-danger">${task.subject || 'ДЗ'}</span>
-                <small class="text-muted">Дедлайн: ${task.deadline || 'Нет'}</small>
+                <small class="text-muted">Дедлайн: ${task.deadline || ''}</small>
             </div>
             <h5 class="fw-bold mt-2">${task.title}</h5>
             <p class="opacity-75">${task.task}</p>
@@ -271,7 +263,7 @@ async function loadPersonalHomework() {
 }
 
 /* =========================================
-   5. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+   6. УТИЛИТЫ
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
@@ -324,7 +316,6 @@ function updateThemeIcon(theme) {
     const icon = document.getElementById('themeIcon');
     if(icon) icon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
 }
-
 function init3DButton() {
     update3DIcon();
     if (!is3DEnabled) disableAllTilt();
