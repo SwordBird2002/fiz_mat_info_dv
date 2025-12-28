@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-        <!-- Настройка MathJax (разрешаем $ для формул) -->
-    <script>
+   <script>
       window.MathJax = {
         tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']], // Формулы внутри строки: $...$ или \(...\)
-          displayMath: [['$$', '$$'], ['\\[', '\\]']] // Формулы отдельным блоком: $$...$$
+          inlineMath: [['$', '$'], ['\\(', '\\)']] 
         },
         svg: {
           fontCache: 'global'
         }
       };
     </script>
+
+    <!-- 2. Потом САМ СКРИПТ MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     
     <!-- Сам скрипт MathJax -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -394,6 +396,7 @@
 
 </body>
 </html>
+
 
 
 
