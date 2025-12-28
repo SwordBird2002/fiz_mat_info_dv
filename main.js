@@ -300,7 +300,7 @@ async function loadHomework() {
     container.innerHTML = '<h3 class="text-center mb-4 text-white">Актуальные задания</h3>'; 
 
     try {
-        const response = await fetch('homework.json');
+        const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json');
         const data = await response.json();
 
         data.forEach(item => {
@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
