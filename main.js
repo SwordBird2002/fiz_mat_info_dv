@@ -227,15 +227,17 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // 2. Инициализируем блоки с кодом (если есть функция initCodeBlocks)
-    if (typeof initCodeBlocks === 'function') {
-        initCodeBlocks(modalBody);
+    // 2. Запускаем подсветку кода (Prism.js)
+    // Проверяем, загрузилась ли библиотека, чтобы не было ошибки
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightAll();
     }
 
     // 3. Показываем окно
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; // Блокируем скролл фона
 }
+
 
 function closeModal(force) {
     const modal = document.getElementById('newsModal');
@@ -359,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
