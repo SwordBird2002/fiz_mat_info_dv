@@ -91,6 +91,28 @@
         .glass-card:hover { transform: translateY(-5px); }
 
         /* Логотип */
+        /* Кнопка ДЗ */
+        .btn-homework {
+            display: block;             /* Блочный элемент, чтобы работало margin: auto */
+            margin: 15px auto 0 auto;   /* Отступ сверху 15px, по бокам авто (центровка) */
+            background-color: rgba(249, 115, 22, 0.9); /* Приглушенный оранжевый */
+            color: white;
+            border: none;
+            padding: 10px 30px;         /* Размер побольше */
+            border-radius: 25px;        /* Сильное скругление */
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3); /* Оранжевое свечение */
+            text-decoration: none;      /* Убрать подчеркивание ссылки */
+            width: fit-content;         /* Ширина по контенту */
+        }
+        
+        .btn-homework:hover {
+            background-color: #ea580c; /* Чуть темнее при наведении */
+            transform: translateY(-2px);
+            color: white;
+        }
+
         .logo-circle {
             width: 36px; height: 36px; border-radius: 999px;
             background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
@@ -199,11 +221,20 @@
             <p class="text-muted">Разборы задач, шпаргалки и домашние задания</p>
             
             <div class="filters" id="filterContainer">
+    <!-- Ваши кнопки фильтров -->
                 <button class="filter-btn active" onclick="filterSelection('all')">Все</button>
                 <button class="filter-btn" onclick="filterSelection('math')">Математика</button>
                 <button class="filter-btn" onclick="filterSelection('cs')">Информатика</button>
                 <button class="filter-btn" onclick="filterSelection('phys')">Физика</button>
+            
+                <!-- НОВАЯ КНОПКА (с переносом на новую строку) -->
+                <div style="flex-basis: 100%; height: 0;"></div> <!-- Этот хак переносит кнопку вниз, если используется flex -->
+                
+                <a href="homework.html" class="btn-homework">
+                    <i class="bi bi-pencil-fill me-2"></i>Домашнее Задание
+                </a>
             </div>
+
         </div>
 
         <!-- ЛЕНТА (FEED) -->
@@ -217,7 +248,7 @@
 
     <!-- ФУТЕР -->
     <footer class="text-center py-4 mt-5 text-muted">
-        <small>&copy; 2025 Fiz | Mat | Info</small>
+        <small>&copy; 2026 Fiz | Mat | Info</small>
     </footer>
 
     <!-- СКРИПТЫ -->
@@ -248,5 +279,6 @@
     </script>
 </body>
 </html>
+
 
 
