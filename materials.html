@@ -325,6 +325,20 @@
                 font-size: 2rem; color: var(--text-color);
                 cursor: pointer; line-height: 1;
             }
+    /* ЯВНОЕ переопределение цвета для формы входа */
+            body[data-theme="light"] .login-title {
+                color: #333333 !important; /* Темно-серый для заголовка */
+            }
+            body[data-theme="light"] .login-desc {
+                color: #555555 !important; /* Чуть светлее для описания */
+            }
+            
+            body[data-theme="dark"] .login-title {
+                color: #ffffff !important; /* Белый для заголовка */
+            }
+            body[data-theme="dark"] .login-desc {
+                color: rgba(255, 255, 255, 0.7) !important; /* Полупрозрачный белый */
+            }
 
     </style>
 </head>
@@ -463,6 +477,7 @@
 
 </body>
 </html>
+
 
 
 
