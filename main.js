@@ -89,34 +89,31 @@ const step = 6;
 
 async function loadMaterials() {
     const container = document.getElementById('feed-container');
-    if (!container) return; 
+    if (!container) return;
 
-    // Добавляем кнопку "Показать еще"
-    let loadMoreContainer = document.getElementById('loadMoreContainer');
-    if (!loadMoreContainer) {
-        loadMoreContainer = document.createElement('div');
-        loadMoreContainer.id = 'loadMoreContainer';
-        loadMoreContainer.className = 'text-center mt-4 mb-5 hidden';
-        loadMoreContainer.innerHTML = `
-            <button onclick="renderNextBatch()" class="btn btn-outline-primary px-4 py-2 rounded-pill">
-                Показать еще материалы
-            </button>
-        `;
-        container.parentNode.insertBefore(loadMoreContainer, container.nextSibling);
-    }
-
+    // --- ЛОГИКА ЗАГРУЗКИ ---
     try {
         if (allMaterials.length === 0) {
-            const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json');
+            // 1. Загружаем данные
+            // (Замените URL на ваш бакет или локальный файл)
+            const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json'); 
+            
+            if (!response.ok) throw new Error('Ошибка сети');
             allMaterials = await response.json();
-            container.innerHTML = '';
+            
+            // 2. ВАЖНО: Очищаем контейнер от спиннера!
+            container.innerHTML = ''; 
         }
+        
+        // 3. Рисуем карточки
         renderNextBatch();
+        
     } catch (error) {
-        console.error('Ошибка загрузки:', error);
-        container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
+        console.error('Ошибка:', error);
+        container.innerHTML = '<div class="text-danger text-center">Ошибка загрузки данных</div>';
     }
 }
+
 
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
@@ -405,6 +402,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
