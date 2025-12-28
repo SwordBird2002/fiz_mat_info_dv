@@ -182,6 +182,52 @@
             .hidden {
                 display: none !important;
             }
+                        /* --- МОДАЛЬНОЕ ОКНО --- */
+            .modal-overlay {
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                z-index: 10000; /* Поверх всего */
+                
+                /* Эффект размытия фона */
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(8px); 
+                -webkit-backdrop-filter: blur(8px);
+                
+                /* Центрирование */
+                display: flex; justify-content: center; align-items: center;
+                
+                /* Скрыто по умолчанию */
+                opacity: 0; pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+            
+            /* Класс для открытия */
+            .modal-overlay.active {
+                opacity: 1; pointer-events: all;
+            }
+            
+            .modal-content {
+                width: 90%; max-width: 700px;
+                max-height: 90vh; /* Чтобы влезало на экран */
+                overflow-y: auto; /* Скролл внутри окна, если текста много */
+                padding: 30px;
+                position: relative;
+                transform: scale(0.9);
+                transition: transform 0.3s ease;
+                background: var(--card-bg); /* Берет цвет темы */
+                color: var(--text-color);
+            }
+            
+            .modal-overlay.active .modal-content {
+                transform: scale(1);
+            }
+            
+            .close-btn {
+                position: absolute; top: 15px; right: 20px;
+                background: none; border: none;
+                font-size: 2rem; color: var(--text-color);
+                cursor: pointer; line-height: 1;
+            }
 
     </style>
 </head>
@@ -314,6 +360,7 @@
  
 </body>
 </html>
+
 
 
 
