@@ -265,32 +265,29 @@ async function toggleHomeworkView() {
     if (!isHomeworkMode) {
         // === ВХОД В РЕЖИМ "ДОМАШНЕЕ ЗАДАНИЕ" ===
 
-        // 1. ВАЖНОЕ ИСПРАВЛЕНИЕ: Сбрасываем фильтр на "Все"
-        // Если этого не сделать, фильтр "Физика" скроет карточки ДЗ
+        // 1. Сбрасываем фильтр на "Все" (чтобы задания не скрывались)
         if (filterContainer) {
             const allBtn = filterContainer.querySelector('[data-filter="all"]');
             if (allBtn) {
-                allBtn.click(); // Имитируем клик по кнопке "Все"
+                allBtn.click(); 
             }
         }
 
-        // 2. Переключаем видимость контейнеров
+        // 2. Переключаем видимость блоков
         feed.classList.add('hidden');
         hwContainer.classList.remove('hidden');
 
-        // 3. Меняем кнопку на "Лента новостей"
+        // 3. Меняем текст кнопки
         btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        // 4. Проверяем авторизацию
-        const token = localStorage.getItem('studentToken');
-        
-        if (token) {
-            // Если есть сохраненный токен, сразу грузим задачи
-            currentUser = JSON.parse(token);
+        // 4. Проверка БЕЗ ТОКЕНА
+        // Мы просто смотрим, есть ли данные в переменной currentUser
+        if (currentUser) {
+            // Если пользователь уже вошел (в текущей вкладке браузера)
             showTasksInterface();
             loadPersonalHomework();
         } else {
-            // Если токена нет, показываем форму входа
+            // Если переменная пустая — показываем вход
             showLoginInterface();
         }
 
@@ -307,6 +304,7 @@ async function toggleHomeworkView() {
         isHomeworkMode = false;
     }
 }
+
 
 
 async function loadHomework() {
@@ -373,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
