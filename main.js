@@ -91,7 +91,7 @@ async function loadMaterials() {
     const container = document.getElementById('feed-container');
     if (!container) return; 
 
-    // Добавляем кнопку "Показать еще"
+    // Добавляем кнопку "Показать еще", если её нет
     let loadMoreContainer = document.getElementById('loadMoreContainer');
     if (!loadMoreContainer) {
         loadMoreContainer = document.createElement('div');
@@ -106,9 +106,16 @@ async function loadMaterials() {
     }
 
     try {
+        // Если массив пуст - загружаем данные заново
         if (allMaterials.length === 0) {
-            const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json');
+            // ДОБАВЛЕНО: ?t=... и cache: 'no-store' для отключения кеширования
+            const timestamp = Date.now();
+            const response = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json?t=${timestamp}`, {
+                cache: "no-store"
+            });
             allMaterials = await response.json();
+            
+            // Очищаем контейнер перед первой отрисовкой
             container.innerHTML = '';
         }
         renderNextBatch();
@@ -117,6 +124,7 @@ async function loadMaterials() {
         container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
     }
 }
+
 
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
@@ -247,9 +255,27 @@ function openModal(item) {
 
 function closeModal(force) {
     const modal = document.getElementById('newsModal');
-    if (force || (event && event.target === modal)) {
+    
+    // Проверка: нажали кнопку закрытия (force) или кликнули по темному фону (event.target === modal)
+    if (force || (window.event && window.event.target === modal)) {
         modal.classList.remove('active');
-        document.body.style.overflow = ''; 
+        document.body.style.overflow = ''; // Возвращаем скролл
+        
+        // === ЛОГИКА ОБНОВЛЕНИЯ ЛЕНТЫ ===
+        // 1. Очищаем массив данных и счетчик
+        allMaterials = []; 
+        shownCount = 0;
+        
+        // 2. Очищаем визуальный контейнер
+        const container = document.getElementById('feed-container');
+        if (container) {
+            container.innerHTML = ''; 
+            // Можно добавить спиннер для красоты на момент загрузки
+            container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>';
+        }
+
+        // 3. Запускаем загрузку заново (она подтянет свежий JSON)
+        loadMaterials();
     }
 }
 
@@ -406,3 +432,4 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
