@@ -260,49 +260,55 @@ async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
-    
-    // ИСПРАВЛЕНИЕ: Используем правильный ID, который у вас в HTML/JS
-    const filterContainer = document.getElementById('filterContainer'); 
+    const filterContainer = document.getElementById('filterContainer'); // Убедитесь, что ID совпадает с HTML
 
     if (!isHomeworkMode) {
         // === ВХОД В РЕЖИМ "ДОМАШНЕЕ ЗАДАНИЕ" ===
+        isHomeworkMode = true; // Ставим флаг сразу
 
-        // 1. Сбрасываем фильтр на "Все", чтобы ДЗ не скрывалось
-        if (filterContainer) {
-            const allBtn = filterContainer.querySelector('[data-filter="all"]');
-            if (allBtn) {
-                allBtn.click(); // Имитируем клик по кнопке "Все"
+        // 1. Сбрасываем фильтр (оборачиваем в try-catch, чтобы ошибка здесь не сломала остальной код)
+        try {
+            if (filterContainer) {
+                const allBtn = filterContainer.querySelector('[data-filter="all"]');
+                if (allBtn) allBtn.click();
             }
+        } catch (e) {
+            console.error("Ошибка сброса фильтра", e);
         }
 
-        // 2. Переключаем видимость блоков
+        // 2. Переключаем основные контейнеры
         feed.classList.add('hidden');
-        hwContainer.classList.remove('hidden');
+        hwContainer.classList.remove('hidden'); // Показываем главный контейнер ДЗ
 
-        // 3. Меняем текст кнопки
+        // 3. Меняем кнопку
         btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        // 4. Проверка БЕЗ ТОКЕНА (как вы просили)
+        // 4. ЛОГИКА ОТОБРАЖЕНИЯ (Без токена)
         if (currentUser) {
-            showTasksInterface();
-            loadPersonalHomework();
+            // ПРИНУДИТЕЛЬНО показываем список задач и скрываем вход
+            const tasksList = document.getElementById('tasksList');
+            const loginInterface = document.getElementById('loginInterface');
+            
+            if (loginInterface) loginInterface.classList.add('hidden');
+            if (tasksList) tasksList.classList.remove('hidden'); // <--- ВАЖНО: убираем hidden вручную
+
+            // Загружаем данные
+            loadPersonalHomework(); 
         } else {
             showLoginInterface();
         }
 
-        isHomeworkMode = true;
-
     } else {
         // === ВОЗВРАТ В РЕЖИМ "ЛЕНТА НОВОСТЕЙ" ===
+        isHomeworkMode = false;
 
         feed.classList.remove('hidden');
         hwContainer.classList.add('hidden');
         
         btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
-        
-        isHomeworkMode = false;
     }
 }
+
 
 
 async function loadHomework() {
@@ -369,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
