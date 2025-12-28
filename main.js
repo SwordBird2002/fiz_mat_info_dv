@@ -602,7 +602,9 @@ async function loadHomework(token) {
         if (typeof MathJax !== 'undefined') {
             MathJax.typesetPromise([container]).catch(err => console.log('MathJax hw error:', err));
         }
-
+         if (typeof initCodeBlocks === 'function') {
+             initCodeBlocks(container);
+         }
     } catch (error) {
         console.error(error);
         container.innerHTML = `
@@ -692,6 +694,7 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
 
 
