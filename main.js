@@ -318,6 +318,69 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+/* =========================================
+   6. УПРАВЛЕНИЕ 3D ЭФФЕКТОМ
+   ========================================= */
+let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; // По умолчанию ВКЛ (true)
+
+function init3DButton() {
+    update3DIcon();
+    // Если 3D выключено, сразу отключаем эффект
+    if (!is3DEnabled) {
+        disableAllTilt();
+    }
+}
+
+function toggle3D() {
+    is3DEnabled = !is3DEnabled;
+    localStorage.setItem('3d_enabled', is3DEnabled);
+    
+    update3DIcon();
+    
+    if (is3DEnabled) {
+        // Перезагружаем страницу, чтобы эффект применился заново (самый надежный способ для tilt.js)
+        // Либо можно пройтись циклом и сделать tilt.init() снова
+        location.reload(); 
+    } else {
+        disableAllTilt();
+    }
+}
+
+function disableAllTilt() {
+    // Находим все элементы с tilt
+    const cards = document.querySelectorAll('.material-card');
+    cards.forEach(card => {
+        // У vanilla-tilt есть метод destroy(), который убирает эффект
+        if (card.vanillaTilt) {
+            card.vanillaTilt.destroy();
+        }
+        // Сбрасываем стили, чтобы карточка не застряла в наклоне
+        card.style.transform = 'none';
+        card.style.willChange = 'auto';
+    });
+}
+
+function update3DIcon() {
+    const btn = document.getElementById('btn3D');
+    const icon = document.getElementById('icon3D');
+    if (!btn || !icon) return;
+
+    if (is3DEnabled) {
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-outline-primary'); // Активный цвет
+        icon.className = 'bi bi-box-fill'; // Заполненный куб
+    } else {
+        btn.classList.remove('btn-outline-primary');
+        btn.classList.add('btn-outline-secondary'); // Серый цвет
+        icon.className = 'bi bi-box'; // Пустой куб
+    }
+}
+
+// Запускаем инициализацию кнопки
+document.addEventListener('DOMContentLoaded', init3DButton);
+
+
+
 
 
 
