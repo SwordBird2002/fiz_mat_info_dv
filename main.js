@@ -257,55 +257,26 @@ function closeModal(force) {
 let isHomeworkMode = false;
 
 async function toggleHomeworkView() {
-    const btn = document.getElementById('hwBtn');
-    const feed = document.getElementById('feed-container');
-    const hwContainer = document.getElementById('homework-container');
-    const tasksList = document.getElementById('tasksList'); // Контейнер списка задач
+  const btn = document.getElementById('hwBtn');
+  const feed = document.getElementById('feed-container');
+  const hwContainer = document.getElementById('homework-container');
 
-    if (!isHomeworkMode) {
-        // === ВКЛЮЧАЕМ РЕЖИМ ДЗ ===
+  if (!isHomeworkMode) {
+    if (feed) feed.classList.add('hidden');
+    if (hwContainer) hwContainer.classList.remove('hidden');
 
-        // 1. Скрываем ленту новостей
-        if (feed) feed.classList.add('hidden');
-        
-        // 2. Показываем контейнер ДЗ
-        if (hwContainer) hwContainer.classList.remove('hidden');
-        
-        // 3. ОБЯЗАТЕЛЬНО: Показываем сам список (убираем hidden, если он был)
-        if (tasksList) tasksList.classList.remove('hidden');
+    if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
 
-        // 4. Меняем кнопку
-        if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
-        
-        // --- ЗАГЛУШКА ВМЕСТО ЛОГИНА ---
-        // Так как логина нет, мы вручную создаем пользователя, 
-        // чтобы скрипт знал, для кого искать задания.
-        // Можете поменять "group1" на ту группу, для которой хотите видеть ДЗ.
-        currentUser = {
-            name: "Ученик",
-            group: "group1" 
-        };
+    // Возвращаем старую загрузку ДЗ (карточки добавляются прямо в homework-container)
+    await loadHomework();
 
-        // 5. Загружаем задания
-        // Оборачиваем в try-catch, чтобы если там ошибка, кнопка не сломалась
-        try {
-            await loadPersonalHomework();
-        } catch (e) {
-            console.error("Ошибка при загрузке заданий:", e);
-        }
-
-        isHomeworkMode = true;
-
-    } else {
-        // === ВОЗВРАТ В ЛЕНТУ НОВОСТЕЙ ===
-
-        if (feed) feed.classList.remove('hidden');
-        if (hwContainer) hwContainer.classList.add('hidden');
-        
-        if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
-        
-        isHomeworkMode = false;
-    }
+    isHomeworkMode = true;
+  } else {
+    if (feed) feed.classList.remove('hidden');
+    if (hwContainer) hwContainer.classList.add('hidden');
+    if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
+    isHomeworkMode = false;
+  }
 }
 
 
@@ -468,6 +439,7 @@ async function loadPersonalHomework() {
             </div>`;
     }
 }
+
 
 
 
