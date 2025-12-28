@@ -28,47 +28,90 @@ function updateThemeIcon(theme) {
     }
 }
 
-// Запускаем тему сразу при загрузке
 document.addEventListener('DOMContentLoaded', initTheme);
 
 
 /* =========================================
-   2. ЗАГРУЗКА МАТЕРИАЛОВ С ПАГИНАЦИЕЙ
+   2. УПРАВЛЕНИЕ 3D ЭФФЕКТОМ (TILT)
    ========================================= */
-let allMaterials = []; // Хранилище всех загруженных данных
-let shownCount = 0;    // Сколько уже показано
-const step = 6;        // Сколько показывать за раз
+let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; // По умолчанию true
+
+function init3DButton() {
+    update3DIcon();
+    if (!is3DEnabled) disableAllTilt();
+}
+
+function toggle3D() {
+    is3DEnabled = !is3DEnabled;
+    localStorage.setItem('3d_enabled', is3DEnabled);
+    update3DIcon();
+    
+    if (is3DEnabled) {
+        location.reload(); // Перезагрузка для включения
+    } else {
+        disableAllTilt();
+    }
+}
+
+function disableAllTilt() {
+    const cards = document.querySelectorAll('.material-card');
+    cards.forEach(card => {
+        if (card.vanillaTilt) card.vanillaTilt.destroy();
+        card.style.transform = 'none';
+    });
+}
+
+function update3DIcon() {
+    const btn = document.getElementById('btn3D');
+    const icon = document.getElementById('icon3D');
+    if (!btn || !icon) return;
+
+    if (is3DEnabled) {
+        btn.classList.remove('btn-secondary');
+        btn.classList.add('btn-outline-primary');
+        icon.className = 'bi bi-box-fill';
+    } else {
+        btn.classList.remove('btn-outline-primary');
+        btn.classList.add('btn-outline-secondary');
+        icon.className = 'bi bi-box';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', init3DButton);
+
+
+/* =========================================
+   3. ЗАГРУЗКА МАТЕРИАЛОВ (С ПАГИНАЦИЕЙ)
+   ========================================= */
+let allMaterials = [];
+let shownCount = 0;
+const step = 6;
 
 async function loadMaterials() {
     const container = document.getElementById('feed-container');
-    if (!container) return; // Если мы не на странице материалов, выходим
+    if (!container) return; 
 
-    // Добавляем кнопку "Показать еще", если её нет
+    // Добавляем кнопку "Показать еще"
     let loadMoreContainer = document.getElementById('loadMoreContainer');
     if (!loadMoreContainer) {
         loadMoreContainer = document.createElement('div');
         loadMoreContainer.id = 'loadMoreContainer';
-        loadMoreContainer.className = 'text-center mt-4 mb-5 hidden'; // Скрыта по умолчанию
+        loadMoreContainer.className = 'text-center mt-4 mb-5 hidden';
         loadMoreContainer.innerHTML = `
             <button onclick="renderNextBatch()" class="btn btn-outline-primary px-4 py-2 rounded-pill">
                 Показать еще материалы
             </button>
         `;
-        // Вставляем кнопку ПОСЛЕ контейнера с карточками
         container.parentNode.insertBefore(loadMoreContainer, container.nextSibling);
     }
 
     try {
-        // Скачиваем данные только один раз
         if (allMaterials.length === 0) {
             const response = await fetch('data.json');
             allMaterials = await response.json();
-            container.innerHTML = ''; // Очищаем контейнер
+            container.innerHTML = '';
         }
-
-        // Рисуем первую партию
         renderNextBatch();
-
     } catch (error) {
         console.error('Ошибка загрузки:', error);
         container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
@@ -78,39 +121,33 @@ async function loadMaterials() {
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
     const btnContainer = document.getElementById('loadMoreContainer');
-
-    // Берем кусочек данных
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
 
     nextItems.forEach(item => {
-        // Определяем стили бейджей
         let badgeClass = '', subjectName = '';
         if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
         else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
-        // Создаем карточку
         const card = document.createElement('div');
         card.className = `material-card glass-card filterDiv ${item.subject}`;
         card.style.cursor = 'pointer';
 
-        // 3D эффект (VanillaTilt)
+        // 3D эффект
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, {
                 max: 5, speed: 500, glare: true, "max-glare": 0.3, scale: 1.02, gyroscope: true
             });
         }
 
-        // Клик для открытия модалки
+        // КЛИК ДЛЯ ОТКРЫТИЯ МОДАЛКИ
         card.onclick = (e) => {
             if(e.target.tagName === 'A' || e.target.closest('a')) return;
             openModal(item);
         };
 
-        // Мини-превью файла
         let filePreview = item.file ? '<div class="text-muted small mt-2"><i class="bi bi-paperclip"></i> Прикреплен файл</div>' : '';
 
-        // Вставляем HTML
         card.innerHTML = `
             <div class="card-header-custom">
                 <span class="subject-badge ${badgeClass}">${subjectName}</span>
@@ -128,10 +165,8 @@ function renderNextBatch() {
         container.appendChild(card);
     });
 
-    // Обновляем счетчик
     shownCount += nextItems.length;
 
-    // Скрываем кнопку, если всё показали
     if (shownCount >= allMaterials.length) {
         btnContainer.classList.add('hidden');
     } else {
@@ -139,20 +174,19 @@ function renderNextBatch() {
     }
 }
 
-// Запускаем загрузку, если мы на странице материалов
 if (document.getElementById('feed-container')) {
     document.addEventListener('DOMContentLoaded', loadMaterials);
 }
 
 
 /* =========================================
-   3. МОДАЛЬНОЕ ОКНО
+   4. МОДАЛЬНОЕ ОКНО
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
     const modalBody = document.getElementById('modalBody');
     if (!modal || !modalBody) return;
-
+    
     let mediaHtml = '';
     if (item.image) mediaHtml = `<img src="${item.image}" class="img-fluid rounded mb-4 w-100">`;
     
@@ -203,7 +237,7 @@ function closeModal(force) {
 
 
 /* =========================================
-   4. ЛОГИКА ДЗ (HOMEWORK)
+   5. ЛОГИКА ДЗ (HOMEWORK)
    ========================================= */
 let isHomeworkMode = false;
 
@@ -217,11 +251,9 @@ async function toggleHomeworkView() {
     if (!feed || !hwContainer || !btn) return;
 
     if (!isHomeworkMode) {
-        // ВКЛЮЧАЕМ РЕЖИМ ДЗ
         feed.classList.add('hidden');
-        if (loadMoreBtn) loadMoreBtn.classList.add('hidden'); // Прячем кнопку "Показать еще"
+        if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
         
-        // Прячем только кнопки фильтров
         const buttonsRow = filterContainer.querySelector('.d-flex'); 
         if(buttonsRow) buttonsRow.classList.add('hidden');
 
@@ -234,9 +266,7 @@ async function toggleHomeworkView() {
         isHomeworkMode = true;
 
     } else {
-        // ВЫКЛЮЧАЕМ РЕЖИМ ДЗ
         feed.classList.remove('hidden');
-        // Показываем кнопку "Показать еще" только если есть что показывать
         if (loadMoreBtn && shownCount < allMaterials.length) loadMoreBtn.classList.remove('hidden');
 
         const buttonsRow = filterContainer.querySelector('.d-flex'); 
@@ -252,7 +282,6 @@ async function toggleHomeworkView() {
 
 async function loadHomework() {
     const container = document.getElementById('homework-container');
-    // Оставляем заголовок
     container.innerHTML = '<h3 class="text-center mb-4 text-white">Актуальные задания</h3>'; 
 
     try {
@@ -278,7 +307,6 @@ async function loadHomework() {
             `;
             container.appendChild(card);
         });
-
     } catch (error) {
         container.innerHTML += '<p class="text-center text-danger">Ошибка загрузки ДЗ</p>';
     }
@@ -286,7 +314,7 @@ async function loadHomework() {
 
 
 /* =========================================
-   5. ФИЛЬТРАЦИЯ (JS EVENT LISTENER)
+   6. ФИЛЬТРАЦИЯ (EVENT LISTENER)
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
     const filterContainer = document.getElementById('filterContainer');
@@ -316,73 +344,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-/* =========================================
-   6. УПРАВЛЕНИЕ 3D ЭФФЕКТОМ
-   ========================================= */
-let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; // По умолчанию ВКЛ (true)
-
-function init3DButton() {
-    update3DIcon();
-    // Если 3D выключено, сразу отключаем эффект
-    if (!is3DEnabled) {
-        disableAllTilt();
-    }
-}
-
-function toggle3D() {
-    is3DEnabled = !is3DEnabled;
-    localStorage.setItem('3d_enabled', is3DEnabled);
-    
-    update3DIcon();
-    
-    if (is3DEnabled) {
-        // Перезагружаем страницу, чтобы эффект применился заново (самый надежный способ для tilt.js)
-        // Либо можно пройтись циклом и сделать tilt.init() снова
-        location.reload(); 
-    } else {
-        disableAllTilt();
-    }
-}
-
-function disableAllTilt() {
-    // Находим все элементы с tilt
-    const cards = document.querySelectorAll('.material-card');
-    cards.forEach(card => {
-        // У vanilla-tilt есть метод destroy(), который убирает эффект
-        if (card.vanillaTilt) {
-            card.vanillaTilt.destroy();
-        }
-        // Сбрасываем стили, чтобы карточка не застряла в наклоне
-        card.style.transform = 'none';
-        card.style.willChange = 'auto';
-    });
-}
-
-function update3DIcon() {
-    const btn = document.getElementById('btn3D');
-    const icon = document.getElementById('icon3D');
-    if (!btn || !icon) return;
-
-    if (is3DEnabled) {
-        btn.classList.remove('btn-secondary');
-        btn.classList.add('btn-outline-primary'); // Активный цвет
-        icon.className = 'bi bi-box-fill'; // Заполненный куб
-    } else {
-        btn.classList.remove('btn-outline-primary');
-        btn.classList.add('btn-outline-secondary'); // Серый цвет
-        icon.className = 'bi bi-box'; // Пустой куб
-    }
-}
-
-// Запускаем инициализацию кнопки
-document.addEventListener('DOMContentLoaded', init3DButton);
-
-
-
-
-
-
-
-
