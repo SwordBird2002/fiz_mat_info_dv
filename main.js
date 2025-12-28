@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', initTheme);
 /* =========================================
    2. УПРАВЛЕНИЕ 3D ЭФФЕКТОМ (TILT)
    ========================================= */
-let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; // По умолчанию true
+let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; 
 
 function init3DButton() {
     update3DIcon();
@@ -45,7 +45,7 @@ function toggle3D() {
     localStorage.setItem('3d_enabled', is3DEnabled);
     update3DIcon();
     if (is3DEnabled) {
-        location.reload(); // Перезагрузка для включения
+        location.reload(); 
     } else {
         disableAllTilt();
     }
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', init3DButton);
 
 
 /* =========================================
-   3. ЗАГРУЗКА МАТЕРИАЛОВ (С ПАГИНАЦИЕЙ)
+   3. ЗАГРУЗКА МАТЕРИАЛОВ (ЛЕНТА)
    ========================================= */
 let allMaterials = [];
 let shownCount = 0;
@@ -89,7 +89,6 @@ async function loadMaterials() {
     const container = document.getElementById('feed-container');
     if (!container) return;
 
-    // Добавляем кнопку "Показать еще"
     let loadMoreContainer = document.getElementById('loadMoreContainer');
     if (!loadMoreContainer) {
         loadMoreContainer = document.createElement('div');
@@ -101,7 +100,6 @@ async function loadMaterials() {
 
     try {
         if (allMaterials.length === 0) {
-            // Загрузка с внешнего источника
             const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json');
             if (!response.ok) throw new Error('Ошибка сети');
             allMaterials = await response.json();
@@ -109,11 +107,8 @@ async function loadMaterials() {
         }
         renderNextBatch();
     } catch (error) {
-        console.error('Ошибка загрузки:', error);
-        container.innerHTML = `<div class="text-center text-danger py-5">
-            <h4>Не удалось загрузить материалы</h4>
-            <p>${error.message}</p>
-        </div>`;
+        console.error('Ошибка:', error);
+        container.innerHTML = `<div class="text-center text-danger py-5"><h4>Не удалось загрузить материалы</h4></div>`;
     }
 }
 
@@ -131,26 +126,24 @@ function renderNextBatch() {
         else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
+        // ОБЕРТКА ДЛЯ ФИЛЬТРАЦИИ И СЕТКИ
+        const wrapper = document.createElement('div');
+        wrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`; // Сетка Bootstrap
+
         const card = document.createElement('div');
-        // Обратите внимание: класс filterDiv добавлен для работы фильтрации
-        card.className = `material-card glass-card filterDiv ${item.subject}`; 
+        card.className = `material-card glass-card p-4 h-100 d-flex flex-column`; 
         card.style.cursor = 'pointer';
 
-        // 3D эффект
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
-            VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.3, scale: 1.02, gyroscope: true });
+            VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.3, scale: 1.02 });
         }
 
-        // КЛИК ДЛЯ ОТКРЫТИЯ МОДАЛКИ
         card.onclick = (e) => {
             if(e.target.tagName === 'A' || e.target.closest('a')) return;
             openModal(item);
         };
 
-        let filePreview = item.file ? `<div class="text-primary mb-2"><i class="bi bi-paperclip me-1"></i>${item.file.name}</div>` : '';
         let mediaHtml = item.image ? `<img src="${item.image}" class="img-fluid rounded mb-3" style="max-height: 200px; width: 100%; object-fit: cover;">` : '';
-
-        // Обрезка текста для превью
         let shortText = item.text ? item.text.substring(0, 100) + '...' : '';
 
         card.innerHTML = `
@@ -160,25 +153,21 @@ function renderNextBatch() {
             </div>
             ${mediaHtml}
             <h5 class="fw-bold mb-2">${item.title}</h5>
-            <div class="text-muted small mb-3">${shortText}</div>
-            ${filePreview}
+            <div class="text-muted small mb-3 flex-grow-1">${shortText}</div>
+            <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
         `;
         
-        container.appendChild(card);
+        wrapper.appendChild(card);
+        container.appendChild(wrapper);
     });
 
     shownCount += nextItems.length;
 
-    // Управление кнопкой "Показать еще"
     if (btnContainer) {
-        if (shownCount >= allMaterials.length) {
-            btnContainer.classList.add('hidden');
-        } else {
-            btnContainer.classList.remove('hidden');
-        }
+        if (shownCount >= allMaterials.length) btnContainer.classList.add('hidden');
+        else btnContainer.classList.remove('hidden');
     }
 
-    // === ВАЖНО: ОТРИСОВКА ФОРМУЛ (MATHJAX) ===
     if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
     }
@@ -188,7 +177,7 @@ document.addEventListener('DOMContentLoaded', loadMaterials);
 
 
 /* =========================================
-   4. МОДАЛЬНОЕ ОКНО (С ФОРМУЛАМИ)
+   4. МОДАЛЬНОЕ ОКНО
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
@@ -215,7 +204,6 @@ function openModal(item) {
         linkHtml = `<a href="${item.link}" target="_blank" class="btn btn-outline-primary w-100 mt-3"><i class="bi bi-box-arrow-up-right me-2"></i>${item.linkText || 'Открыть ссылку'}</a>`;
     }
 
-    // Собираем контент
     modalBody.innerHTML = `
         <div class="mb-3">
             <span class="badge bg-secondary">${item.subject === 'math' ? 'Математика' : item.subject === 'cs' ? 'Информатика' : 'Физика'}</span>
@@ -230,21 +218,15 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // Показываем модалку
     modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+    document.body.style.overflow = 'hidden'; 
 
-    // === ВАЖНО: ОТРИСОВКА ФОРМУЛ В МОДАЛКЕ ===
     if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise([modalBody]).catch(err => console.log('MathJax modal error:', err));
+        MathJax.typesetPromise([modalBody]).catch(err => console.log(err));
     }
-
-    // Подсветка кода (если используется Prism.js)
     if (typeof Prism !== 'undefined') {
         Prism.highlightAll();
     }
-    
-    // Кнопки копирования для блоков кода
     addCopyButtons(modalBody);
 }
 
@@ -253,11 +235,9 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
-// Доп. функция для кнопок копирования кода
 function addCopyButtons(container) {
     container.querySelectorAll('pre').forEach(pre => {
-        if (pre.parentNode.querySelector('.copy-btn')) return; // защита от дублей
-        
+        if (pre.parentNode.querySelector('.copy-btn')) return; 
         pre.style.position = 'relative';
         const btn = document.createElement('button');
         btn.className = 'btn btn-sm btn-light position-absolute top-0 end-0 m-2 copy-btn opacity-50';
@@ -276,7 +256,7 @@ function addCopyButtons(container) {
 
 
 /* =========================================
-   5. ДОМАШНЕЕ ЗАДАНИЕ (ПЕРЕКЛЮЧЕНИЕ)
+   5. ДОМАШНЕЕ ЗАДАНИЕ (ВОССТАНОВЛЕНО)
    ========================================= */
 async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
@@ -284,22 +264,115 @@ async function toggleHomeworkView() {
     const btnMore = document.getElementById('loadMoreContainer');
     const filterDiv = document.getElementById('filterContainer');
     
-    // Элемент для отображения ДЗ (создадим, если нет)
+    // Создаем контейнер ДЗ, если его нет
     let hwContainer = document.getElementById('homework-container');
     if (!hwContainer) {
         hwContainer = document.createElement('div');
         hwContainer.id = 'homework-container';
         hwContainer.className = 'hidden container mt-4';
-        feed.parentNode.insertBefore(hwContainer, feed.nextSibling);
+        if(feed && feed.parentNode) feed.parentNode.insertBefore(hwContainer, feed.nextSibling);
     }
 
-    // Если сейчас НЕ режим ДЗ -> Включаем ДЗ
     if (!btn.classList.contains('active-hw')) {
-        // Меняем состояние
+        // -> ВКЛЮЧАЕМ РЕЖИМ ДЗ
         btn.classList.add('active-hw');
-        btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей'; // Меняем текст кнопки
+        btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        // Скрываем ленту и фильтры
-        feed.classList.add('hidden');
+        if(feed) feed.classList.add('hidden');
         if (btnMore) btnMore.classList.add('hidden');
-        if
+        if (filterDiv) filterDiv.classList.add('hidden'); // Скрываем фильтры
+
+        hwContainer.classList.remove('hidden');
+        await loadPersonalHomework(hwContainer);
+
+    } else {
+        // -> ВОЗВРАТ В ЛЕНТУ
+        btn.classList.remove('active-hw');
+        btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
+        
+        if(feed) feed.classList.remove('hidden');
+        if (btnMore && shownCount < allMaterials.length) btnMore.classList.remove('hidden');
+        if (filterDiv) filterDiv.classList.remove('hidden'); // Показываем фильтры
+        
+        hwContainer.classList.add('hidden');
+    }
+}
+
+async function loadPersonalHomework(container) {
+    container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
+    
+    try {
+        const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json');
+        if (!response.ok) throw new Error('Ошибка загрузки');
+        const data = await response.json();
+        
+        const tasks = data['group1'] || (Array.isArray(data) ? data : []);
+        
+        container.innerHTML = '';
+        
+        if (tasks.length === 0) {
+            container.innerHTML = '<div class="text-center text-muted py-5"><h4>Нет активных заданий</h4></div>';
+            return;
+        }
+
+        tasks.forEach(task => {
+            const card = document.createElement('div');
+            card.className = 'glass-card p-4 mb-3';
+            card.style.animation = 'fadeIn 0.5s ease';
+            
+            card.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-danger">${task.subject}</span>
+                    <small class="text-muted fw-bold">Дедлайн: ${task.deadline}</small>
+                </div>
+                <h5 class="fw-bold">${task.title}</h5>
+                <p class="mb-3">${task.task}</p>
+                <a href="${task.link}" target="_blank" class="btn btn-outline-primary btn-sm w-100">
+                    <i class="bi bi-pencil-square me-2"></i>Перейти к выполнению
+                </a>
+            `;
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = `
+            <div class="alert alert-danger text-center">
+                Не удалось загрузить домашнее задание.<br>
+                <small>${error.message}</small>
+            </div>`;
+    }
+}
+
+
+/* =========================================
+   6. ФИЛЬТРАЦИЯ (EVENT LISTENER)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    const filterContainer = document.getElementById('filterContainer');
+    if (!filterContainer) return;
+
+    const btns = filterContainer.querySelectorAll('.filter-btn');
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const category = btn.getAttribute('data-filter');
+            // Ищем элементы с классом filterDiv (это обертки карточек)
+            const wrappers = document.querySelectorAll('.filterDiv');
+            
+            wrappers.forEach(wrapper => {
+                if (category === 'all') {
+                    wrapper.classList.remove('hidden');
+                } else {
+                    if (wrapper.classList.contains(category)) {
+                        wrapper.classList.remove('hidden');
+                    } else {
+                        wrapper.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+});
