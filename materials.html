@@ -322,19 +322,35 @@
         </div>
 
         <!-- ЛЕНТА (FEED) -->
-        <div class="feed-container" id="feed-container">
-            <div class="text-center py-5 glass-card">
+                <!-- 1. ЛЕНТА НОВОСТЕЙ -->
+        <!-- Оставляем класс 'row', так как в JS карточки создаются как col-md-6 и т.д., 
+             либо используем ваш класс feed-container, если под него написан CSS Grid -->
+        <div id="feed-container" class="row">
+            <div class="col-12 text-center py-5">
                 <div class="spinner-border text-primary" role="status"></div>
-                <p class="mt-2 text-muted">Загрузка материалов из базы...</p>
+                <p class="mt-2 text-white">Загрузка материалов из базы...</p>
             </div>
         </div>
-        <!-- Контейнер для ДЗ (изначально скрыт) -->
-        <div class="feed-container hidden" id="homework-container">
-            <h3 class="text-center mb-4 text-white">Актуальные задания</h3>
-            <!-- Сюда JS загрузит карточки -->
+
+        <!-- 2. КОНТЕЙНЕР ДЛЯ ДЗ -->
+        <!-- Убрали класс "feed-container", чтобы он не конфликтовал с hidden -->
+        <div id="homework-container" class="container mt-4 hidden">
+            
+            <!-- Внутренний блок, который ищет JS (tasksList) -->
+            <div id="tasksList">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="text-white mb-0">Актуальные задания</h3>
+                        <p class="text-light opacity-75 small mb-0">Привет, <span id="userName">Ученик</span>!</p>
+                    </div>
+                </div>
+
+                <!-- СЮДА JS БУДЕТ ВСТАВЛЯТЬ КАРТОЧКИ -->
+                <div id="personal-homework-feed"></div>
+            </div>
+
         </div>
 
-    </div>
 
     <!-- ФУТЕР -->
     <footer class="text-center py-4 mt-5 text-muted">
@@ -363,6 +379,7 @@
  
 </body>
 </html>
+
 
 
 
