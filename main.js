@@ -257,7 +257,7 @@ function closeModal(force) {
 let isHomeworkMode = false;
 
 async function toggleHomeworkView() {
-    const btn = document.getElementById('hw-toggle-btn');
+    const btn = document.getElementById('hwBtn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
     const tasksList = document.getElementById('tasksList'); // Контейнер списка задач
@@ -468,6 +468,7 @@ async function loadPersonalHomework() {
             </div>`;
     }
 }
+
 
 
 
