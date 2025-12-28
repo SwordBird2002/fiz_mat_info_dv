@@ -39,34 +39,42 @@
           100% { transform: scale(1); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
         }
         
+        
+        .gradient-blob {
+          width: 140px; /* Чуть увеличили размер для красоты */
+          height: 140px;
+          
+          /* БОЛЬШЕ ЦВЕТОВ ЗДЕСЬ */
+          /* Мы используем 45deg и много цветов: розовый, фиолетовый, синий, голубой, зеленый, желтый, красный */
+          background: linear-gradient(
+            45deg, 
+            #ff00cc, #a64bf4, #00dbde, #fc00ff, #00ff99, #ffcc00, #ff0000
+          );
+          
+          /* Увеличиваем размер фона, чтобы градиент был "растянут" и плавно двигался */
+          background-size: 600% 600%; 
+          
+          /* Размытие */
+          filter: blur(30px);
+          opacity: 0.6; /* Чуть ярче */
+          
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 0;
+          
+          /* Анимация: bounce (форма) + gradient-rotate (смена цветов) */
+          animation: blob-bounce 8s ease-in-out infinite, gradient-rotate 10s ease infinite;
+        }
+        
+        /* Обновленная анимация вращения градиента для более плавного перехода */
         @keyframes gradient-rotate {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
-        
-        .gradient-blob {
-          width: 120px;
-          height: 120px;
-          /* Градиентный фон */
-          background: linear-gradient(45deg, #ff00cc, #3333ff, #00ccff, #ffcc00);
-          background-size: 300% 300%;
-          
-          /* Размытие и прозрачность */
-          filter: blur(25px);
-          opacity: 0.4;
-          
-          /* Позиционирование */
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          margin-top: -60px; /* Половина высоты */
-          margin-left: -60px; /* Половина ширины */
-          z-index: 0; /* Уводим на задний план */
-          
-          /* Анимации */
-          animation: blob-bounce 6s ease-in-out infinite, gradient-rotate 4s ease infinite;
-        }
+
         
         /* Контейнер иконки должен быть relative, чтобы шар был внутри */
         .icon-container {
@@ -455,6 +463,7 @@
 
 </body>
 </html>
+
 
 
 
