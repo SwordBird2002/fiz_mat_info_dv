@@ -399,31 +399,37 @@ async function toggleHomeworkView() {
 }
 
 // 2. Функция отрисовки формы входа
-function renderLoginForm() {
+function renderLoginForm(initialError = '') {
     const container = document.getElementById('homework-container');
-    
-    // Изменили col-md-6 col-lg-4 -> col-md-8 col-lg-6 для большей ширины
+    const errorHtml = initialError ? `<div class="alert alert-danger py-2 small fw-bold mb-3"><i class="bi bi-exclamation-triangle-fill me-2"></i>${initialError}</div>` : '';
+
     container.innerHTML = `
         <div class="row justify-content-center animate__animated animate__fadeIn">
             <div class="col-md-8 col-lg-6">
                 <div class="glass-card p-5 text-center">
-                    <div class="mb-4">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3">
-                            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
-                        </div>
+                    
+                    <!-- Новый блок иконки с анимацией -->
+                    <div class="mb-4 icon-container">
+                        <!-- Разноцветный живой шар на фоне -->
+                        <div class="gradient-blob"></div>
+                        
+                        <!-- Иконка замка (поверх шара) -->
+                        <i class="bi bi-shield-lock-fill text-white position-relative" style="font-size: 3rem; z-index: 2; text-shadow: 0 2px 10px rgba(0,0,0,0.3);"></i>
                     </div>
                     
-                    <h3 class="mb-2 fw-bold">Вход в систему</h3>
-                    <p class="text-muted mb-5">Введите ваш персональный токен доступа</p>
+                    <h3 class="mb-2 fw-bold text-white">Вход в систему</h3>
+                    <p class="text-white-50 mb-4">Введите ваш персональный токен доступа</p>
                     
+                    ${errorHtml}
+
                     <div class="row justify-content-center">
                         <div class="col-sm-10">
                             <div class="form-floating mb-3 text-dark">
-                                <input type="text" class="form-control" id="tokenInput" placeholder="Ваш токен">
+                                <input type="text" class="form-control border-0 shadow-sm" id="tokenInput" placeholder="Ваш токен">
                                 <label for="tokenInput">Ваш токен</label>
                             </div>
                             
-                            <button onclick="saveTokenAndReload()" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm mt-2 transition-btn">
+                            <button onclick="saveTokenAndReload()" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-lg mt-2 transition-btn" style="background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%); border: none;">
                                 Войти в личный кабинет
                             </button>
                             
@@ -446,6 +452,7 @@ function renderLoginForm() {
         }
     }, 100);
 }
+
 
 
 // 3. Функция сохранения токена (вызывается кнопкой "Войти")
@@ -694,6 +701,7 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
 
 
