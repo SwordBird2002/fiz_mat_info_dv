@@ -1,423 +1,207 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-   <script>
-      window.MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']] 
-        },
-        svg: {
-          fontCache: 'global'
-        }
-      };
-    </script>
-
-    <!-- 2. Потом САМ СКРИПТ MathJax -->
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    
-    <!-- Сам скрипт MathJax -->
-    
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Материалы | ФизМатИнфо 🪐</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <title>ФизМатИнфо 🪐</title>
     
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Prism.js (Подсветка кода) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <!-- MathJax (Формулы) -->
+    <script>
+      window.MathJax = {
+        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+        svg: { fontCache: 'global' }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+
+    <!-- Vanilla Tilt (3D эффект) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
     <style>
-        /* --- 1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ (СВЕТЛАЯ/ТЕМНАЯ ТЕМА) --- */
         :root {
-            --primary-color: #4f46e5; 
-            
-            /* Светлая тема */
-            --bg-color: #f8f9fa;
-            --text-color: #212529;
-            --card-bg: rgba(255, 255, 255, 0.6);
-            --navbar-bg: rgba(248, 249, 250, 0.8);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.4);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #2c3e50;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
 
         [data-theme="dark"] {
-            /* Темная тема */
-            --bg-color: #0f172a;
-            --text-color: #e2e8f0;
-            --card-bg: rgba(30, 41, 59, 0.6);
-            --navbar-bg: rgba(15, 23, 42, 0.8);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --glass-bg: rgba(30, 30, 40, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-color: #e0e0e0;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background: var(--bg-gradient);
             color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden;
-            position: relative;
             min-height: 100vh;
+            transition: background 0.5s ease;
+            background-attachment: fixed;
         }
 
-        /* Исправление цветов текста в темной теме */
-        [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
-        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h4 { color: #f1f5f9; }
-        /* Кнопки фильтров в темной теме */
-        [data-theme="dark"] .filter-btn { background: rgba(30, 41, 59, 0.8); color: white; border: 1px solid rgba(255,255,255,0.1); }
-        [data-theme="dark"] .filter-btn.active { background: var(--primary-color); border-color: var(--primary-color); }
-        [data-theme="dark"] .download-box { background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.1); }
-
-        /* --- 2. ФОНОВЫЕ ШАРЫ --- */
-        .background-orbs {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; overflow: hidden; pointer-events: none;
-        }
-        .orb {
-            position: absolute; border-radius: 50%; opacity: 0.6;
-            filter: blur(80px); will-change: transform;
-        }
-        .orb-1 {
-            width: 400px; height: 400px; background: radial-gradient(circle, #4f46e5, #0ea5e9);
-            top: -10%; left: -10%; animation: moveDiagonal 12s infinite alternate ease-in-out;
-        }
-        .orb-2 {
-            width: 300px; height: 300px; background: radial-gradient(circle, #06b6d4, #3b82f6);
-            bottom: 10%; right: -5%; animation: moveVertical 10s infinite alternate ease-in-out;
-        }
-        .orb-3 {
-            width: 250px; height: 250px; background: radial-gradient(circle, #8b5cf6, #6366f1);
-            top: 40%; left: 40%; animation: moveCircular 15s infinite linear;
-        }
-        /* Новый оранжевый шар */
-        .orb-4 {
-            width: 150px; height: 150px; background: radial-gradient(circle, #f59e0b, #ef4444);
-            bottom: 20%; left: 20%; opacity: 0.5; animation: moveWild 14s infinite ease-in-out;
-        }
-
-        @keyframes moveDiagonal { 0% { transform: translate(0, 0); } 100% { transform: translate(300px, 200px); } }
-        @keyframes moveVertical { 0% { transform: translateY(0); } 100% { transform: translateY(-150px); } }
-        @keyframes moveCircular { 0% { transform: rotate(0deg) translate(100px) rotate(0deg); } 100% { transform: rotate(360deg) translate(100px) rotate(-360deg); } }
-        @keyframes moveWild { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(200px, 50px) scale(0.8); } 100% { transform: translate(0, 0) scale(1); } }
-
-        /* --- 3. СТЕКЛЯННЫЕ ЭЛЕМЕНТЫ --- */
         .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: var(--glass-border); box-shadow: var(--shadow);
-            border-radius: 16px; transition: transform 0.2s;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .glass-card:hover { transform: translateY(-5px); }
 
-        /* Логотип */
-        /* Кнопка ДЗ */
-        .btn-homework {
-            display: block;             /* Блочный элемент, чтобы работало margin: auto */
-            margin: 15px auto 0 auto;   /* Отступ сверху 15px, по бокам авто (центровка) */
-            background-color: rgba(249, 115, 22, 0.9); /* Приглушенный оранжевый */
-            color: white;
-            border: none;
-            padding: 10px 30px;         /* Размер побольше */
-            border-radius: 25px;        /* Сильное скругление */
+        .material-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+        }
+
+        /* Бейджи предметов */
+        .subject-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 600;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3); /* Оранжевое свечение */
-            text-decoration: none;      /* Убрать подчеркивание ссылки */
-            width: fit-content;         /* Ширина по контенту */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-math { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
+        .badge-cs { background: rgba(78, 205, 196, 0.15); color: #4ecdc4; }
+        .badge-phys { background: rgba(69, 183, 209, 0.15); color: #45b7d1; }
+
+        .hidden { display: none !important; }
+
+        /* Кнопка 3D */
+        #btn3D { transition: all 0.3s ease; }
+        
+        /* Модальное окно */
+        .modal-custom {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1050;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-custom.active { display: flex; animation: fadeIn 0.3s ease; }
+        .modal-content-custom {
+            background: var(--glass-bg);
+            width: 90%; max-width: 700px;
+            max-height: 90vh; overflow-y: auto;
+            border-radius: 20px; padding: 2rem;
+            position: relative;
         }
         
-        .btn-homework:hover {
-            background-color: #ea580c; /* Чуть темнее при наведении */
-            transform: translateY(-2px);
-            color: white;
-        }
+        /* Скроллбар */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-        .logo-circle {
-            width: 36px; height: 36px; border-radius: 999px;
-            background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
-            position: relative; box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
-        }
-        .logo-circle::after {
-            content: "f"; position: absolute; inset: 0; display: flex;
-            align-items: center; justify-content: center; font-weight: 700; color: #0b1120; font-size: 20px;
-        }
-
-        /* --- 4. СПЕЦИФИКА MATERIALS --- */
-        .feed-container { max-width: 800px; margin: 0 auto; }
-        
-        .card-header-custom {
-            padding: 20px; border-bottom: 1px solid rgba(150, 150, 150, 0.1);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        
-        .card-content { padding: 25px; }
-        
-        .subject-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .badge-math { background: rgba(224, 242, 254, 0.8); color: #0284c7; }
-        .badge-cs { background: rgba(220, 252, 231, 0.8); color: #16a34a; }
-        .badge-phys { background: rgba(254, 249, 195, 0.8); color: #ca8a04; }
-
-        .download-box {
-            background: rgba(248, 249, 250, 0.5); border-radius: 10px; padding: 15px;
-            display: flex; align-items: center; margin-top: 20px; border: 1px solid rgba(0,0,0,0.05);
-        }
-        .download-icon { font-size: 2rem; margin-right: 15px; color: #dc3545; }
-
-        /* Фильтры (теперь стеклянные) */
-        .filters {
-            position: sticky; top: 70px; z-index: 99;
-            background: transparent; /* Прозрачный фон */
-            padding: 15px 0;
-            backdrop-filter: blur(5px); /* Легкое размытие под кнопками */
-            border-radius: 0 0 15px 15px;
-        }
-        /* Фильтры */
-            .filter-btn {
-                border-radius: 20px;
-                padding: 8px 20px;
-                margin: 5px;
-                border: none;
-                font-weight: 500;
-                background: rgba(255, 255, 255, 0.8); /* Светлый полупрозрачный фон */
-                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-                
-                /* ГЛАВНОЕ: Плавный переход всех свойств за 0.3 секунды */
-                transition: all 0.3s ease-in-out;
-            }
-            
-            .filter-btn:hover {
-                transform: translateY(-2px); /* Легкое всплытие */
-                background: white;           /* Чуть белее */
-            }
-            
-            .filter-btn.active {
-                background: var(--primary-color) !important; /* Цвет активной кнопки */
-                color: white;
-                transform: scale(1.05);      /* Активная кнопка чуть крупнее */
-                box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); /* Красивое свечение */
-            }
-
-            /* КРИТИЧЕСКИ ВАЖНЫЙ КЛАСС */
-            .hidden {
-                display: none !important;
-            }
-                        /* --- МОДАЛЬНОЕ ОКНО --- */
-            .modal-overlay {
-                position: fixed;
-                top: 0; left: 0; width: 100%; height: 100%;
-                z-index: 10000;
-                background: rgba(0, 0, 0, 0.4);
-                backdrop-filter: blur(8px);
-                
-                /* ЦЕНТРИРОВАНИЕ */
-                display: none; /* <--- СКРЫТО ПО УМОЛЧАНИЮ (вместо opacity:0) */
-                justify-content: center;
-                align-items: center;
-            }
-            
-            /* Когда добавляем класс active - показываем flex */
-            .modal-overlay.active {
-                display: flex !important; /* <--- ПОКАЗЫВАЕМ */
-                animation: fadeIn 0.3s ease; /* Добавляем плавность через анимацию */
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-
-
-            
-            .modal-content {
-                width: 90%; max-width: 700px;
-                max-height: 90vh; /* Чтобы влезало на экран */
-                overflow-y: auto; /* Скролл внутри окна, если текста много */
-                padding: 30px;
-                position: relative;
-                transform: scale(0.9);
-                transition: transform 0.3s ease;
-                background: var(--card-bg); /* Берет цвет темы */
-                color: var(--text-color);
-            }
-            
-            .modal-overlay.active .modal-content {
-                transform: scale(1);
-            }
-            
-            .close-btn {
-                position: absolute; top: 15px; right: 20px;
-                background: none; border: none;
-                font-size: 2rem; color: var(--text-color);
-                cursor: pointer; line-height: 1;
-            }
-
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <!-- ФОНОВЫЕ ШАРЫ (Обязательно добавлены) -->
-    <div class="background-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="orb orb-4"></div>
-    </div>
-
-    <!-- НАВИГАЦИЯ (Обновленная, с кнопкой темы) -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: var(--navbar-bg); backdrop-filter: blur(10px); transition: background-color 0.3s;">
-        <div class="container">
-            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html" style="color: var(--text-color);">
-                <div class="logo-circle"></div> 
-                <span> ФизМатИнфо 🪐</span>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg fixed-top glass-card mx-3 mt-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <i class="bi bi-rocket-takeoff-fill me-2 text-primary"></i>
+                ФизМатИнфо 🪐
             </a>
             
-            <!-- Хак для цвета текста в навбаре, т.к. Bootstrap navbar-dark делает текст белым принудительно -->
-            <style>
-                .navbar-nav .nav-link { color: var(--text-color) !important; opacity: 0.8; }
-                .navbar-nav .nav-link.active { opacity: 1; font-weight: bold; }
-                .navbar-toggler-icon { filter: invert(1); } /* Инверсия иконки меню для светлой темы */
-                [data-theme="dark"] .navbar-toggler-icon { filter: invert(0); }
-                [data-theme="dark"] .navbar-brand { color: white !important; }
-                [data-theme="dark"] .nav-link { color: rgba(255,255,255,0.8) !important; }
-            </style>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Главная</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="materials.html">Материалы</a></li>
-                    
-                    <!-- КНОПКА ТЕМЫ -->
-                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <button class="theme-toggle btn btn-sm btn-outline-secondary rounded-circle" onclick="toggleTheme()" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
-                        </button>
-                    </li>
-                    <li class="nav-item ms-2 mt-2 mt-lg-0">
-                        <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="toggle3D()" id="btn3D" 
-                                style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;"
-                                title="Вкл/Выкл 3D эффект">
-                            <i class="bi bi-box" id="icon3D"></i>
-                        </button>
-                    </li>
-                </ul>
+            <div class="d-flex align-items-center gap-2">
+                <!-- Переключатель Темы -->
+                <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="toggleTheme()">
+                    <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                </button>
+                <!-- Переключатель 3D -->
+                <button class="btn btn-sm btn-outline-primary rounded-circle" id="btn3D" onclick="toggle3D()" title="3D эффект">
+                    <i class="bi bi-box-fill" id="icon3D"></i>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- ОТСТУП СВЕРХУ (чтобы меню не закрывало контент) -->
-    <div style="height: 100px;"></div>
+    <!-- Основной контент -->
+    <div class="container" style="margin-top: 100px; padding-bottom: 50px;">
 
-    <div class="container py-3">
-        
-        <!-- ЗАГОЛОВОК И ФИЛЬТРЫ -->
-        <div class="text-center mb-4">
-            <h1 class="fw-bold">Библиотека знаний</h1>
-            <p class="text-muted">Разборы задач, шпаргалки и домашние задания</p>
-            
-            <div class="filters text-center" id="filterContainer">
-    <!-- Ваши кнопки фильтров -->
-                <div class="d-flex justify-content-center flex-wrap mb-2"> 
-                    <button class="filter-btn active" data-filter="all">Все</button>
-                    <button class="filter-btn" data-filter="math">Математика</button>
-                    <button class="filter-btn" data-filter="cs">Информатика</button>
-                    <button class="filter-btn" data-filter="phys">Физика</button>
-                </div>
-                
-
-
-            
-                <!-- НОВАЯ КНОПКА (с переносом на новую строку) -->
-                <div style="flex-basis: 100%; height: 0;"></div> <!-- Этот хак переносит кнопку вниз, если используется flex -->
-                
-                <button onclick="toggleHomeworkView()" class="btn-homework" id="hwBtn" style="cursor: pointer;">
-                    <i class="bi bi-pencil-fill me-2"></i>Домашнее Задание
-                </button>
-
-            </div>
-
+        <!-- Заголовок -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">Библиотека знаний</h1>
+            <p class="lead opacity-75">Разборы задач, шпаргалки и домашние задания</p>
         </div>
 
-        <!-- ЛЕНТА (FEED) -->
-        <div class="feed-container" id="feed-container">
-            <div class="text-center py-5 glass-card">
+        <!-- Фильтры и кнопки -->
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-5" id="filterContainer">
+            <button class="btn btn-outline-dark rounded-pill px-4 active filter-btn" data-filter="all">Все</button>
+            <button class="btn btn-outline-danger rounded-pill px-4 filter-btn" data-filter="math">Математика</button>
+            <button class="btn btn-outline-success rounded-pill px-4 filter-btn" data-filter="cs">Информатика</button>
+            <button class="btn btn-outline-info rounded-pill px-4 filter-btn" data-filter="phys">Физика</button>
+            
+            <!-- Кнопка ДЗ -->
+            <button class="btn btn-primary rounded-pill px-4 ms-md-3" id="hw-toggle-btn" onclick="toggleHomeworkView()">
+                <i class="bi bi-journal-text me-2"></i>Домашнее задание
+            </button>
+        </div>
+
+        <!-- ЛЕНТА НОВОСТЕЙ -->
+        <div id="feed-container" class="row">
+            <div class="col-12 text-center py-5">
                 <div class="spinner-border text-primary" role="status"></div>
                 <p class="mt-2 text-muted">Загрузка материалов из базы...</p>
             </div>
         </div>
-        <!-- Контейнер для ДЗ (изначально скрыт) -->
-        <div id="homework-container" class="container mt-4 hidden">
-    <!-- Добавляем обертку с ID tasksList, которую ищет скрипт -->
-            <div id="tasksList">
-                <h3 class="text-center mb-4 text-white">Актуальные задания</h3>
-                
-                <!-- Добавляем место для имени, чтобы скрипт не ругался на null -->
-                <p class="text-center text-white small mb-4">
-                     Привет, <span id="userName">Ученик</span>!
-                </p>
         
-                <!-- ГЛАВНОЕ: Добавляем ID personal-homework-feed -->
-                <!-- Именно сюда скрипт вставляет карточки. Если этого ID нет — скрипт падает -->
+        <!-- Кнопка "Показать еще" -->
+        <div id="loadMoreContainer" class="text-center mt-4 hidden">
+            <button class="btn btn-outline-secondary px-5" onclick="renderNextBatch()">Показать еще</button>
+        </div>
+
+        <!-- КОНТЕЙНЕР ДЗ (Скрыт по умолчанию) -->
+        <div id="homework-container" class="container mt-4 hidden">
+            <div id="tasksList">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="mb-0">Актуальные задания</h3>
+                        <p class="opacity-75 small mb-0">Привет, <span id="userName">Ученик</span>!</p>
+                    </div>
+                </div>
+                <!-- Сюда грузятся карточки ДЗ -->
                 <div id="personal-homework-feed"></div>
             </div>
         </div>
-        
 
     </div>
 
-    <!-- ФУТЕР -->
-    <footer class="text-center py-4 mt-5 text-muted">
-        <small>&copy; 2026 Fiz | Mat | Info</small>
-    </footer>
+    <!-- Модальное окно новости -->
+    <div class="modal-custom" id="newsModal" onclick="if(event.target === this) closeModal()">
+        <div class="modal-content-custom">
+            <button class="btn-close position-absolute top-0 end-0 m-3" onclick="closeModal()"></button>
+            <div id="modalBody">
+                <!-- Контент загружается JS -->
+            </div>
+        </div>
+    </div>
 
-    <!-- СКРИПТЫ -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- ВАШ MAIN.JS (Фильтрация тоже перенесена сюда для чистоты) -->
+    <!-- Библиотеки JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+    <!-- ВАШ СКРИПТ (Подключаем в конце!) -->
     <script src="main.js"></script>
-    <!-- Библиотека для 3D наклона -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-
-    
-    <!-- ЛОКАЛЬНЫЙ СКРИПТ ФИЛЬТРАЦИИ (Если вы не перенесли его в main.js) -->
-<!-- МОДАЛЬНОЕ ОКНО (Скрыто по умолчанию) -->
-<div id="newsModal" class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-content glass-card">
-        <button class="close-btn" onclick="closeModal(true)">&times;</button>
-        
-        <!-- Сюда JS будет вставлять контент -->
-        <div id="modalBody"></div>
-    </div>
-</div>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
