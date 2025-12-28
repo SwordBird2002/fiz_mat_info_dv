@@ -107,41 +107,69 @@ if (document.getElementById('feed-container')) {
 
 
 /* --- 3. ЛОГИКА ДОМАШНЕГО ЗАДАНИЯ --- */
+/* --- ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ДЗ / МАТЕРИАЛЫ --- */
 let isHomeworkMode = false;
 
 async function toggleHomeworkView() {
-    const feed = document.getElementById('feed-container');
-    const hwContainer = document.getElementById('homework-container');
-    const filterContainer = document.querySelector('.d-flex.justify-content-center'); // Блок с кнопками фильтров
-    const btn = document.getElementById('hwBtn');
+    // 1. Находим все элементы
+    const feed = document.getElementById('feed-container');      // Лента новостей
+    const hwContainer = document.getElementById('homework-container'); // Лента ДЗ
+    const filterBlock = document.getElementById('filterContainer');    // Блок с кнопками фильтров
+    const btn = document.getElementById('hwBtn'); // Сама кнопка переключения
+
+    if (!feed || !hwContainer || !btn) {
+        console.error("Не найдены контейнеры! Проверьте ID в HTML");
+        return;
+    }
 
     if (!isHomeworkMode) {
-        // ВКЛЮЧАЕМ РЕЖИМ ДЗ
-        feed.classList.add('hidden');          // Прячем материалы
-        filterContainer.classList.add('hidden'); // Прячем фильтры (если не нужны для ДЗ)
-        hwContainer.classList.remove('hidden'); // Показываем контейнер ДЗ
+        // --- ПЕРЕХОД В РЕЖИМ ДЗ ---
         
-        // Меняем кнопку на "Назад"
+        // Скрываем лишнее
+        feed.classList.add('hidden');
+        
+        // ВАЖНО: Мы скрываем не весь filterContainer, а только кнопки фильтров внутри него? 
+        // Если скрыть весь контейнер, исчезнет и кнопка ДЗ!
+        // Поэтому мы найдем только верхний ряд кнопок и скроем его.
+        const buttonsRow = filterBlock.querySelector('.d-flex'); 
+        if(buttonsRow) buttonsRow.classList.add('hidden');
+
+        // Показываем ДЗ
+        hwContainer.classList.remove('hidden');
+
+        // Меняем вид кнопки
         btn.innerHTML = '<i class="bi bi-arrow-left me-2"></i>Вернуться к материалам';
-        btn.style.backgroundColor = '#64748b'; // Делаем серой
-        
-        // Загружаем данные (если еще не загружали)
+        btn.style.backgroundColor = '#64748b'; // Серый цвет
+
+        // Загружаем ДЗ, если там пусто
+        // Проверяем children.length > 1 (там уже есть заголовок h3)
         if (hwContainer.children.length <= 1) { 
             await loadHomework();
         }
-    } else {
-        // ВЫКЛЮЧАЕМ РЕЖИМ ДЗ (Возврат назад)
-        feed.classList.remove('hidden');
-        filterContainer.classList.remove('hidden');
-        hwContainer.classList.add('hidden');
-        
-        // Возвращаем кнопку как было
-        btn.innerHTML = '<i class="bi bi-pencil-fill me-2"></i>Домашнее Задание';
-        btn.style.backgroundColor = ''; // Сброс цвета (вернется оранжевый из CSS)
-    }
 
-    isHomeworkMode = !isHomeworkMode;
+        isHomeworkMode = true;
+
+    } else {
+        // --- ВОЗВРАТ В РЕЖИМ МАТЕРИАЛОВ ---
+        
+        // Показываем материалы
+        feed.classList.remove('hidden');
+        
+        // Показываем кнопки фильтров
+        const buttonsRow = filterBlock.querySelector('.d-flex'); 
+        if(buttonsRow) buttonsRow.classList.remove('hidden');
+
+        // Прячем ДЗ
+        hwContainer.classList.add('hidden');
+
+        // Возвращаем вид кнопки
+        btn.innerHTML = '<i class="bi bi-pencil-fill me-2"></i>Домашнее Задание';
+        btn.style.backgroundColor = ''; // Сброс цвета
+
+        isHomeworkMode = false;
+    }
 }
+
 
 async function loadHomework() {
     const container = document.getElementById('homework-container');
@@ -218,5 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
