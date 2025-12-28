@@ -321,35 +321,35 @@
 
         </div>
 
-        <!-- ЛЕНТА (FEED) -->
-                <!-- 1. ЛЕНТА НОВОСТЕЙ -->
-        <!-- Оставляем класс 'row', так как в JS карточки создаются как col-md-6 и т.д., 
-             либо используем ваш класс feed-container, если под него написан CSS Grid -->
-        <div id="feed-container" class="row">
-            <div class="col-12 text-center py-5">
+               <!-- 1. ЛЕНТА НОВОСТЕЙ -->
+        <!-- Вернули class="feed-container", как у вас было изначально -->
+        <div class="feed-container" id="feed-container">
+            <div class="text-center py-5 glass-card">
                 <div class="spinner-border text-primary" role="status"></div>
-                <p class="mt-2 text-white">Загрузка материалов из базы...</p>
+                <p class="mt-2 text-muted">Загрузка материалов из базы...</p>
             </div>
         </div>
 
         <!-- 2. КОНТЕЙНЕР ДЛЯ ДЗ -->
-        <!-- Убрали класс "feed-container", чтобы он не конфликтовал с hidden -->
+        <!-- Важно: убрали класс 'feed-container' отсюда, чтобы не было конфликтов стилей.
+             Оставили просто container и hidden. -->
         <div id="homework-container" class="container mt-4 hidden">
             
-            <!-- Внутренний блок, который ищет JS (tasksList) -->
+            <!-- Добавили этот блок, потому что скрипт ищет document.getElementById('tasksList') -->
             <div id="tasksList">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h3 class="text-white mb-0">Актуальные задания</h3>
-                        <p class="text-light opacity-75 small mb-0">Привет, <span id="userName">Ученик</span>!</p>
-                    </div>
-                </div>
+                <h3 class="text-center mb-4 text-white">Актуальные задания</h3>
+                
+                <!-- Добавили имя пользователя (скрипт пытается его заполнить) -->
+                <p class="text-center text-white small mb-4">
+                    Ученик: <span id="userName">...</span>
+                </p>
 
-                <!-- СЮДА JS БУДЕТ ВСТАВЛЯТЬ КАРТОЧКИ -->
+                <!-- ГЛАВНОЕ: Добавили этот ID. Без него loadPersonalHomework падает! -->
                 <div id="personal-homework-feed"></div>
             </div>
 
         </div>
+
 
 
     <!-- ФУТЕР -->
@@ -379,6 +379,7 @@
  
 </body>
 </html>
+
 
 
 
