@@ -257,55 +257,43 @@ function closeModal(force) {
 let isHomeworkMode = false;
 
 async function toggleHomeworkView() {
-    const btn = document.getElementById('hw-toggle-btn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
-    const filterContainer = document.getElementById('filter-buttons');
+    const filterContainer = document.getElementById('filterContainer');
+    const loadMoreBtn = document.getElementById('loadMoreContainer');
+    const btn = document.getElementById('hwBtn');
+
+    if (!feed || !hwContainer || !btn) return;
 
     if (!isHomeworkMode) {
-        // === ВХОД В РЕЖИМ "ДОМАШНЕЕ ЗАДАНИЕ" ===
-
-        // 1. Сбрасываем фильтр на "Все" (чтобы задания не скрывались)
-        if (filterContainer) {
-            const allBtn = filterContainer.querySelector('[data-filter="all"]');
-            if (allBtn) {
-                allBtn.click(); 
-            }
-        }
-
-        // 2. Переключаем видимость блоков
         feed.classList.add('hidden');
+        if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
+        
+        const buttonsRow = filterContainer.querySelector('.d-flex'); 
+        if(buttonsRow) buttonsRow.classList.add('hidden');
+
         hwContainer.classList.remove('hidden');
 
-        // 3. Меняем текст кнопки
-        btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
-        
-        // 4. Проверка БЕЗ ТОКЕНА
-        // Мы просто смотрим, есть ли данные в переменной currentUser
-        if (currentUser) {
-            // Если пользователь уже вошел (в текущей вкладке браузера)
-            showTasksInterface();
-            loadPersonalHomework();
-        } else {
-            // Если переменная пустая — показываем вход
-            showLoginInterface();
-        }
+        btn.innerHTML = '<i class="bi bi-arrow-left me-2"></i>Вернуться к материалам';
+        btn.style.backgroundColor = '#64748b'; 
 
+        if (hwContainer.children.length <= 1) await loadHomework();
         isHomeworkMode = true;
 
     } else {
-        // === ВОЗВРАТ В РЕЖИМ "ЛЕНТА НОВОСТЕЙ" ===
-
         feed.classList.remove('hidden');
+        if (loadMoreBtn && shownCount < allMaterials.length) loadMoreBtn.classList.remove('hidden');
+
+        const buttonsRow = filterContainer.querySelector('.d-flex'); 
+        if(buttonsRow) buttonsRow.classList.remove('hidden');
+
         hwContainer.classList.add('hidden');
-        
-        btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
-        
+
+        btn.innerHTML = '<i class="bi bi-pencil-fill me-2"></i>Домашнее Задание';
+        btn.style.backgroundColor = ''; 
         isHomeworkMode = false;
     }
 }
-
-
 
 async function loadHomework() {
     const container = document.getElementById('homework-container');
@@ -371,8 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
 
 
 
