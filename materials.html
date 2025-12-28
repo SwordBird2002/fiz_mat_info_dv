@@ -41,33 +41,23 @@
         
         
         .gradient-blob {
-          width: 140px; /* Чуть увеличили размер для красоты */
-          height: 140px;
-          
-          /* БОЛЬШЕ ЦВЕТОВ ЗДЕСЬ */
-          /* Мы используем 45deg и много цветов: розовый, фиолетовый, синий, голубой, зеленый, желтый, красный */
-          background: linear-gradient(
-            45deg, 
-            #ff00cc, #a64bf4, #00dbde, #fc00ff, #00ff99, #ffcc00, #ff0000
-          );
-          
-          /* Увеличиваем размер фона, чтобы градиент был "растянут" и плавно двигался */
-          background-size: 600% 600%; 
-          
-          /* Размытие */
-          filter: blur(30px);
-          opacity: 0.6; /* Чуть ярче */
-          
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: 0;
-          
-          /* Анимация: bounce (форма) + gradient-rotate (смена цветов) */
-          animation: blob-bounce 8s ease-in-out infinite, gradient-rotate 10s ease infinite;
+            width: 150px;       /* Чуть больше контейнера */
+            height: 150px;
+            
+            background: linear-gradient(45deg, #ff00cc, #a64bf4, #00dbde, #fc00ff, #00ff99, #ffcc00, #ff0000);
+            background-size: 600% 600%;
+            filter: blur(25px);
+            opacity: 0.6;
+            
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Идеальное центрирование */
+            z-index: 1; /* Под иконкой */
+            
+            animation: blob-bounce 8s ease-in-out infinite, gradient-rotate 10s ease infinite;
+            border-radius: 50%; /* На всякий случай база */
         }
-        
         /* Обновленная анимация вращения градиента для более плавного перехода */
         @keyframes gradient-rotate {
           0% { background-position: 0% 50%; }
@@ -78,13 +68,17 @@
         
         /* Контейнер иконки должен быть relative, чтобы шар был внутри */
         .icon-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
+            position: relative; /* Важно для absolute детей */
+            width: 120px;       /* Фиксированный размер */
+            height: 120px;
+            margin: 0 auto 1.5rem auto; /* Центрируем сам контейнер в карточке + отступ снизу */
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .icon-container i {
+            z-index: 2; /* Над пятном */
+            position: relative;
         }
 
         .gradient-text {
@@ -477,6 +471,7 @@
 
 </body>
 </html>
+
 
 
 
