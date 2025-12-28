@@ -329,6 +329,29 @@ async function closeModal(force) {
    5. ЛОГИКА ДЗ (HOMEWORK)
    ========================================= */
 let isHomeworkMode = false;
+// Кэш имен, чтобы не дергать names.json на каждый клик
+let _namesCache = null;
+
+async function loadNamesMap() {
+  if (_namesCache) return _namesCache;
+
+  const ts = Date.now();
+  const resp = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${ts}`, {
+    cache: "no-store",
+  });
+
+  if (!resp.ok) throw new Error("Не удалось загрузить names.json");
+
+  const names = await resp.json();
+  _namesCache = names;
+  return names;
+}
+
+async function validateStudentToken(token) {
+  const names = await loadNamesMap();
+  return Boolean(names && Object.prototype.hasOwnProperty.call(names, token));
+}
+
 
 /* =========================================
    5. ЛОГИКА ДЗ (ВХОД И ПЕРЕКЛЮЧЕНИЕ)
@@ -426,22 +449,39 @@ function renderLoginForm() {
 
 
 // 3. Функция сохранения токена (вызывается кнопкой "Войти")
-function saveTokenAndReload() {
-    const input = document.getElementById('tokenInput');
-    const token = input.value.trim();
-    const errorDiv = document.getElementById('loginError');
-    
-    if (!token) {
-        errorDiv.innerText = 'Пожалуйста, введите токен!';
-        return;
+async function saveTokenAndReload() {
+  const input = document.getElementById("tokenInput");
+  const errorDiv = document.getElementById("loginError");
+
+  const token = (input?.value || "").trim();
+
+  if (errorDiv) errorDiv.innerText = "";
+
+  if (!token) {
+    if (errorDiv) errorDiv.innerText = "Введите токен.";
+    return;
+  }
+
+  try {
+    const ok = await validateStudentToken(token);
+
+    if (!ok) {
+      // ВАЖНО: не сохраняем неправильный токен
+      localStorage.removeItem("student_token");
+      if (errorDiv) errorDiv.innerText = "Неверный токен. Проверьте и попробуйте снова.";
+      if (input) input.focus();
+      return;
     }
-    
-    // Сохраняем токен в память браузера
-    localStorage.setItem('student_token', token);
-    
-    // Запускаем загрузку заданий с этим токеном
-    loadHomework(token);
+
+    // Токен валиден — сохраняем и грузим ДЗ
+    localStorage.setItem("student_token", token);
+    await loadHomework(token);
+  } catch (e) {
+    console.error(e);
+    if (errorDiv) errorDiv.innerText = "Ошибка проверки токена. Попробуйте позже.";
+  }
 }
+
 
 // 4. Функция выхода (вызывается кнопкой "Выйти" внутри loadHomework)
 function logoutStudent() {
@@ -652,6 +692,7 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
 
 
