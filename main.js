@@ -330,27 +330,116 @@ async function closeModal(force) {
    ========================================= */
 let isHomeworkMode = false;
 
+/* =========================================
+   5. ЛОГИКА ДЗ (ВХОД И ПЕРЕКЛЮЧЕНИЕ)
+   ========================================= */
+
+// 1. Главная функция-переключатель
 async function toggleHomeworkView() {
-  const btn = document.getElementById('hwBtn');
-  const feed = document.getElementById('feed-container');
-  const hwContainer = document.getElementById('homework-container');
+    const btn = document.getElementById('hwBtn');
+    const feed = document.getElementById('feed-container');
+    const hwContainer = document.getElementById('homework-container');
 
-  if (!isHomeworkMode) {
-    if (feed) feed.classList.add('hidden');
-    if (hwContainer) hwContainer.classList.remove('hidden');
+    if (!isHomeworkMode) {
+        // === ВКЛЮЧАЕМ РЕЖИМ ДЗ ===
+        
+        // Скрываем ленту, показываем контейнер ДЗ
+        if (feed) feed.classList.add('hidden');
+        if (hwContainer) hwContainer.classList.remove('hidden');
 
-    if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
+        // Меняем кнопку на "Вернуться в новости"
+        if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
 
-    await loadHomework();
+        // ПРОВЕРКА: Есть ли сохраненный токен?
+        const savedToken = localStorage.getItem('student_token');
+        
+        if (savedToken) {
+            // Если токен есть — сразу грузим задания
+            await loadHomework(savedToken);
+        } else {
+            // Если токена нет — рисуем форму входа
+            renderLoginForm();
+        }
 
-    isHomeworkMode = true;
-  } else {
-    if (feed) feed.classList.remove('hidden');
-    if (hwContainer) hwContainer.classList.add('hidden');
-    if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
-    isHomeworkMode = false;
-  }
+        isHomeworkMode = true;
+
+    } else {
+        // === ВОЗВРАТ В ЛЕНТУ НОВОСТЕЙ ===
+        
+        if (feed) feed.classList.remove('hidden');
+        if (hwContainer) hwContainer.classList.add('hidden');
+        
+        if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
+        
+        isHomeworkMode = false;
+    }
 }
+
+// 2. Функция отрисовки формы входа
+function renderLoginForm() {
+    const container = document.getElementById('homework-container');
+    container.innerHTML = `
+        <div class="row justify-content-center animate__animated animate__fadeIn">
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card p-5 text-center">
+                    <div class="mb-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3">
+                            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                    </div>
+                    <h4 class="mb-3 fw-bold">Личный кабинет</h4>
+                    <p class="text-muted mb-4 small">Введите ваш персональный токен, чтобы увидеть задания.</p>
+                    
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-key"></i></span>
+                        <input type="text" id="tokenInput" class="form-control border-start-0 shadow-none" placeholder="Ваш токен">
+                    </div>
+                    
+                    <button onclick="saveTokenAndReload()" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm mb-3">
+                        Войти
+                    </button>
+                    <div id="loginError" class="text-danger small" style="min-height: 20px;"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Добавляем обработку нажатия Enter
+    setTimeout(() => {
+        const input = document.getElementById('tokenInput');
+        if(input) {
+            input.focus(); // Фокус в поле ввода
+            input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') saveTokenAndReload();
+            });
+        }
+    }, 100);
+}
+
+// 3. Функция сохранения токена (вызывается кнопкой "Войти")
+function saveTokenAndReload() {
+    const input = document.getElementById('tokenInput');
+    const token = input.value.trim();
+    const errorDiv = document.getElementById('loginError');
+    
+    if (!token) {
+        errorDiv.innerText = 'Пожалуйста, введите токен!';
+        return;
+    }
+    
+    // Сохраняем токен в память браузера
+    localStorage.setItem('student_token', token);
+    
+    // Запускаем загрузку заданий с этим токеном
+    loadHomework(token);
+}
+
+// 4. Функция выхода (вызывается кнопкой "Выйти" внутри loadHomework)
+function logoutStudent() {
+    localStorage.removeItem('student_token'); // Удаляем токен
+    renderLoginForm(); // Рисуем форму входа снова
+}
+
 
 
 /* =========================================
@@ -554,4 +643,5 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
