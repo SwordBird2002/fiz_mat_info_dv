@@ -408,17 +408,17 @@ function renderLoginForm(initialError = '') {
             <div class="col-md-8 col-lg-6">
                 <div class="glass-card p-5 text-center">
                     
-                    <!-- Новый блок иконки с анимацией -->
                     <div class="mb-4 icon-container">
-                        <!-- Разноцветный живой шар на фоне -->
                         <div class="gradient-blob"></div>
-                        
-                        <!-- Иконка замка (поверх шара) -->
+                        <!-- Иконка тоже должна адаптироваться? 
+                             Если хотите чтобы она была всегда белой на фоне пятна - оставьте text-white. 
+                             Если хотите чтобы менялась - text-adaptive. -->
                         <i class="bi bi-shield-lock-fill text-white position-relative" style="font-size: 3rem; z-index: 2; text-shadow: 0 2px 10px rgba(0,0,0,0.3);"></i>
                     </div>
                     
-                    <h3 class="mb-2 fw-bold text-white">Вход в систему</h3>
-                    <p class="text-white-50 mb-4">Введите ваш персональный токен доступа</p>
+                    <!-- ИСПОЛЬЗУЕМ НОВЫЕ КЛАССЫ ЗДЕСЬ -->
+                    <h3 class="mb-2 fw-bold text-adaptive">Вход в систему</h3>
+                    <p class="text-adaptive-muted mb-4">Введите ваш персональный токен доступа</p>
                     
                     ${errorHtml}
 
@@ -441,6 +441,19 @@ function renderLoginForm(initialError = '') {
             </div>
         </div>
     `;
+    
+    // ... (setTimeout остаётся без изменений) ...
+    setTimeout(() => {
+        const input = document.getElementById('tokenInput');
+        if(input) {
+            input.focus(); 
+            input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') saveTokenAndReload();
+            });
+        }
+    }, 100);
+}
+
     
     setTimeout(() => {
         const input = document.getElementById('tokenInput');
@@ -701,6 +714,7 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
 
 
