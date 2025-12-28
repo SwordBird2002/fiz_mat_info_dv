@@ -89,7 +89,7 @@ async function loadMaterials() {
             container.appendChild(card);
             if (typeof VanillaTilt !== 'undefined') {
                 VanillaTilt.init(card, {
-                    max: 8,            // Максимальный угол наклона (градусы)
+                    max: 5,            // Максимальный угол наклона (градусы)
                     speed: 500,         // Скорость анимации
                     glare: true,        // Эффект блика (света)
                     "max-glare": 0.3,   // Яркость блика (0-1)
@@ -256,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
