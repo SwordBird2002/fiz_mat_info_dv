@@ -57,7 +57,7 @@ async function loadMaterials() {
 
     try {
         if (allMaterials.length === 0) {
-            const response = await fetch('data.json'); 
+            const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json'); 
             if (!response.ok) throw new Error('Ошибка HTTP: ' + response.status);
             allMaterials = await response.json();
             container.innerHTML = '';
@@ -269,7 +269,7 @@ async function loadPersonalHomework() {
     container.style.width = '100%';
     
     try {
-        const response = await fetch('homework.json');
+        const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json');
         if(!response.ok) throw new Error('Ошибка HW');
         const data = await response.json();
         const tasks = data[currentUser.group] || [];
@@ -369,3 +369,4 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
