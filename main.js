@@ -172,6 +172,11 @@ function renderNextBatch() {
     } else {
         btnContainer.classList.remove('hidden');
     }
+
+    // === NEW: Рендеринг формул (MathJax) ===
+    if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
+    }
 }
 
 if (document.getElementById('feed-container')) {
@@ -181,9 +186,6 @@ if (document.getElementById('feed-container')) {
 
 /* =========================================
    4. МОДАЛЬНОЕ ОКНО
-   ========================================= */
-/* =========================================
-   4. МОДАЛЬНОЕ ОКНО (ПОЛНАЯ ВЕРСИЯ)
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
@@ -227,9 +229,14 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // 2. Инициализируем блоки с кодом (если есть функция initCodeBlocks)
+    // 2. Инициализируем блоки с кодом
     if (typeof initCodeBlocks === 'function') {
         initCodeBlocks(modalBody);
+    }
+
+    // === NEW: Рендеринг формул в модальном окне ===
+    if (typeof MathJax !== 'undefined') {
+        MathJax.typesetPromise([modalBody]).catch(err => console.log('MathJax modal error:', err));
     }
 
     // 3. Показываем окно
@@ -239,16 +246,11 @@ function openModal(item) {
 
 function closeModal(force) {
     const modal = document.getElementById('newsModal');
-    
-    // force - если нажали крестик
-    // event.target === modal - если нажали на темный фон
     if (force || (event && event.target === modal)) {
         modal.classList.remove('active');
-        document.body.style.overflow = ''; // Возвращаем скролл
+        document.body.style.overflow = ''; 
     }
 }
-
-
 
 
 /* =========================================
@@ -267,7 +269,7 @@ async function toggleHomeworkView() {
 
     if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
 
-    // Возвращаем старую загрузку ДЗ (карточки добавляются прямо в homework-container)
+    // Загружаем ДЗ
     await loadHomework();
 
     isHomeworkMode = true;
@@ -278,9 +280,6 @@ async function toggleHomeworkView() {
     isHomeworkMode = false;
   }
 }
-
-
-
 
 
 async function loadHomework() {
@@ -310,6 +309,12 @@ async function loadHomework() {
             `;
             container.appendChild(card);
         });
+
+        // === NEW: Рендеринг формул в ДЗ ===
+        if (typeof MathJax !== 'undefined') {
+            MathJax.typesetPromise([container]).catch(err => console.log('MathJax hw error:', err));
+        }
+
     } catch (error) {
         container.innerHTML += '<p class="text-center text-danger">Ошибка загрузки ДЗ</p>';
     }
@@ -347,102 +352,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-
-/* =========================================
-   ФУНКЦИЯ ЗАГРУЗКИ ПЕРСОНАЛЬНОГО ДЗ
-   ========================================= */
-async function loadPersonalHomework() {
-    const tasksList = document.getElementById('tasksList');
-    if (!tasksList) {
-        console.error('Контейнер tasksList не найден!');
-        return;
-    }
-
-    // Очищаем список перед загрузкой и показываем спиннер
-    tasksList.innerHTML = '<div class="text-center text-white w-100"><div class="spinner-border" role="status"></div><p class="mt-2">Поиск заданий...</p></div>';
-
-    try {
-        // Загружаем специальный файл с ДЗ (или используем общий data.json, если ДЗ там)
-        // В вашем коде была ссылка на homework.json — используем её
-        const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json');
-        
-        if (!response.ok) throw new Error('Файл homework.json не найден');
-        
-        const allHomework = await response.json();
-
-        // Фильтруем задания для группы пользователя (currentUser задается в toggleHomeworkView)
-        // Если в JSON нет поля group, будут показаны все задания
-        const myTasks = allHomework.filter(item => {
-            return !item.group || (currentUser && item.group === currentUser.group);
-        });
-
-        tasksList.innerHTML = ''; // Убираем спиннер
-
-        if (myTasks.length === 0) {
-            tasksList.innerHTML = '<div class="col-12 text-center text-white"><p class="fs-5">🎉 Ура! Актуальных заданий нет.</p></div>';
-            return;
-        }
-
-        // Генерируем карточки
-        myTasks.forEach(item => {
-            let badgeClass = 'bg-secondary';
-            let subjectName = item.subject || 'Общее';
-            
-            if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
-            else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
-            else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
-
-            const col = document.createElement('div');
-            col.className = 'col-md-6 col-lg-4'; // Сетка Bootstrap
-
-            const card = document.createElement('div');
-            card.className = `material-card glass-card h-100 ${item.subject}`;
-            // Добавляем 3D эффект, если он включен
-            if (typeof is3DEnabled !== 'undefined' && is3DEnabled && typeof VanillaTilt !== 'undefined') {
-                VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.3 });
-            }
-
-            // HTML структуры карточки ДЗ
-            card.innerHTML = `
-                <div class="card-body p-4 d-flex flex-column h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="subject-badge ${badgeClass}">${subjectName}</span>
-                        <span class="text-warning fw-bold small">
-                            <i class="bi bi-calendar-event me-1"></i>${item.deadline || 'Без срока'}
-                        </span>
-                    </div>
-                    
-                    <h4 class="fw-bold mb-3">${item.title}</h4>
-                    <p class="text-muted mb-4 flex-grow-1">${item.task || item.text || 'Описание отсутствует'}</p>
-                    
-                    <div class="mt-auto">
-                        <a href="${item.link || '#'}" target="_blank" class="btn btn-outline-primary w-100 rounded-pill">
-                            <i class="bi bi-play-circle me-2"></i>Перейти к выполнению
-                        </a>
-                    </div>
-                </div>
-            `;
-            
-            col.appendChild(card);
-            tasksList.appendChild(col);
-        });
-
-    } catch (error) {
-        console.error(error);
-        // Если homework.json нет, пробуем искать в обычных материалах (фоллбэк)
-        tasksList.innerHTML = `
-            <div class="col-12 text-center text-danger">
-                <p>Не удалось загрузить домашние задания.</p>
-                <small class="text-muted">${error.message}</small>
-            </div>`;
-    }
-}
-
-
-
-
-
-
-
