@@ -182,11 +182,15 @@ if (document.getElementById('feed-container')) {
 /* =========================================
    4. МОДАЛЬНОЕ ОКНО
    ========================================= */
+/* =========================================
+   4. МОДАЛЬНОЕ ОКНО (ПОЛНАЯ ВЕРСИЯ)
+   ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
     const modalBody = document.getElementById('modalBody');
     if (!modal || !modalBody) return;
     
+    // 1. Генерируем контент
     let mediaHtml = '';
     if (item.image) mediaHtml = `<img src="${item.image}" class="img-fluid rounded mb-4 w-100">`;
     
@@ -223,20 +227,27 @@ function openModal(item) {
         ${linkHtml}
     `;
 
+    // 2. Инициализируем блоки с кодом (если есть функция initCodeBlocks)
+    if (typeof initCodeBlocks === 'function') {
+        initCodeBlocks(modalBody);
+    }
+
+    // 3. Показываем окно
     modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; // Блокируем скролл фона
 }
 
-/* ЗАМЕНИТЕ ФУНКЦИЮ closeModal НА ЭТУ */
 function closeModal(force) {
     const modal = document.getElementById('newsModal');
     
-    // Если нажали на фон (event.target === modal) ИЛИ нажали крестик (force === true)
-    if (force || event.target === modal) {
+    // force - если нажали крестик
+    // event.target === modal - если нажали на темный фон
+    if (force || (event && event.target === modal)) {
         modal.classList.remove('active');
-        document.body.style.overflow = ''; // Разблокируем скролл
+        document.body.style.overflow = ''; // Возвращаем скролл
     }
 }
+
 
 
 
@@ -348,5 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
