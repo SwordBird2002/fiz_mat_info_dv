@@ -256,59 +256,80 @@ function closeModal(force) {
    ========================================= */
 let isHomeworkMode = false;
 
+/* =========================================
+   ПЕРЕКЛЮЧЕНИЕ "ЛЕНТА / ДОМАШНЕЕ ЗАДАНИЕ"
+   (Исправленная версия без логина)
+   ========================================= */
+let isHomeworkMode = false;
+let currentUser = null; // Глобальная переменная
+
 async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
-    const feed = document.getElementById('feed-container');
-    const hwContainer = document.getElementById('homework-container');
-    const tasksList = document.getElementById('tasksList'); // Контейнер списка задач
+    const feed = document.getElementById('feed-container'); // Лента новостей
+    const hwContainer = document.getElementById('homework-container'); // Контейнер ДЗ
+    const tasksList = document.getElementById('tasksList'); // Список внутри ДЗ
+    const filterContainer = document.getElementById('filterContainer'); // Кнопки фильтров
+    const loadMoreBtn = document.getElementById('loadMoreContainer'); // Кнопка "Показать еще"
 
     if (!isHomeworkMode) {
-        // === ВКЛЮЧАЕМ РЕЖИМ ДЗ ===
+        // === ВХОДИМ В РЕЖИМ "ДОМАШНЕЕ ЗАДАНИЕ" ===
+        
+        // 1. Сбрасываем фильтр на "Все", чтобы ДЗ не скрывалось
+        // (Имитируем клик по кнопке "Все")
+        if (filterContainer) {
+            const allBtn = filterContainer.querySelector('[data-filter="all"]');
+            if (allBtn) allBtn.click();
+        }
 
-        // 1. Скрываем ленту новостей
+        // 2. Скрываем ленту и кнопку "Показать еще"
         if (feed) feed.classList.add('hidden');
-        
-        // 2. Показываем контейнер ДЗ
+        if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
+
+        // 3. Показываем контейнер ДЗ
         if (hwContainer) hwContainer.classList.remove('hidden');
-        
-        // 3. ОБЯЗАТЕЛЬНО: Показываем сам список (убираем hidden, если он был)
+
+        // 4. Гарантированно показываем сам список задач
         if (tasksList) tasksList.classList.remove('hidden');
 
-        // 4. Меняем кнопку
+        // 5. Меняем текст кнопки переключения
         if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
-        
-        // --- ЗАГЛУШКА ВМЕСТО ЛОГИНА ---
-        // Так как логина нет, мы вручную создаем пользователя, 
-        // чтобы скрипт знал, для кого искать задания.
-        // Можете поменять "group1" на ту группу, для которой хотите видеть ДЗ.
+
+        // 6. СОЗДАЕМ ПОЛЬЗОВАТЕЛЯ (Заглушка, раз нет входа)
         currentUser = {
             name: "Ученик",
-            group: "group1" 
+            group: "group1" // <-- Укажите здесь нужную группу (group1, group2 и т.д.)
         };
 
-        // 5. Загружаем задания
-        // Оборачиваем в try-catch, чтобы если там ошибка, кнопка не сломалась
+        // 7. Загружаем и отображаем задания
         try {
-            await loadPersonalHomework();
+            await loadPersonalHomework(); 
+            // Обновляем имя в заголовке
+            const userNameSpan = document.getElementById('userName');
+            if (userNameSpan) userNameSpan.innerText = currentUser.name;
         } catch (e) {
-            console.error("Ошибка при загрузке заданий:", e);
+            console.error("Ошибка загрузки ДЗ:", e);
         }
 
         isHomeworkMode = true;
 
     } else {
-        // === ВОЗВРАТ В ЛЕНТУ НОВОСТЕЙ ===
+        // === ВОЗВРАЩАЕМСЯ В "ЛЕНТУ НОВОСТЕЙ" ===
 
+        // 1. Показываем ленту
         if (feed) feed.classList.remove('hidden');
+        
+        // Кнопку "Показать еще" возвращаем только если она была
+        if (loadMoreBtn) loadMoreBtn.classList.remove('hidden');
+
+        // 2. Скрываем ДЗ
         if (hwContainer) hwContainer.classList.add('hidden');
         
+        // 3. Меняем кнопку обратно
         if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
         
         isHomeworkMode = false;
     }
 }
-
-
 
 
 
@@ -376,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
