@@ -274,27 +274,10 @@
     <script src="main.js"></script>
     
     <!-- ЛОКАЛЬНЫЙ СКРИПТ ФИЛЬТРАЦИИ (Если вы не перенесли его в main.js) -->
-    <script>
-        function filterSelection(c) {
-            var x, i;
-            x = document.getElementsByClassName("material-card");
-            var btns = document.getElementsByClassName("filter-btn");
-            if (c == "all") c = "";
-            
-            // Переключаем кнопки
-            for (var b = 0; b < btns.length; b++) {
-                btns[b].classList.remove("active");
-                if (btns[b].innerText === event.target.innerText) btns[b].classList.add("active");
-            }
-            // Скрываем/показываем карточки
-            for (i = 0; i < x.length; i++) {
-                x[i].classList.remove("hidden");
-                if (x[i].className.indexOf(c) == -1) x[i].classList.add("hidden");
-            }
-        }
-    </script>
+    
 </body>
 </html>
+
 
 
 
