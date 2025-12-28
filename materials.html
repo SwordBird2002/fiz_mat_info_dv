@@ -16,6 +16,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
+        .gradient-text {
+            background: linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8, #845ef7, #5c7cfa, #339af0, #22b8cf, #20c997, #51cf66, #94d82d, #fcc419, #ff922b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-anim 5s ease infinite;
+            font-weight: 800;
+        }
+        
+        @keyframes gradient-anim {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         /* --- 1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ (СВЕТЛАЯ/ТЕМНАЯ ТЕМА) --- */
         :root {
             --primary-color: #4f46e5; 
@@ -377,6 +392,7 @@
 
 </body>
 </html>
+
 
 
 
