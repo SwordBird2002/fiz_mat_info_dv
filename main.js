@@ -227,39 +227,32 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // --- 2. ПОДСВЕТКА СИНТАКСИСА (Prism.js) ---
+    // --- 2. РЕНДЕРИНГ ФОРМУЛ (MathJax) ---
+    // Важно: вызываем это для перерисовки формул в новом контенте
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([modalBody]).catch((err) => console.log('MathJax error:', err));
+    }
+
+    // --- 3. ПОДСВЕТКА КОДА (Prism.js) ---
     if (typeof Prism !== 'undefined') {
         Prism.highlightAll();
     }
 
-    // --- 3. ДОБАВЛЕНИЕ КНОПОК КОПИРОВАНИЯ (Встроенная логика) ---
+    // --- 4. КНОПКИ КОПИРОВАНИЯ ---
     const preBlocks = modalBody.querySelectorAll('pre');
     preBlocks.forEach(pre => {
-        // Делаем блок relative, чтобы кнопка позиционировалась внутри него
         pre.style.position = 'relative';
-
-        // Создаем кнопку
         const btn = document.createElement('button');
         btn.className = 'btn btn-sm btn-dark position-absolute top-0 end-0 m-2';
-        btn.innerHTML = '<i class="bi bi-clipboard"></i>'; // Иконка буфера
-        btn.title = 'Копировать';
-        btn.style.zIndex = '10';
-
-        // Логика клика
+        btn.innerHTML = '<i class="bi bi-clipboard"></i>';
         btn.onclick = () => {
             const code = pre.querySelector('code');
-            if (!code) return;
-            
-            navigator.clipboard.writeText(code.innerText).then(() => {
-                btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>'; // Галочка
-                setTimeout(() => { btn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
-            }).catch(err => console.error('Ошибка копирования:', err));
+            if(code) navigator.clipboard.writeText(code.innerText);
         };
-
         pre.appendChild(btn);
     });
 
-    // --- 4. ПОКАЗЫВАЕМ ОКНО ---
+    // --- 5. ПОКАЗ ОКНА ---
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -433,6 +426,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
