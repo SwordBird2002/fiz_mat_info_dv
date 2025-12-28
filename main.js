@@ -260,33 +260,54 @@ async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
+    const tasksList = document.getElementById('tasksList'); // Контейнер списка задач
 
     if (!isHomeworkMode) {
-        // Скрываем ленту, показываем ДЗ
-        feed.classList.add('hidden');
-        hwContainer.classList.remove('hidden');
+        // === ВКЛЮЧАЕМ РЕЖИМ ДЗ ===
+
+        // 1. Скрываем ленту новостей
+        if (feed) feed.classList.add('hidden');
         
-        btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
+        // 2. Показываем контейнер ДЗ
+        if (hwContainer) hwContainer.classList.remove('hidden');
         
-        // Проверка: если пользователь уже вошел в систему
-        if (currentUser) {
-            showTasksInterface();
-            loadPersonalHomework();
-        } else {
-            showLoginInterface();
+        // 3. ОБЯЗАТЕЛЬНО: Показываем сам список (убираем hidden, если он был)
+        if (tasksList) tasksList.classList.remove('hidden');
+
+        // 4. Меняем кнопку
+        if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
+        
+        // --- ЗАГЛУШКА ВМЕСТО ЛОГИНА ---
+        // Так как логина нет, мы вручную создаем пользователя, 
+        // чтобы скрипт знал, для кого искать задания.
+        // Можете поменять "group1" на ту группу, для которой хотите видеть ДЗ.
+        currentUser = {
+            name: "Ученик",
+            group: "group1" 
+        };
+
+        // 5. Загружаем задания
+        // Оборачиваем в try-catch, чтобы если там ошибка, кнопка не сломалась
+        try {
+            await loadPersonalHomework();
+        } catch (e) {
+            console.error("Ошибка при загрузке заданий:", e);
         }
 
         isHomeworkMode = true;
+
     } else {
-        // Показываем ленту, скрываем ДЗ
-        feed.classList.remove('hidden');
-        hwContainer.classList.add('hidden');
+        // === ВОЗВРАТ В ЛЕНТУ НОВОСТЕЙ ===
+
+        if (feed) feed.classList.remove('hidden');
+        if (hwContainer) hwContainer.classList.add('hidden');
         
-        btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
+        if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
         
         isHomeworkMode = false;
     }
 }
+
 
 
 
@@ -355,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
