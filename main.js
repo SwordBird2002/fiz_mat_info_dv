@@ -87,6 +87,16 @@ async function loadMaterials() {
                 </div>
             `;
             container.appendChild(card);
+            if (typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(card, {
+                    max: 10,            // Максимальный угол наклона (градусы)
+                    speed: 400,         // Скорость анимации
+                    glare: true,        // Эффект блика (света)
+                    "max-glare": 0.3,   // Яркость блика (0-1)
+                    scale: 1.02,        // Чуть увеличиваем при наведении
+                    gyroscope: true     // Включаем акселерометр для телефонов!
+                });
+            }
         });
 
     } catch (error) {
@@ -246,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
