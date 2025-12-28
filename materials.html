@@ -185,16 +185,28 @@
                         /* --- МОДАЛЬНОЕ ОКНО --- */
             .modal-overlay {
                 position: fixed;
-                top: 0; left: 0; width: 100%; height: 100%;
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%;
                 z-index: 10000;
                 
-                /* ... цвета и прочее ... */
+                /* ФОН */
                 background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(8px); 
+                -webkit-backdrop-filter: blur(8px);
                 
-                opacity: 0;           /* Скрыто визуально */
-                pointer-events: none; /* <--- САМОЕ ВАЖНОЕ: Пропускать клики сквозь себя! */
+                /* ЦЕНТРИРОВАНИЕ (Вот эти 3 строки отвечают за центр) */
+                display: flex;                /* Включаем Flexbox */
+                justify-content: center;      /* Центр по горизонтали */
+                align-items: center;          /* Центр по вертикали */
+                
+                /* АНИМАЦИЯ */
+                opacity: 0; 
+                pointer-events: none;
                 transition: opacity 0.3s ease;
             }
+
             
             .modal-overlay.active {
                 opacity: 1;
@@ -356,6 +368,7 @@
  
 </body>
 </html>
+
 
 
 
