@@ -120,71 +120,112 @@ async function loadMaterials() {
 
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
-    const btnContainer = document.getElementById('loadMoreContainer');
+    const loadMoreBtn = document.getElementById('loadMoreContainer');
+    
+    // Берем следующую порцию новостей
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
 
     nextItems.forEach(item => {
-        let badgeClass = '', subjectName = '';
-        if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
-        else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
-        else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
+        // 1. Определяем стили бейджика
+        let badgeClass = '';
+        let subjectName = '';
+        
+        if (item.subject === 'math') {
+            badgeClass = 'badge-math';
+            subjectName = 'Математика';
+        } else if (item.subject === 'cs') {
+            badgeClass = 'badge-cs';
+            subjectName = 'Информатика';
+        } else if (item.subject === 'phys') {
+            badgeClass = 'badge-phys';
+            subjectName = 'Физика';
+        } else {
+            badgeClass = 'bg-secondary';
+            subjectName = 'Общее';
+        }
 
+        // 2. Создаем элемент карточки
         const card = document.createElement('div');
-        card.className = `material-card glass-card filterDiv ${item.subject}`;
+        // Добавляем классы: material-card (основа), glass-card (стиль), filterDiv (для фильтрации)
+        card.className = `material-card glass-card p-4 mb-4 filterDiv ${item.subject}`;
         card.style.cursor = 'pointer';
 
-        // 3D эффект
-        if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
+        // 3. Добавляем 3D эффект (Tilt), если он включен
+        if (typeof is3DEnabled !== 'undefined' && is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, {
-                max: 5, speed: 500, glare: true, "max-glare": 0.3, scale: 1.02, gyroscope: true
+                max: 5,
+                speed: 500,
+                glare: true,
+                "max-glare": 0.2,
+                scale: 1.02
             });
         }
 
-        // КЛИК ДЛЯ ОТКРЫТИЯ МОДАЛКИ
+        // 4. Подготовка превью медиа (если есть картинка)
+        let mediaPreview = '';
+        if (item.image) {
+            mediaPreview = `
+            <div class="mb-3" style="height: 180px; overflow: hidden; border-radius: 12px;">
+                <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="preview">
+            </div>`;
+        }
+
+        // 5. Заполняем HTML карточки
+        // Обратите внимание: item.text вставляется как HTML, чтобы формулы работали
+        card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="subject-badge ${badgeClass}">${subjectName}</span>
+                <small class="text-muted">${item.date}</small>
+            </div>
+            
+            ${mediaPreview}
+
+            <h4 class="fw-bold mb-2 text-white">${item.title}</h4>
+            
+            <!-- Ограничиваем текст по высоте (класс text-truncate-3 должен быть в CSS) -->
+            <div class="text-light opacity-75 mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                ${item.text}
+            </div>
+
+            <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
+        `;
+
+        // 6. Обработчик клика (Открытие модалки)
         card.onclick = (e) => {
+            // Если кликнули по ссылке внутри карточки — не открываем модалку
             if(e.target.tagName === 'A' || e.target.closest('a')) return;
             openModal(item);
         };
 
-        let filePreview = item.file ? '<div class="text-muted small mt-2"><i class="bi bi-paperclip"></i> Прикреплен файл</div>' : '';
-
-        card.innerHTML = `
-            <div class="card-header-custom">
-                <span class="subject-badge ${badgeClass}">${subjectName}</span>
-                <small class="text-muted">${item.date}</small>
-            </div>
-            <div class="card-content">
-                <h4>${item.title}</h4>
-                <p class="mb-2" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    ${item.text} 
-                </p>
-                ${filePreview}
-                <div class="text-primary small mt-2 fw-bold">Читать подробнее</div>
-            </div>
-        `;
+        // Добавляем карточку в контейнер
         container.appendChild(card);
     });
 
+    // === ВАЖНО: ЗАПУСКАЕМ MATHJAX ДЛЯ НОВЫХ КАРТОЧЕК ===
+    if (window.MathJax && MathJax.typesetPromise) {
+        // Рендерим формулы внутри всего контейнера ленты
+        MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
+    }
+
+    // 7. Обновляем счетчик показанных материалов
     shownCount += nextItems.length;
 
-    if (shownCount >= allMaterials.length) {
-        btnContainer.classList.add('hidden');
-    } else {
-        btnContainer.classList.remove('hidden');
+    // 8. Управляем кнопкой "Показать еще"
+    if (loadMoreBtn) {
+        if (shownCount >= allMaterials.length) {
+            loadMoreBtn.classList.add('hidden');
+        } else {
+            loadMoreBtn.classList.remove('hidden');
+        }
     }
 }
 
-if (document.getElementById('feed-container')) {
-    document.addEventListener('DOMContentLoaded', loadMaterials);
-}
 
 
 /* =========================================
    4. МОДАЛЬНОЕ ОКНО
    ========================================= */
-/* =========================================
-   4. МОДАЛЬНОЕ ОКНО (ПОЛНАЯ ВЕРСИЯ)
-   ========================================= */
+
 function openModal(item) {
     const modal = document.getElementById('newsModal');
     const modalBody = document.getElementById('modalBody');
@@ -426,6 +467,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
