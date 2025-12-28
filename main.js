@@ -95,9 +95,9 @@ function renderNextBatch() {
         card.style.cursor = 'pointer';
 
         // 3D эффект (VanillaTilt)
-        if (typeof VanillaTilt !== 'undefined') {
+        if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, {
-                max: 10, speed: 400, glare: true, "max-glare": 0.3, scale: 1.02, gyroscope: true
+                max: 5, speed: 500, glare: true, "max-glare": 0.3, scale: 1.02, gyroscope: true
             });
         }
 
@@ -378,6 +378,7 @@ function update3DIcon() {
 
 // Запускаем инициализацию кнопки
 document.addEventListener('DOMContentLoaded', init3DButton);
+
 
 
 
