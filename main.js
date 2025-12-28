@@ -122,81 +122,74 @@ function renderNextBatch() {
     const container = document.getElementById('feed-container');
     const loadMoreBtn = document.getElementById('loadMoreContainer');
     
+    // Проверка, есть ли данные
+    if (!allMaterials || allMaterials.length === 0) return;
+
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
 
     nextItems.forEach(item => {
-        // --- Стили бейджика ---
-        let badgeClass = 'bg-secondary';
-        let subjectName = 'Общее';
-        if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
-        else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
-        else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
+        try {
+            // --- Стили бейджика ---
+            let badgeClass = 'bg-secondary';
+            let subjectName = 'Общее';
+            if (item.subject === 'math') { badgeClass = 'badge-math'; subjectName = 'Математика'; }
+            else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
+            else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
-        // --- Создание карточки ---
-        const card = document.createElement('div');
-        card.className = `material-card glass-card p-4 mb-4 filterDiv ${item.subject}`;
-        card.style.cursor = 'pointer';
+            const card = document.createElement('div');
+            card.className = `material-card glass-card p-4 mb-4 filterDiv ${item.subject || ''}`;
+            card.style.cursor = 'pointer';
 
-        if (typeof is3DEnabled !== 'undefined' && is3DEnabled && typeof VanillaTilt !== 'undefined') {
-            VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
+            if (typeof is3DEnabled !== 'undefined' && is3DEnabled && typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
+            }
+
+            let mediaPreview = '';
+            if (item.image) {
+                mediaPreview = `
+                <div class="mb-3" style="height: 180px; overflow: hidden; border-radius: 12px;">
+                    <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="preview">
+                </div>`;
+            }
+
+            // --- БЕЗОПАСНАЯ ОБРАБОТКА ТЕКСТА ---
+            let previewText = item.text || ""; // Если текста нет, ставим пустую строку
+
+            if (previewText) {
+                // Заменяем формулы на значки (упрощенный regex, чтобы не падал)
+                // $$...$$ -> [Формула]
+                previewText = previewText.replace(/\$\$[\s\S]*?\$\$/g, '<span class="badge bg-warning text-dark">Формула</span>');
+                
+                // $...$ -> f(x)
+                previewText = previewText.replace(/\$[^$]*\$/g, '<span class="badge bg-dark text-warning">ƒ(x)</span>');
+                
+                // <pre>...</pre> -> [Код]
+                previewText = previewText.replace(/<pre[\s\S]*?<\/pre>/g, '<span class="badge bg-secondary">Код</span>');
+            }
+
+            card.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="subject-badge ${badgeClass}">${subjectName}</span>
+                    <small class="text-muted">${item.date || ''}</small>
+                </div>
+                ${mediaPreview}
+                <h4 class="fw-bold mb-2 text-white">${item.title || 'Без заголовка'}</h4>
+                <div class="text-light opacity-75 mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    ${previewText}
+                </div>
+                <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
+            `;
+
+            card.onclick = (e) => {
+                if(e.target.tagName === 'A' || e.target.closest('a')) return;
+                openModal(item);
+            };
+
+            container.appendChild(card);
+        } catch (err) {
+            console.error("Ошибка при рендеринге карточки:", item, err);
         }
-
-        // --- Картинка ---
-        let mediaPreview = '';
-        if (item.image) {
-            mediaPreview = `
-            <div class="mb-3" style="height: 180px; overflow: hidden; border-radius: 12px;">
-                <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;" alt="preview">
-            </div>`;
-        }
-
-        // ============================================================
-        // ⚡ ОЧИСТКА ТЕКСТА ДЛЯ ПРЕВЬЮ (Замена формул на значок)
-        // ============================================================
-        let previewText = item.text;
-
-        // 1. Заменяем блочные формулы $$...$$ и \[...\]
-        previewText = previewText.replace(/(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\])/g, 
-            '<span class="badge bg-dark text-warning border border-warning mx-1"><i class="bi bi-calculator"></i> Формула</span>');
-
-        // 2. Заменяем строчные формулы $...$ и \(...\)
-        previewText = previewText.replace(/(\$[^$]*\$|\\\([\s\S]*?\\\))/g, 
-            '<span class="badge bg-dark text-warning border border-warning mx-1" style="font-size: 0.8em;">ƒ(x)</span>');
-
-        // 3. Заменяем блоки кода <pre>...</pre> на значок "Код"
-        previewText = previewText.replace(/<pre[\s\S]*?<\/pre>/g, 
-            '<div class="badge bg-secondary text-light my-2"><i class="bi bi-code-slash"></i> Фрагмент кода</div>');
-        
-        // ============================================================
-
-        card.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="subject-badge ${badgeClass}">${subjectName}</span>
-                <small class="text-muted">${item.date}</small>
-            </div>
-            
-            ${mediaPreview}
-
-            <h4 class="fw-bold mb-2 text-white">${item.title}</h4>
-            
-            <!-- Показываем очищенный текст -->
-            <div class="text-light opacity-75 mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                ${previewText}
-            </div>
-
-            <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
-        `;
-
-        card.onclick = (e) => {
-            if(e.target.tagName === 'A' || e.target.closest('a')) return;
-            // В модалку передаем ОРИГИНАЛЬНЫЙ item (с формулами), а не previewText
-            openModal(item);
-        };
-
-        container.appendChild(card);
     });
-
-    // MathJax здесь вызывать НЕ НУЖНО, так как формул в превью больше нет!
 
     shownCount += nextItems.length;
 
@@ -456,6 +449,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
