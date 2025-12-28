@@ -329,10 +329,22 @@
             </div>
         </div>
         <!-- Контейнер для ДЗ (изначально скрыт) -->
-        <div class="feed-container hidden" id="homework-container">
-            <h3 class="text-center mb-4 text-white">Актуальные задания</h3>
-            <!-- Сюда JS загрузит карточки -->
+        <div id="homework-container" class="container mt-4 hidden">
+    <!-- Добавляем обертку с ID tasksList, которую ищет скрипт -->
+            <div id="tasksList">
+                <h3 class="text-center mb-4 text-white">Актуальные задания</h3>
+                
+                <!-- Добавляем место для имени, чтобы скрипт не ругался на null -->
+                <p class="text-center text-white small mb-4">
+                     Привет, <span id="userName">Ученик</span>!
+                </p>
+        
+                <!-- ГЛАВНОЕ: Добавляем ID personal-homework-feed -->
+                <!-- Именно сюда скрипт вставляет карточки. Если этого ID нет — скрипт падает -->
+                <div id="personal-homework-feed"></div>
+            </div>
         </div>
+        
 
     </div>
 
@@ -363,6 +375,7 @@
  
 </body>
 </html>
+
 
 
 
