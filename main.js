@@ -1,5 +1,5 @@
 /* =========================================
-   1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И ССЫЛКИ
+   1. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
    ========================================= */
 let allMaterials = [];
 let shownCount = 0;
@@ -7,8 +7,9 @@ const step = 6;
 let isHomeworkMode = false;
 let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false';
 
-// ВАША ССЫЛКА НА ФАЙЛ С ДОМАШКОЙ
-const HOMEWORK_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json";
+// Ссылки на данные
+const HOMEWORK_URL_REMOTE = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json";
+const HOMEWORK_URL_LOCAL = "homework.json"; // Запасной вариант
 
 /* =========================================
    2. ИНИЦИАЛИЗАЦИЯ
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     init3DButton();
     
-    // Фильтры
+    // Инициализация фильтров
     const filterContainer = document.getElementById('filterContainer');
     if (filterContainer) {
         const btns = filterContainer.querySelectorAll('.filter-btn');
@@ -51,13 +52,13 @@ async function loadMaterials() {
     const container = document.getElementById('feed-container');
     if (!container) return;
 
-    // !!! ГЛАВНОЕ: ЦЕНТРОВКА СЕТКИ !!!
-    container.classList.add('justify-content-center'); 
+    // УБИРАЕМ justify-content-center, чтобы вернуть старую сетку (слева направо)
+    container.classList.remove('justify-content-center'); 
 
     try {
         if (allMaterials.length === 0) {
-            const response = await fetch('data.json'); // Или ваша ссылка на новости
-            if (!response.ok) throw new Error('Ошибка HTTP: ' + response.status);
+            const response = await fetch('data.json'); 
+            if (!response.ok) throw new Error('Ошибка HTTP');
             allMaterials = await response.json();
             container.innerHTML = '';
         }
@@ -77,16 +78,16 @@ function renderNextBatch() {
     const nextItems = allMaterials.slice(shownCount, shownCount + step);
 
     nextItems.forEach(item => {
-        // Обертка: col-lg-4 (3 в ряд), col-md-6 (2 в ряд)
-        // filterDiv нужен для работы фильтров
+        // ВОЗВРАЩАЕМ СТАРУЮ СЕТКУ
         const cardWrapper = document.createElement('div');
+        // col-md-6 = 2 в ряд, col-lg-4 = 3 в ряд. Это стандарт Bootstrap.
         cardWrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`;
 
         const card = document.createElement('div');
+        // h-100 растягивает карточку на всю высоту ряда
         card.className = `material-card glass-card p-4 h-100 d-flex flex-column`;
         card.style.cursor = 'pointer';
 
-        // 3D Tilt
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
         }
@@ -97,7 +98,6 @@ function renderNextBatch() {
         else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
-        // Картинка (если есть)
         let mediaHtml = '';
         if (item.image) {
             mediaHtml = `<div class="mb-3 rounded overflow-hidden" style="height: 180px;">
@@ -127,7 +127,6 @@ function renderNextBatch() {
         container.appendChild(cardWrapper);
     });
     
-    // Рендер формул (если есть в превью)
     if (window.MathJax && MathJax.typesetPromise) {
          MathJax.typesetPromise([container]).catch(err => console.log(err));
     }
@@ -141,7 +140,7 @@ function renderNextBatch() {
 }
 
 /* =========================================
-   4. ДОМАШНЕЕ ЗАДАНИЕ (С ВАШЕГО САЙТА)
+   4. ДОМАШНЕЕ ЗАДАНИЕ (С ЗАПАСНЫМ ВАРИАНТОМ)
    ========================================= */
 async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
@@ -150,36 +149,34 @@ async function toggleHomeworkView() {
     const loadMore = document.getElementById('loadMoreContainer');
     const filterContainer = document.getElementById('filterContainer'); 
     
-    // Сброс фильтров
     const allFilterBtn = document.querySelector('[data-filter="all"]');
     if(allFilterBtn) allFilterBtn.click();
 
     if (!isHomeworkMode) {
-        // --> ВКЛЮЧАЕМ ДЗ
+        // ВКЛЮЧАЕМ РЕЖИМ ДЗ
         feed.classList.add('hidden');
         if(loadMore) loadMore.classList.add('hidden');
-        if(filterContainer) filterContainer.classList.add('hidden'); // Скрываем фильтры
+        if(filterContainer) filterContainer.classList.add('hidden');
         
         if(hwContainer) {
             hwContainer.classList.remove('hidden');
-            // Центрируем контейнер с заданиями
             hwContainer.className = 'container mt-4 d-flex flex-column align-items-center';
         }
         
         btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        loadPersonalHomework(); // Загрузка с URL
+        // Запускаем загрузку
+        await loadPersonalHomework();
         isHomeworkMode = true;
     } else {
-        // --> ВОЗВРАТ В ЛЕНТУ
+        // ВОЗВРАТ В ЛЕНТУ
         feed.classList.remove('hidden');
         if(loadMore && shownCount < allMaterials.length) loadMore.classList.remove('hidden');
-        if(filterContainer) filterContainer.classList.remove('hidden'); 
+        if(filterContainer) filterContainer.classList.remove('hidden');
         
         if(hwContainer) hwContainer.classList.add('hidden');
         
         btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
-        
         isHomeworkMode = false;
     }
 }
@@ -188,65 +185,70 @@ async function loadPersonalHomework() {
     const container = document.getElementById('personal-homework-feed');
     if(!container) return;
     container.innerHTML = '<div class="spinner-border text-primary"></div>';
-    
-    // Ограничиваем ширину списка ДЗ (для красоты)
     container.style.maxWidth = '800px'; 
     container.style.width = '100%';
     
+    let data = null;
+
+    // 1. Пробуем загрузить с удаленного сервера
     try {
-        // ЗАГРУЗКА ПО ВАШЕЙ ССЫЛКЕ
-        const response = await fetch(HOMEWORK_URL);
-        if(!response.ok) throw new Error('Ошибка HTTP: ' + response.status);
-        
-        const data = await response.json();
-        
-        // Логика: если файл возвращает { "group1": [...] }, берем group1.
-        // Если массив сразу [...], то берем data.
-        let tasks = [];
-        if (Array.isArray(data)) {
-            tasks = data;
-        } else if (data.group1) {
-            tasks = data.group1;
+        const response = await fetch(HOMEWORK_URL_REMOTE);
+        if(response.ok) {
+            data = await response.json();
         } else {
-            // Если структура другая, пробуем взять первое поле или просто пустой массив
-            tasks = Object.values(data)[0] || [];
+            throw new Error('Remote fail');
         }
-
-        container.innerHTML = '';
-        
-        if(tasks.length === 0) {
-            container.innerHTML = '<p class="text-center text-muted">Нет активных заданий</p>';
-            return;
-        }
-
-        tasks.forEach(task => {
-            const card = document.createElement('div');
-            card.className = 'glass-card p-4 mb-3 w-100'; 
-            
-            card.innerHTML = `
-                <div class="d-flex justify-content-between mb-2">
-                    <span class="badge bg-danger">${task.subject || 'ДЗ'}</span>
-                    <small class="text-muted">Дедлайн: ${task.deadline || ''}</small>
-                </div>
-                <h5 class="fw-bold mt-2">${task.title}</h5>
-                <p class="opacity-75">${task.task}</p>
-                <a href="${task.link}" target="_blank" class="btn btn-outline-primary btn-sm w-100">Выполнить</a>
-            `;
-            container.appendChild(card);
-        });
-
     } catch(e) {
-        console.error(e);
-        container.innerHTML = `
-            <div class="alert alert-danger text-center">
-                Не удалось загрузить задания.<br>
-                <small>${e.message}</small>
-            </div>`;
+        console.warn('Не удалось загрузить с VK Cloud, пробую локальный файл...');
+        // 2. Если не вышло (CORS или ошибка), грузим локальный файл
+        try {
+            const localResponse = await fetch(HOMEWORK_URL_LOCAL);
+            if(localResponse.ok) {
+                data = await localResponse.json();
+            }
+        } catch(localErr) {
+            console.error('Локальный файл тоже недоступен', localErr);
+        }
     }
+
+    // Если данных нет ниоткуда
+    if (!data) {
+        container.innerHTML = '<div class="alert alert-warning text-center">Не удалось загрузить задания. Проверьте файлы.</div>';
+        return;
+    }
+
+    // Обработка структуры JSON
+    let tasks = [];
+    if (Array.isArray(data)) tasks = data;
+    else if (data.group1) tasks = data.group1; // Если структура { group1: [...] }
+    else tasks = Object.values(data)[0] || [];
+
+    container.innerHTML = '';
+    
+    if(tasks.length === 0) {
+        container.innerHTML = '<p class="text-center text-muted">Нет активных заданий</p>';
+        return;
+    }
+
+    tasks.forEach(task => {
+        const card = document.createElement('div');
+        card.className = 'glass-card p-4 mb-3 w-100'; 
+        
+        card.innerHTML = `
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-danger">${task.subject || 'ДЗ'}</span>
+                <small class="text-muted">Дедлайн: ${task.deadline || ''}</small>
+            </div>
+            <h5 class="fw-bold mt-2">${task.title}</h5>
+            <p class="opacity-75">${task.task}</p>
+            <a href="${task.link}" target="_blank" class="btn btn-outline-primary btn-sm w-100">Выполнить</a>
+        `;
+        container.appendChild(card);
+    });
 }
 
 /* =========================================
-   5. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (МОДАЛКА, ТЕМА)
+   5. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
