@@ -230,9 +230,10 @@
                 <!-- НОВАЯ КНОПКА (с переносом на новую строку) -->
                 <div style="flex-basis: 100%; height: 0;"></div> <!-- Этот хак переносит кнопку вниз, если используется flex -->
                 
-                <a href="homework.html" class="btn-homework">
+                <button onclick="toggleHomeworkView()" class="btn-homework" id="hwBtn" style="cursor: pointer;">
                     <i class="bi bi-pencil-fill me-2"></i>Домашнее Задание
-                </a>
+                </button>
+
             </div>
 
         </div>
@@ -244,6 +245,12 @@
                 <p class="mt-2 text-muted">Загрузка материалов из базы...</p>
             </div>
         </div>
+        <!-- Контейнер для ДЗ (изначально скрыт) -->
+        <div class="feed-container hidden" id="homework-container">
+            <h3 class="text-center mb-4 text-white">Актуальные задания</h3>
+            <!-- Сюда JS загрузит карточки -->
+        </div>
+
     </div>
 
     <!-- ФУТЕР -->
@@ -279,6 +286,7 @@
     </script>
 </body>
 </html>
+
 
 
 
