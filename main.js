@@ -99,3 +99,82 @@ async function loadMaterials() {
 if (document.getElementById('feed-container')) {
     document.addEventListener('DOMContentLoaded', loadMaterials);
 }
+
+
+
+
+
+
+
+/* --- 3. ЛОГИКА ДОМАШНЕГО ЗАДАНИЯ --- */
+let isHomeworkMode = false;
+
+async function toggleHomeworkView() {
+    const feed = document.getElementById('feed-container');
+    const hwContainer = document.getElementById('homework-container');
+    const filterContainer = document.querySelector('.d-flex.justify-content-center'); // Блок с кнопками фильтров
+    const btn = document.getElementById('hwBtn');
+
+    if (!isHomeworkMode) {
+        // ВКЛЮЧАЕМ РЕЖИМ ДЗ
+        feed.classList.add('hidden');          // Прячем материалы
+        filterContainer.classList.add('hidden'); // Прячем фильтры (если не нужны для ДЗ)
+        hwContainer.classList.remove('hidden'); // Показываем контейнер ДЗ
+        
+        // Меняем кнопку на "Назад"
+        btn.innerHTML = '<i class="bi bi-arrow-left me-2"></i>Вернуться к материалам';
+        btn.style.backgroundColor = '#64748b'; // Делаем серой
+        
+        // Загружаем данные (если еще не загружали)
+        if (hwContainer.children.length <= 1) { 
+            await loadHomework();
+        }
+    } else {
+        // ВЫКЛЮЧАЕМ РЕЖИМ ДЗ (Возврат назад)
+        feed.classList.remove('hidden');
+        filterContainer.classList.remove('hidden');
+        hwContainer.classList.add('hidden');
+        
+        // Возвращаем кнопку как было
+        btn.innerHTML = '<i class="bi bi-pencil-fill me-2"></i>Домашнее Задание';
+        btn.style.backgroundColor = ''; // Сброс цвета (вернется оранжевый из CSS)
+    }
+
+    isHomeworkMode = !isHomeworkMode;
+}
+
+async function loadHomework() {
+    const container = document.getElementById('homework-container');
+    container.innerHTML = '<h3 class="text-center mb-4">Актуальные задания</h3>'; // Очистка + заголовок
+
+    try {
+        const response = await fetch('homework.json');
+        const data = await response.json();
+
+        data.forEach(item => {
+            // Определяем цвет (как в материалах)
+            let badgeClass = 'bg-secondary text-white';
+            if (item.subject === 'math') badgeClass = 'badge-math';
+            if (item.subject === 'cs') badgeClass = 'badge-cs';
+            if (item.subject === 'phys') badgeClass = 'badge-phys';
+
+            const card = document.createElement('div');
+            // Карточка ДЗ может выглядеть немного иначе (например, с красной рамкой дедлайна)
+            card.className = 'material-card glass-card p-4 mb-3';
+            card.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="subject-badge ${badgeClass}">${item.subject.toUpperCase()}</span>
+                    <span class="text-danger fw-bold"><i class="bi bi-clock me-1"></i>До: ${item.deadline}</span>
+                </div>
+                <h4>${item.title}</h4>
+                <p class="mb-4">${item.task}</p>
+                <a href="${item.link}" target="_blank" class="btn btn-outline-danger w-100">Перейти к выполнению</a>
+            `;
+            container.appendChild(card);
+        });
+
+    } catch (error) {
+        container.innerHTML += '<p class="text-center text-danger">Ошибка загрузки ДЗ</p>';
+    }
+}
+
