@@ -5,20 +5,17 @@ let allMaterials = [];
 let shownCount = 0;
 const step = 6;
 let isHomeworkMode = false;
-let currentUser = null; // Будет заполнен при входе в ДЗ
+let currentUser = { group: "group1" }; // Группа для фильтрации ДЗ
 let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false';
 
 /* =========================================
-   2. ИНИЦИАЛИЗАЦИЯ (При загрузке страницы)
+   2. ИНИЦИАЛИЗАЦИЯ
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Тема
     initTheme();
-    
-    // 2. 3D кнопка
     init3DButton();
     
-    // 3. Фильтры (Вешаем обработчики)
+    // Фильтры
     const filterContainer = document.getElementById('filterContainer');
     if (filterContainer) {
         const btns = filterContainer.querySelectorAll('.filter-btn');
@@ -28,12 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
                 
                 const category = btn.getAttribute('data-filter');
-                const cards = document.querySelectorAll('.material-card');
+                const wrappers = document.querySelectorAll('.filterDiv'); // Ищем обертки
                 
-                cards.forEach(card => {
-                    // Ищем родительский col-элемент, если он есть, или саму карточку
-                    const wrapper = card.closest('.filterDiv') || card;
-                    
+                wrappers.forEach(wrapper => {
                     if (category === 'all') {
                         wrapper.classList.remove('hidden');
                     } else {
@@ -48,12 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Загрузка новостей
     loadMaterials();
 });
 
 /* =========================================
-   3. ЗАГРУЗКА МАТЕРИАЛОВ (JSON)
+   3. ЗАГРУЗКА МАТЕРИАЛОВ
    ========================================= */
 async function loadMaterials() {
     const container = document.getElementById('feed-container');
@@ -61,13 +54,9 @@ async function loadMaterials() {
 
     try {
         if (allMaterials.length === 0) {
-            // Убедитесь, что файл доступен по этому пути
             const response = await fetch('data.json'); 
             if (!response.ok) throw new Error('Ошибка HTTP: ' + response.status);
-            
             allMaterials = await response.json();
-            
-            // ВАЖНО: Очищаем спиннер перед рисованием
             container.innerHTML = '';
         }
         renderNextBatch();
@@ -81,7 +70,7 @@ async function loadMaterials() {
 }
 
 /* =========================================
-   4. ОТРИСОВКА КАРТОЧЕК (LENTA)
+   4. ОТРИСОВКА КАРТОЧЕК
    ========================================= */
 function renderNextBatch() {
     const container = document.getElementById('feed-container');
@@ -99,32 +88,29 @@ function renderNextBatch() {
         else if (item.subject === 'cs') { badgeClass = 'badge-cs'; subjectName = 'Информатика'; }
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
-        // Создаем обертку (для сетки Bootstrap, если используется)
-        // Если у вас flex-container, классы col-md-6 можно убрать
+        // ОБЕРТКА ДЛЯ СЕТКИ (Вернул col-lg-4, чтобы было по 3 в ряд)
         const cardWrapper = document.createElement('div');
-        cardWrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`; // Классы для фильтра
+        cardWrapper.className = `col-md-6 col-lg-4 mb-4 filterDiv ${item.subject}`;
 
-        // Создаем саму карточку
+        // КАРТОЧКА
         const card = document.createElement('div');
         card.className = `material-card glass-card p-4 h-100 d-flex flex-column`;
         card.style.cursor = 'pointer';
 
-        // 3D Эффект
+        // 3D
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, { max: 5, speed: 500, glare: true, "max-glare": 0.2, scale: 1.02 });
         }
 
-        // Превью медиа
+        // Превью картинки
         let mediaHtml = '';
         if (item.image) {
             mediaHtml = `<div class="mb-3 rounded overflow-hidden" style="height: 180px;">
                 <img src="${item.image}" style="width: 100%; height: 100%; object-fit: cover;">
             </div>`;
         }
-
-        // Подготовка текста превью (простая, без regex, чтобы не ломать)
-        // Формулы будут показаны как текст (безопасно)
         
+        // Рендер контента
         card.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <span class="subject-badge ${badgeClass}">${subjectName}</span>
@@ -136,13 +122,12 @@ function renderNextBatch() {
             <h4 class="fw-bold mb-2">${item.title}</h4>
             
             <div class="text-muted opacity-75 mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                ${item.text || ''}
+                ${item.text || ''} 
             </div>
 
             <button class="btn btn-outline-primary btn-sm w-100 mt-auto">Подробнее</button>
         `;
 
-        // Клик по карточке
         card.onclick = (e) => {
             if(e.target.tagName === 'A' || e.target.closest('a')) return;
             openModal(item);
@@ -151,10 +136,14 @@ function renderNextBatch() {
         cardWrapper.appendChild(card);
         container.appendChild(cardWrapper);
     });
+    
+    // Рендер формул в превью (если они туда попали)
+    if (window.MathJax && MathJax.typesetPromise) {
+         MathJax.typesetPromise([container]).catch(err => console.log(err));
+    }
 
     shownCount += nextItems.length;
 
-    // Кнопка "Показать еще"
     if (loadMoreBtn) {
         if (shownCount >= allMaterials.length) loadMoreBtn.classList.add('hidden');
         else loadMoreBtn.classList.remove('hidden');
@@ -162,7 +151,7 @@ function renderNextBatch() {
 }
 
 /* =========================================
-   5. МОДАЛЬНОЕ ОКНО (С MATHJAX И PRISM)
+   5. МОДАЛЬНОЕ ОКНО
    ========================================= */
 function openModal(item) {
     const modal = document.getElementById('newsModal');
@@ -202,17 +191,16 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // 1. MathJax: Рендерим формулы в модалке
+    // MathJax в модалке
     if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise([modalBody]).catch(err => console.log('MathJax error:', err));
     }
 
-    // 2. Prism: Подсвечиваем код
+    // Prism
     if (typeof Prism !== 'undefined') {
         Prism.highlightAll();
     }
     
-    // 3. Добавляем кнопки копирования
     addCopyButtons(modalBody);
 
     modal.classList.add('active');
@@ -220,12 +208,13 @@ function openModal(item) {
 }
 
 function closeModal() {
-    document.getElementById('newsModal').classList.remove('active');
+    const modal = document.getElementById('newsModal');
+    if(modal) modal.classList.remove('active');
     document.body.style.overflow = '';
 }
 
 /* =========================================
-   6. ДОМАШНЕЕ ЗАДАНИЕ
+   6. ДОМАШНЕЕ ЗАДАНИЕ (ПРОСТОЕ)
    ========================================= */
 async function toggleHomeworkView() {
     const btn = document.getElementById('hw-toggle-btn');
@@ -233,27 +222,27 @@ async function toggleHomeworkView() {
     const hwContainer = document.getElementById('homework-container');
     const loadMore = document.getElementById('loadMoreContainer');
     
-    // Сброс фильтра на "Все", чтобы не скрывать ДЗ
+    // Сброс фильтра
     const allFilterBtn = document.querySelector('[data-filter="all"]');
     if(allFilterBtn) allFilterBtn.click();
 
     if (!isHomeworkMode) {
-        // Включаем ДЗ
+        // ВКЛЮЧАЕМ РЕЖИМ ДЗ
         feed.classList.add('hidden');
         if(loadMore) loadMore.classList.add('hidden');
         hwContainer.classList.remove('hidden');
+        
         btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
         
-        // Авто-вход (заглушка)
-        currentUser = { name: "Ученик", group: "group1" };
         loadPersonalHomework();
 
         isHomeworkMode = true;
     } else {
-        // Возврат в ленту
+        // ВОЗВРАЩАЕМСЯ В ЛЕНТУ
         feed.classList.remove('hidden');
         if(loadMore && shownCount < allMaterials.length) loadMore.classList.remove('hidden');
         hwContainer.classList.add('hidden');
+        
         btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
         
         isHomeworkMode = false;
@@ -267,28 +256,31 @@ async function loadPersonalHomework() {
     
     try {
         const response = await fetch('homework.json');
-        if(!response.ok) throw new Error('Ошибка загрузки HW');
+        if(!response.ok) throw new Error('Ошибка HW');
         const data = await response.json();
         
+        // Берем задания для группы 1
         const tasks = data[currentUser.group] || [];
         container.innerHTML = '';
         
         if(tasks.length === 0) {
-            container.innerHTML = '<p class="text-white text-center">Нет активных заданий</p>';
+            container.innerHTML = '<p class="text-center text-muted">Нет заданий</p>';
             return;
         }
 
         tasks.forEach(task => {
             const card = document.createElement('div');
+            // Обычная карточка на всю ширину (или как было)
             card.className = 'material-card glass-card p-4 mb-3';
+            
             card.innerHTML = `
                 <div class="d-flex justify-content-between mb-2">
                     <span class="badge bg-danger">${task.subject}</span>
-                    <small class="text-white opacity-75">Дедлайн: ${task.deadline}</small>
+                    <small class="text-muted">Дедлайн: ${task.deadline}</small>
                 </div>
-                <h5 class="text-white mt-2">${task.title}</h5>
-                <p class="text-white opacity-75">${task.task}</p>
-                <a href="${task.link}" target="_blank" class="btn btn-outline-light w-100">Выполнить</a>
+                <h5 class="fw-bold mt-2">${task.title}</h5>
+                <p class="opacity-75">${task.task}</p>
+                <a href="${task.link}" target="_blank" class="btn btn-outline-primary btn-sm w-100">Выполнить</a>
             `;
             container.appendChild(card);
         });
@@ -300,7 +292,7 @@ async function loadPersonalHomework() {
 }
 
 /* =========================================
-   7. УТИЛИТЫ (Темы, 3D, Копирование)
+   7. УТИЛИТЫ
    ========================================= */
 function initTheme() {
     const saved = localStorage.getItem('theme') || 'light';
@@ -327,8 +319,10 @@ function toggle3D() {
     is3DEnabled = !is3DEnabled;
     localStorage.setItem('3d_enabled', is3DEnabled);
     if(is3DEnabled) location.reload();
-    else disableAllTilt();
-    update3DIcon();
+    else {
+        disableAllTilt();
+        update3DIcon();
+    }
 }
 function disableAllTilt() {
     document.querySelectorAll('.material-card').forEach(c => {
