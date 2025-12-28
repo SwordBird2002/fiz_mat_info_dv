@@ -159,7 +159,7 @@ function renderNextBatch() {
                     ${item.text} 
                 </p>
                 ${filePreview}
-                <div class="text-primary small mt-2 fw-bold">Читать подробнее -></div>
+                <div class="text-primary small mt-2 fw-bold">Читать подробнее</div>
             </div>
         `;
         container.appendChild(card);
@@ -348,4 +348,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
