@@ -190,7 +190,7 @@ function openModal(item) {
     const modalBody = document.getElementById('modalBody');
     if (!modal || !modalBody) return;
     
-    // 1. Генерируем контент
+    // 1. Генерируем контент (картинки, файлы, ссылки)
     let mediaHtml = '';
     if (item.image) mediaHtml = `<img src="${item.image}" class="img-fluid rounded mb-4 w-100">`;
     
@@ -212,6 +212,7 @@ function openModal(item) {
         linkHtml = `<a href="${item.link}" target="_blank" class="btn btn-outline-primary w-100 mt-3">${item.linkText || 'Перейти'}</a>`;
     }
 
+    // 2. Вставляем HTML в тело модального окна
     modalBody.innerHTML = `
         <span class="subject-badge badge-${item.subject} mb-3 d-inline-block">
             ${item.subject === 'math' ? 'Математика' : item.subject === 'cs' ? 'Информатика' : 'Физика'}
@@ -227,17 +228,21 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // 2. Запускаем подсветку кода (Prism.js)
-    // Проверяем, загрузилась ли библиотека, чтобы не было ошибки
+    // 3. Запускаем подсветку кода (Prism.js)
     if (typeof Prism !== 'undefined') {
         Prism.highlightAll();
     }
 
-    // 3. Показываем окно
+    // 4. Добавляем кнопки "Копировать" к блокам кода
+    // (Убедитесь, что функция addCopyButtons добавлена в файл main.js)
+    if (typeof addCopyButtons === 'function') {
+        addCopyButtons(modalBody);
+    }
+
+    // 5. Показываем окно
     modal.classList.add('active');
     document.body.style.overflow = 'hidden'; // Блокируем скролл фона
 }
-
 
 function closeModal(force) {
     const modal = document.getElementById('newsModal');
@@ -408,6 +413,7 @@ function addCopyButtons(container) {
         pre.appendChild(btn);
     });
 }
+
 
 
 
