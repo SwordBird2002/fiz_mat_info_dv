@@ -257,43 +257,57 @@ function closeModal(force) {
 let isHomeworkMode = false;
 
 async function toggleHomeworkView() {
+    const btn = document.getElementById('hw-toggle-btn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
-    const filterContainer = document.getElementById('filterContainer');
-    const loadMoreBtn = document.getElementById('loadMoreContainer');
-    const btn = document.getElementById('hwBtn');
-
-    if (!feed || !hwContainer || !btn) return;
+    const filterContainer = document.getElementById('filter-buttons');
 
     if (!isHomeworkMode) {
-        feed.classList.add('hidden');
-        if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
-        
-        const buttonsRow = filterContainer.querySelector('.d-flex'); 
-        if(buttonsRow) buttonsRow.classList.add('hidden');
+        // === ВХОД В РЕЖИМ "ДОМАШНЕЕ ЗАДАНИЕ" ===
 
+        // 1. ВАЖНОЕ ИСПРАВЛЕНИЕ: Сбрасываем фильтр на "Все"
+        // Если этого не сделать, фильтр "Физика" скроет карточки ДЗ
+        if (filterContainer) {
+            const allBtn = filterContainer.querySelector('[data-filter="all"]');
+            if (allBtn) {
+                allBtn.click(); // Имитируем клик по кнопке "Все"
+            }
+        }
+
+        // 2. Переключаем видимость контейнеров
+        feed.classList.add('hidden');
         hwContainer.classList.remove('hidden');
 
-        btn.innerHTML = '<i class="bi bi-arrow-left me-2"></i>Вернуться к материалам';
-        btn.style.backgroundColor = '#64748b'; 
+        // 3. Меняем кнопку на "Лента новостей"
+        btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
+        
+        // 4. Проверяем авторизацию
+        const token = localStorage.getItem('studentToken');
+        
+        if (token) {
+            // Если есть сохраненный токен, сразу грузим задачи
+            currentUser = JSON.parse(token);
+            showTasksInterface();
+            loadPersonalHomework();
+        } else {
+            // Если токена нет, показываем форму входа
+            showLoginInterface();
+        }
 
-        if (hwContainer.children.length <= 1) await loadHomework();
         isHomeworkMode = true;
 
     } else {
+        // === ВОЗВРАТ В РЕЖИМ "ЛЕНТА НОВОСТЕЙ" ===
+
         feed.classList.remove('hidden');
-        if (loadMoreBtn && shownCount < allMaterials.length) loadMoreBtn.classList.remove('hidden');
-
-        const buttonsRow = filterContainer.querySelector('.d-flex'); 
-        if(buttonsRow) buttonsRow.classList.remove('hidden');
-
         hwContainer.classList.add('hidden');
-
-        btn.innerHTML = '<i class="bi bi-pencil-fill me-2"></i>Домашнее Задание';
-        btn.style.backgroundColor = ''; 
+        
+        btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
+        
         isHomeworkMode = false;
     }
 }
+
 
 async function loadHomework() {
     const container = document.getElementById('homework-container');
@@ -359,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
