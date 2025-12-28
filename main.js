@@ -179,30 +179,44 @@ async function loadHomework() {
 }
 
 
-/* --- 4. ФИЛЬТРАЦИЯ МАТЕРИАЛОВ (ВЕРНУЛИ) --- */
-function filterSelection(category) {
-    const cards = document.getElementsByClassName("material-card");
-    const btns = document.getElementsByClassName("filter-btn");
+/* --- 4. ФИЛЬТРАЦИЯ (НАДЕЖНЫЙ СПОСОБ) --- */
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const filterContainer = document.getElementById('filterContainer');
+    if (!filterContainer) return; // Если мы не на странице материалов, выходим
 
-    // 1. Управление кнопками
-    // Удаляем active у всех
-    for (let btn of btns) {
-        btn.classList.remove("active");
-    }
-    // Добавляем active нажатой кнопке (через event)
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add("active");
-    }
+    // Находим все кнопки фильтров
+    const btns = filterContainer.querySelectorAll('.filter-btn');
 
-    // 2. Фильтрация карточек
-    if (category === 'all') category = '';
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            
+            // 1. Убираем активный класс у всех кнопок
+            btns.forEach(b => b.classList.remove('active'));
+            // 2. Делаем активной текущую
+            btn.classList.add('active');
 
-    for (let card of cards) {
-        card.classList.remove("hidden");
-        // Проверяем, есть ли у карточки нужный класс (math, cs, phys)
-        // Мы добавляли эти классы при генерации: `material-card glass-card filterDiv ${item.subject}`
-        if (category && !card.classList.contains(category)) {
-            card.classList.add("hidden");
-        }
-    }
-}
+            // 3. Получаем категорию (math, cs...)
+            const category = btn.getAttribute('data-filter');
+            
+            // 4. Фильтруем карточки
+            const cards = document.querySelectorAll('.material-card');
+            
+            cards.forEach(card => {
+                // Если категория 'all', показываем все
+                if (category === 'all') {
+                    card.classList.remove('hidden');
+                } else {
+                    // Проверяем, есть ли у карточки класс этой категории
+                    if (card.classList.contains(category)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    });
+});
+
+
