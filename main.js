@@ -87,11 +87,10 @@ let allMaterials = [];
 let shownCount = 0;
 const step = 6;
 
-async function loadMaterials() {
+async function loadMaterials(restoreCount) {
     const container = document.getElementById('feed-container');
     if (!container) return; 
 
-    // Добавляем кнопку "Показать еще", если её нет
     let loadMoreContainer = document.getElementById('loadMoreContainer');
     if (!loadMoreContainer) {
         loadMoreContainer = document.createElement('div');
@@ -106,19 +105,23 @@ async function loadMaterials() {
     }
 
     try {
-        // Если массив пуст - загружаем данные заново
         if (allMaterials.length === 0) {
-            // ДОБАВЛЕНО: ?t=... и cache: 'no-store' для отключения кеширования
             const timestamp = Date.now();
             const response = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json?t=${timestamp}`, {
                 cache: "no-store"
             });
             allMaterials = await response.json();
-            
-            // Очищаем контейнер перед первой отрисовкой
             container.innerHTML = '';
         }
-        renderNextBatch();
+        
+        // Если передали число для восстановления (например, 12), рендерим их сразу
+        if (restoreCount && typeof restoreCount === 'number') {
+            renderNextBatch(restoreCount);
+        } else {
+            // Иначе обычная загрузка (первые 6)
+            renderNextBatch();
+        }
+        
     } catch (error) {
         console.error('Ошибка загрузки:', error);
         container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
@@ -126,10 +129,15 @@ async function loadMaterials() {
 }
 
 
-function renderNextBatch() {
+function renderNextBatch(customCount) {
     const container = document.getElementById('feed-container');
     const btnContainer = document.getElementById('loadMoreContainer');
-    const nextItems = allMaterials.slice(shownCount, shownCount + step);
+    
+    // Если передали customCount (при восстановлении), используем его.
+    // Иначе используем стандартный шаг (step = 6).
+    const batchSize = customCount || step;
+
+    const nextItems = allMaterials.slice(shownCount, shownCount + batchSize);
 
     nextItems.forEach(item => {
         let badgeClass = '', subjectName = '';
@@ -141,14 +149,12 @@ function renderNextBatch() {
         card.className = `material-card glass-card filterDiv ${item.subject}`;
         card.style.cursor = 'pointer';
 
-        // 3D эффект
         if (is3DEnabled && typeof VanillaTilt !== 'undefined') {
             VanillaTilt.init(card, {
                 max: 5, speed: 500, glare: true, "max-glare": 0.3, scale: 1.02, gyroscope: true
             });
         }
 
-        // КЛИК ДЛЯ ОТКРЫТИЯ МОДАЛКИ
         card.onclick = (e) => {
             if(e.target.tagName === 'A' || e.target.closest('a')) return;
             openModal(item);
@@ -176,22 +182,15 @@ function renderNextBatch() {
     shownCount += nextItems.length;
 
     if (shownCount >= allMaterials.length) {
-        btnContainer.classList.add('hidden');
+        if(btnContainer) btnContainer.classList.add('hidden');
     } else {
-        btnContainer.classList.remove('hidden');
+        if(btnContainer) btnContainer.classList.remove('hidden');
     }
 
-    // === 1. Инициализируем блоки с кодом (Prism) ===
     initCodeBlocks(container);
-
-    // === 2. Рендеринг формул (MathJax) ===
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([container]).catch(err => console.log('MathJax error:', err));
     }
-}
-
-if (document.getElementById('feed-container')) {
-    document.addEventListener('DOMContentLoaded', loadMaterials);
 }
 
 
@@ -256,26 +255,27 @@ function openModal(item) {
 function closeModal(force) {
     const modal = document.getElementById('newsModal');
     
-    // Проверка: нажали кнопку закрытия (force) или кликнули по темному фону (event.target === modal)
     if (force || (window.event && window.event.target === modal)) {
         modal.classList.remove('active');
-        document.body.style.overflow = ''; // Возвращаем скролл
+        document.body.style.overflow = ''; 
         
-        // === ЛОГИКА ОБНОВЛЕНИЯ ЛЕНТЫ ===
-        // 1. Очищаем массив данных и счетчик
+        // 1. ЗАПОМИНАЕМ, сколько карточек сейчас на экране
+        // Если shownCount был 0 (странно, но вдруг), берем хотя бы шаг (6)
+        const countToRestore = shownCount > 0 ? shownCount : step;
+        
+        // 2. Сбрасываем массив и счетчик
         allMaterials = []; 
         shownCount = 0;
         
-        // 2. Очищаем визуальный контейнер
+        // 3. Очищаем контейнер
         const container = document.getElementById('feed-container');
         if (container) {
-            container.innerHTML = ''; 
-            // Можно добавить спиннер для красоты на момент загрузки
-            container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary" role="status"></div></div>';
+            // Можно поставить спиннер, чтобы пользователь видел обновление
+            container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
         }
 
-        // 3. Запускаем загрузку заново (она подтянет свежий JSON)
-        loadMaterials();
+        // 4. Загружаем свежие данные и просим вернуть countToRestore карточек
+        loadMaterials(countToRestore);
     }
 }
 
@@ -432,4 +432,5 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
