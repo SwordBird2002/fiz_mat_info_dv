@@ -378,43 +378,52 @@ async function toggleHomeworkView() {
 // 2. Функция отрисовки формы входа
 function renderLoginForm() {
     const container = document.getElementById('homework-container');
+    
+    // Изменили col-md-6 col-lg-4 -> col-md-8 col-lg-6 для большей ширины
     container.innerHTML = `
         <div class="row justify-content-center animate__animated animate__fadeIn">
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-8 col-lg-6">
                 <div class="glass-card p-5 text-center">
                     <div class="mb-4">
                         <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3">
-                            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 2.5rem;"></i>
+                            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
                         </div>
                     </div>
-                    <h4 class="mb-3 fw-bold">Личный кабинет</h4>
-                    <p class="text-muted mb-4 small">Введите ваш персональный токен, чтобы увидеть задания.</p>
                     
-                    <div class="input-group mb-3">
-                        <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-key"></i></span>
-                        <input type="text" id="tokenInput" class="form-control border-start-0 shadow-none" placeholder="Ваш токен">
+                    <h3 class="mb-2 fw-bold">Вход в систему</h3>
+                    <p class="text-muted mb-5">Введите ваш персональный токен доступа</p>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-sm-10">
+                            <div class="form-floating mb-3 text-dark">
+                                <input type="text" class="form-control" id="tokenInput" placeholder="Ваш токен">
+                                <label for="tokenInput">Ваш токен</label>
+                            </div>
+                            
+                            <button onclick="saveTokenAndReload()" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm mt-2 transition-btn">
+                                Войти в личный кабинет
+                            </button>
+                            
+                            <div id="loginError" class="text-danger mt-3 small fw-bold" style="min-height: 20px;"></div>
+                        </div>
                     </div>
-                    
-                    <button onclick="saveTokenAndReload()" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm mb-3">
-                        Войти
-                    </button>
-                    <div id="loginError" class="text-danger small" style="min-height: 20px;"></div>
+
                 </div>
             </div>
         </div>
     `;
     
-    // Добавляем обработку нажатия Enter
     setTimeout(() => {
         const input = document.getElementById('tokenInput');
         if(input) {
-            input.focus(); // Фокус в поле ввода
+            input.focus(); 
             input.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') saveTokenAndReload();
             });
         }
     }, 100);
 }
+
 
 // 3. Функция сохранения токена (вызывается кнопкой "Войти")
 function saveTokenAndReload() {
@@ -643,5 +652,6 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
 
 
