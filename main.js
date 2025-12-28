@@ -353,43 +353,129 @@ async function toggleHomeworkView() {
 }
 
 
-async function loadHomework() {
+/* =========================================
+   ЗАГРУЗКА ДЗ С ИМЕНАМИ ИЗ NAMES.JSON
+   ========================================= */
+async function loadHomework(token) {
     const container = document.getElementById('homework-container');
-    container.innerHTML = '<h3 class="text-center mb-4 text-white">Актуальные задания</h3>'; 
+    
+    // Спиннер
+    container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Вход в систему...</p></div>';
 
     try {
-        const response = await fetch('https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json');
-        const data = await response.json();
-
-        data.forEach(item => {
-            let badgeClass = 'bg-secondary text-white';
-            if (item.subject === 'math') badgeClass = 'badge-math';
-            if (item.subject === 'cs') badgeClass = 'badge-cs';
-            if (item.subject === 'phys') badgeClass = 'badge-phys';
-
-            const card = document.createElement('div');
-            card.className = 'material-card glass-card p-4 mb-3';
-            card.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="subject-badge ${badgeClass}">${item.subject.toUpperCase()}</span>
-                    <span class="text-danger fw-bold"><i class="bi bi-clock me-1"></i>До: ${item.deadline}</span>
-                </div>
-                <h4>${item.title}</h4>
-                <p class="mb-4">${item.task}</p>
-                <a href="${item.link}" target="_blank" class="btn btn-outline-danger w-100">Перейти к выполнению</a>
-            `;
-            container.appendChild(card);
-        });
+        const timestamp = Date.now();
         
-        // Формулы в ДЗ
+        // --- ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА ---
+        // Запускаем скачивание сразу двух файлов
+        const [hwResponse, namesResponse] = await Promise.all([
+            fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json?t=${timestamp}`, { cache: "no-store" }),
+            fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${timestamp}`, { cache: "no-store" })
+        ]);
+
+        // Проверяем, загрузилось ли ДЗ (это критично)
+        if (!hwResponse.ok) throw new Error('Не удалось загрузить список заданий');
+        
+        const data = await hwResponse.json();
+        
+        // Проверяем, загрузились ли имена (это не критично)
+        let studentNames = {};
+        if (namesResponse.ok) {
+            try {
+                studentNames = await namesResponse.json();
+            } catch (e) {
+                console.warn("Ошибка чтения файла имен:", e);
+            }
+        }
+
+        // --- ФИЛЬТРАЦИЯ ---
+        const myTasks = data.filter(item => {
+            if (!item.allowed_tokens || !Array.isArray(item.allowed_tokens) || item.allowed_tokens.length === 0) {
+                return true; // Публичное задание
+            }
+            return item.allowed_tokens.includes(token);
+        });
+
+        // --- ОПРЕДЕЛЕНИЕ ИМЕНИ ---
+        // Если имя есть в JSON - берем его, иначе показываем сам токен
+        const displayName = studentNames[token] || token;
+
+        // --- ГЕНЕРАЦИЯ HTML ---
+        let htmlContent = `
+            <div class="glass-card p-4 mb-5 d-flex flex-column flex-md-row justify-content-between align-items-center animate__animated animate__fadeInDown">
+                <div class="d-flex align-items-center mb-3 mb-md-0">
+                    <div class="bg-primary rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background: rgba(255,255,255,0.1) !important;">
+                        <i class="bi bi-person-fill fs-2 text-white"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block text-uppercase fw-bold" style="letter-spacing: 1px;">Ученик</small>
+                        <span class="fs-3 gradient-text">${displayName}</span>
+                    </div>
+                </div>
+                <button onclick="logoutStudent()" class="btn btn-outline-danger rounded-pill px-4">
+                    <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                </button>
+            </div>
+            
+            <h4 class="text-white mb-4 ps-2 border-start border-4 border-primary ps-3">Ваши задания</h4>
+            <div class="row g-4">
+        `;
+
+        if (myTasks.length === 0) {
+            htmlContent += `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-folder2-open text-white-50" style="font-size: 3rem;"></i>
+                    <p class="fs-5 text-white mt-3">Для пользователя <b>${displayName}</b> новых заданий нет.</p>
+                </div>`;
+        } else {
+            myTasks.forEach(item => {
+                let badgeClass = 'bg-secondary';
+                if (item.subject === 'math') badgeClass = 'badge-math';
+                if (item.subject === 'cs') badgeClass = 'badge-cs';
+                if (item.subject === 'phys') badgeClass = 'badge-phys';
+
+                // Значок "Личное"
+                let personalBadge = '';
+                if (item.allowed_tokens && item.allowed_tokens.length > 0) {
+                    personalBadge = '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-lock-fill"></i> Личное</span>';
+                }
+
+                htmlContent += `
+                <div class="col-md-6 col-lg-4">
+                    <div class="material-card glass-card h-100 p-4 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="subject-badge ${badgeClass}">${item.subject ? item.subject.toUpperCase() : 'INFO'}</span>
+                                ${personalBadge}
+                            </div>
+                            <span class="text-danger fw-bold small"><i class="bi bi-clock me-1"></i>${item.deadline}</span>
+                        </div>
+                        <h4 class="fw-bold">${item.title}</h4>
+                        <div class="mb-4 text-muted flex-grow-1" style="overflow-wrap: break-word;">${item.task}</div>
+                        <a href="${item.link || '#'}" target="_blank" class="btn btn-outline-danger w-100 mt-auto">Перейти к выполнению</a>
+                    </div>
+                </div>`;
+            });
+        }
+        
+        htmlContent += '</div>';
+        container.innerHTML = htmlContent;
+
+        // Рендеринг формул (MathJax)
         if (typeof MathJax !== 'undefined') {
             MathJax.typesetPromise([container]).catch(err => console.log('MathJax hw error:', err));
         }
 
     } catch (error) {
-        container.innerHTML += '<p class="text-center text-danger">Ошибка загрузки ДЗ</p>';
+        console.error(error);
+        container.innerHTML = `
+            <div class="text-center text-danger py-5">
+                <h4>Ошибка загрузки</h4>
+                <p>${error.message}</p>
+                <button onclick="logoutStudent()" class="btn btn-outline-light mt-3">Назад</button>
+            </div>`;
     }
 }
+
 
 
 /* =========================================
@@ -468,3 +554,4 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
+
