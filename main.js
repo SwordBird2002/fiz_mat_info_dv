@@ -178,3 +178,31 @@ async function loadHomework() {
     }
 }
 
+
+/* --- 4. ФИЛЬТРАЦИЯ МАТЕРИАЛОВ (ВЕРНУЛИ) --- */
+function filterSelection(category) {
+    const cards = document.getElementsByClassName("material-card");
+    const btns = document.getElementsByClassName("filter-btn");
+
+    // 1. Управление кнопками
+    // Удаляем active у всех
+    for (let btn of btns) {
+        btn.classList.remove("active");
+    }
+    // Добавляем active нажатой кнопке (через event)
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add("active");
+    }
+
+    // 2. Фильтрация карточек
+    if (category === 'all') category = '';
+
+    for (let card of cards) {
+        card.classList.remove("hidden");
+        // Проверяем, есть ли у карточки нужный класс (math, cs, phys)
+        // Мы добавляли эти классы при генерации: `material-card glass-card filterDiv ${item.subject}`
+        if (category && !card.classList.contains(category)) {
+            card.classList.add("hidden");
+        }
+    }
+}
