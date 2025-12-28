@@ -9,7 +9,7 @@ let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false';
 
 // Ссылка на JSON
 const HW_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json";
-
+  
 /* =========================================
    2. СТАРТ
    ========================================= */
@@ -240,3 +240,4 @@ function disableAllTilt() {
         c.style.transform = 'none';
     });
 }
+
