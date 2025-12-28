@@ -118,7 +118,6 @@ async function loadMaterials(restoreCount) {
         // Если массив пуст (первая загрузка или обновление), качаем с сервера
         if (allMaterials.length === 0) {
             const timestamp = Date.now();
-            // cache: 'no-store' + timestamp гарантируют свежесть данных
             const response = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json?t=${timestamp}`, {
                 cache: "no-store"
             });
@@ -128,8 +127,6 @@ async function loadMaterials(restoreCount) {
         }
 
         // Логика отрисовки:
-        // Если передали restoreCount (число) — восстанавливаем ленту до этого числа.
-        // Иначе (обычный старт) — рисуем только если еще ничего не нарисовано (shownCount === 0).
         if (typeof restoreCount === 'number') {
             renderNextBatch(restoreCount);
         } else {
@@ -152,12 +149,9 @@ function renderNextBatch(customCount) {
     if (!allMaterials || allMaterials.length === 0) return;
 
     // Определяем сколько карточек добавить
-    // Если customCount передан (восстановление), рисуем столько сразу.
-    // Иначе добавляем стандартный шаг (step = 6).
     let countToAdd = step;
     if (typeof customCount === 'number') {
         countToAdd = customCount; 
-        // В случае восстановления shownCount был сброшен в 0, так что slice(0, customCount) вернет всё, что нужно.
     }
 
     const nextItems = allMaterials.slice(shownCount, shownCount + countToAdd);
@@ -293,7 +287,6 @@ async function closeModal(force) {
         
         // 1. Сохраняем данные для восстановления
         const targetTitle = currentActiveItem ? currentActiveItem.title : null;
-        // Если shownCount=0 (странно), восстанавливаем хотя бы 6
         const countToRestore = shownCount > 0 ? shownCount : step;
         
         // 2. Сброс данных
@@ -310,7 +303,6 @@ async function closeModal(force) {
 
         // 4. Прокрутка к закрытой новости
         if (targetTitle) {
-            // Небольшая задержка для надежности отрисовки
             setTimeout(() => {
                 const cards = document.querySelectorAll('.material-card');
                 for (const card of cards) {
@@ -329,27 +321,23 @@ async function closeModal(force) {
    5. ЛОГИКА ДЗ (HOMEWORK)
    ========================================= */
 let isHomeworkMode = false;
-// Кэш имен, чтобы не дергать names.json на каждый клик
 let _namesCache = null;
 
 async function loadNamesMap() {
   if (_namesCache) return _namesCache;
-
   const ts = Date.now();
-  const resp = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${ts}`, {
-    cache: "no-store",
-  });
-
+  const resp = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${ts}`, { cache: "no-store" });
   if (!resp.ok) throw new Error("Не удалось загрузить names.json");
-
   const names = await resp.json();
   _namesCache = names;
   return names;
 }
 
 async function validateStudentToken(token) {
-  const names = await loadNamesMap();
-  return Boolean(names && Object.prototype.hasOwnProperty.call(names, token));
+  try {
+      const names = await loadNamesMap();
+      return Boolean(names && Object.prototype.hasOwnProperty.call(names, token));
+  } catch(e) { return false; }
 }
 
 
@@ -365,35 +353,31 @@ async function toggleHomeworkView() {
 
     if (!isHomeworkMode) {
         // === ВКЛЮЧАЕМ РЕЖИМ ДЗ ===
-        
-        // Скрываем ленту, показываем контейнер ДЗ
         if (feed) feed.classList.add('hidden');
         if (hwContainer) hwContainer.classList.remove('hidden');
-
-        // Меняем кнопку на "Вернуться в новости"
         if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
 
-        // ПРОВЕРКА: Есть ли сохраненный токен?
         const savedToken = localStorage.getItem('student_token');
         
         if (savedToken) {
-            // Если токен есть — сразу грузим задания
-            await loadHomework(savedToken);
+            // Показываем загрузку проверки
+            hwContainer.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Проверка доступа...</p></div>';
+            const isValid = await validateStudentToken(savedToken);
+            if (isValid) {
+                await loadHomework(savedToken);
+            } else {
+                localStorage.removeItem('student_token');
+                renderLoginForm("Ваш токен устарел или был удален.");
+            }
         } else {
-            // Если токена нет — рисуем форму входа
             renderLoginForm();
         }
-
         isHomeworkMode = true;
-
     } else {
         // === ВОЗВРАТ В ЛЕНТУ НОВОСТЕЙ ===
-        
         if (feed) feed.classList.remove('hidden');
         if (hwContainer) hwContainer.classList.add('hidden');
-        
         if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
-        
         isHomeworkMode = false;
     }
 }
@@ -410,15 +394,11 @@ function renderLoginForm(initialError = '') {
                     
                     <div class="mb-4 icon-container">
                         <div class="gradient-blob"></div>
-                        <!-- Иконка тоже должна адаптироваться? 
-                             Если хотите чтобы она была всегда белой на фоне пятна - оставьте text-white. 
-                             Если хотите чтобы менялась - text-adaptive. -->
                         <i class="bi bi-shield-lock-fill text-white position-relative" style="font-size: 3rem; z-index: 2; text-shadow: 0 2px 10px rgba(0,0,0,0.3);"></i>
                     </div>
                     
-                    <!-- ИСПОЛЬЗУЕМ НОВЫЕ КЛАССЫ ЗДЕСЬ -->
-                    <h3 class="mb-2 fw-bold text-adaptive">Вход в систему</h3>
-                    <p class="text-adaptive-muted mb-4">Введите ваш персональный токен доступа</p>
+                    <h3 class="mb-2 fw-bold login-title">Вход в систему</h3>
+                    <p class="mb-4 login-desc">Введите ваш персональный токен доступа</p>
                     
                     ${errorHtml}
 
@@ -442,7 +422,6 @@ function renderLoginForm(initialError = '') {
         </div>
     `;
     
-    // ... (setTimeout остаётся без изменений) ...
     setTimeout(() => {
         const input = document.getElementById('tokenInput');
         if(input) {
@@ -454,21 +433,7 @@ function renderLoginForm(initialError = '') {
     }, 100);
 }
 
-    
-    setTimeout(() => {
-        const input = document.getElementById('tokenInput');
-        if(input) {
-            input.focus(); 
-            input.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') saveTokenAndReload();
-            });
-        }
-    }, 100);
-}
-
-
-
-// 3. Функция сохранения токена (вызывается кнопкой "Войти")
+// 3. Функция сохранения токена
 async function saveTokenAndReload() {
   const input = document.getElementById("tokenInput");
   const errorDiv = document.getElementById("loginError");
@@ -486,27 +451,25 @@ async function saveTokenAndReload() {
     const ok = await validateStudentToken(token);
 
     if (!ok) {
-      // ВАЖНО: не сохраняем неправильный токен
       localStorage.removeItem("student_token");
-      if (errorDiv) errorDiv.innerText = "Неверный токен. Проверьте и попробуйте снова.";
+      if (errorDiv) errorDiv.innerText = "Неверный токен.";
       if (input) input.focus();
       return;
     }
 
-    // Токен валиден — сохраняем и грузим ДЗ
     localStorage.setItem("student_token", token);
     await loadHomework(token);
   } catch (e) {
     console.error(e);
-    if (errorDiv) errorDiv.innerText = "Ошибка проверки токена. Попробуйте позже.";
+    if (errorDiv) errorDiv.innerText = "Ошибка проверки токена.";
   }
 }
 
 
-// 4. Функция выхода (вызывается кнопкой "Выйти" внутри loadHomework)
+// 4. Функция выхода
 function logoutStudent() {
-    localStorage.removeItem('student_token'); // Удаляем токен
-    renderLoginForm(); // Рисуем форму входа снова
+    localStorage.removeItem('student_token'); 
+    renderLoginForm(); 
 }
 
 
@@ -516,48 +479,32 @@ function logoutStudent() {
    ========================================= */
 async function loadHomework(token) {
     const container = document.getElementById('homework-container');
-    
-    // Спиннер
     container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Вход в систему...</p></div>';
 
     try {
         const timestamp = Date.now();
-        
-        // --- ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА ---
-        // Запускаем скачивание сразу двух файлов
         const [hwResponse, namesResponse] = await Promise.all([
             fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json?t=${timestamp}`, { cache: "no-store" }),
             fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${timestamp}`, { cache: "no-store" })
         ]);
 
-        // Проверяем, загрузилось ли ДЗ (это критично)
         if (!hwResponse.ok) throw new Error('Не удалось загрузить список заданий');
-        
         const data = await hwResponse.json();
         
-        // Проверяем, загрузились ли имена (это не критично)
         let studentNames = {};
         if (namesResponse.ok) {
-            try {
-                studentNames = await namesResponse.json();
-            } catch (e) {
-                console.warn("Ошибка чтения файла имен:", e);
-            }
+            try { studentNames = await namesResponse.json(); } catch (e) {}
         }
 
-        // --- ФИЛЬТРАЦИЯ ---
         const myTasks = data.filter(item => {
             if (!item.allowed_tokens || !Array.isArray(item.allowed_tokens) || item.allowed_tokens.length === 0) {
-                return true; // Публичное задание
+                return true; 
             }
             return item.allowed_tokens.includes(token);
         });
 
-        // --- ОПРЕДЕЛЕНИЕ ИМЕНИ ---
-        // Если имя есть в JSON - берем его, иначе показываем сам токен
         const displayName = studentNames[token] || token;
 
-        // --- ГЕНЕРАЦИЯ HTML ---
         let htmlContent = `
             <div class="glass-card p-4 mb-5 d-flex flex-column flex-md-row justify-content-between align-items-center animate__animated animate__fadeInDown">
                 <div class="d-flex align-items-center mb-3 mb-md-0">
@@ -573,7 +520,6 @@ async function loadHomework(token) {
                     <i class="bi bi-box-arrow-right me-2"></i>Выйти
                 </button>
             </div>
-            
             <h4 class="text-white mb-4 ps-2 border-start border-4 border-primary ps-3">Ваши задания</h4>
             <div class="row g-4">
         `;
@@ -591,10 +537,14 @@ async function loadHomework(token) {
                 if (item.subject === 'cs') badgeClass = 'badge-cs';
                 if (item.subject === 'phys') badgeClass = 'badge-phys';
 
-                // Значок "Личное"
                 let personalBadge = '';
                 if (item.allowed_tokens && item.allowed_tokens.length > 0) {
                     personalBadge = '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-lock-fill"></i> Личное</span>';
+                }
+
+                let imageHtml = '';
+                if (item.image) {
+                     imageHtml = `<img src="${item.image}" class="img-fluid rounded mb-3 border" alt="Task Image" style="max-height: 300px; object-fit: cover; width: 100%;">`;
                 }
 
                 htmlContent += `
@@ -607,7 +557,8 @@ async function loadHomework(token) {
                             </div>
                             <span class="text-danger fw-bold small"><i class="bi bi-clock me-1"></i>${item.deadline}</span>
                         </div>
-                        <h4 class="fw-bold">${item.title}</h4>
+                        <h4 class="fw-bold mb-3">${item.title}</h4>
+                        ${imageHtml}
                         <div class="mb-4 text-muted flex-grow-1" style="overflow-wrap: break-word;">${item.task}</div>
                         <a href="${item.link || '#'}" target="_blank" class="btn btn-outline-danger w-100 mt-auto">Перейти к выполнению</a>
                     </div>
@@ -618,13 +569,13 @@ async function loadHomework(token) {
         htmlContent += '</div>';
         container.innerHTML = htmlContent;
 
-        // Рендеринг формул (MathJax)
         if (typeof MathJax !== 'undefined') {
             MathJax.typesetPromise([container]).catch(err => console.log('MathJax hw error:', err));
         }
-         if (typeof initCodeBlocks === 'function') {
-             initCodeBlocks(container);
-         }
+        if (typeof initCodeBlocks === 'function') {
+            initCodeBlocks(container);
+        }
+
     } catch (error) {
         console.error(error);
         container.innerHTML = `
@@ -635,7 +586,6 @@ async function loadHomework(token) {
             </div>`;
     }
 }
-
 
 
 /* =========================================
@@ -714,10 +664,3 @@ function initCodeBlocks(container) {
         Prism.highlightAllUnder(container);
     }
 }
-
-
-
-
-
-
-
