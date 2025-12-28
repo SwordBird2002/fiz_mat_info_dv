@@ -227,13 +227,17 @@ function openModal(item) {
     document.body.style.overflow = 'hidden';
 }
 
+/* ЗАМЕНИТЕ ФУНКЦИЮ closeModal НА ЭТУ */
 function closeModal(force) {
-    if (force || event.target.id === 'newsModal') {
-        const modal = document.getElementById('newsModal');
+    const modal = document.getElementById('newsModal');
+    
+    // Если нажали на фон (event.target === modal) ИЛИ нажали крестик (force === true)
+    if (force || event.target === modal) {
         modal.classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.style.overflow = ''; // Разблокируем скролл
     }
 }
+
 
 
 /* =========================================
@@ -344,3 +348,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
