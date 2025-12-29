@@ -4,8 +4,18 @@
 let allMaterials = [];
 let shownCount = 0;
 const step = 6;
-let isLoading = false;       // Флаг защиты от двойной загрузки
-let currentActiveItem = null; // Хранит текущую открытую новость (для возврата фокуса)
+let isLoading = false;       
+let currentActiveItem = null; 
+
+// S3 URL
+const S3_BASE_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json";
+// Google Script для отправки отчетов
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyTpgws_8fcXbj_S3sejl-ANN4SIkKAFAn497MI86zgwiXwS_7FJG_cH-a6nLBevBuJqw/exec"; // Вставьте ID скрипта
+
+// === НОВОЕ: API РЕАКЦИЙ ===
+// ВСТАВЬТЕ СЮДА ССЫЛКУ НА ВАШ НОВЫЙ СКРИПТ (Apps Script)
+const REACTIONS_API = "https://script.google.com/macros/s/AKfycbyTpgws_8fcXbj_S3sejl-ANN4SIkKAFAn497MI86zgwiXwS_7FJG_cH-a6nLBevBuJqw/exec";
+let reactionsCache = {}; // Кэш для хранения счетчиков
 
 /* =========================================
    1. УПРАВЛЕНИЕ ТЕМОЙ
@@ -14,6 +24,42 @@ function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
     updateThemeIcon(savedTheme);
+    
+    // Вставляем стили для реакций программно (чтобы не ломать старый CSS)
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .reaction-btn {
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.7);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        [data-theme="dark"] .reaction-btn {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+            color: #eee;
+        }
+        .reaction-btn:hover { transform: scale(1.05); }
+        .reaction-btn:active { transform: scale(0.95); }
+        
+        .reaction-btn.active-like {
+            background-color: #dc3545 !important; 
+            color: white !important;
+            border-color: #dc3545 !important;
+        }
+        .reaction-btn.active-fire { 
+            background-color: #ffc107 !important; 
+            border-color: #ffc107 !important;
+            color: black !important;
+        }
+        .reactions-container.hidden-force { display: none !important; }
+    `;
+    document.head.appendChild(style);
 }
 
 function toggleTheme() {
@@ -43,7 +89,7 @@ document.addEventListener('DOMContentLoaded', initTheme);
 /* =========================================
    2. УПРАВЛЕНИЕ 3D ЭФФЕКТОМ (TILT)
    ========================================= */
-let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; // По умолчанию true
+let is3DEnabled = localStorage.getItem('3d_enabled') !== 'false'; 
 
 function init3DButton() {
     update3DIcon();
@@ -90,22 +136,64 @@ document.addEventListener('DOMContentLoaded', init3DButton);
 
 
 /* =========================================
+   НОВОЕ: ЗАГРУЗКА РЕАКЦИЙ (С ЗАЩИТОЙ ОТ СБОЕВ)
+   ========================================= */
+async function loadReactionsMap() {
+    try {
+        // Создаем AbortController для таймаута (3 секунды)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+
+        const res = await fetch(REACTIONS_API, { 
+            signal: controller.signal 
+        });
+        
+        clearTimeout(timeoutId); // Отменяем таймаут, если успели
+
+        if (!res.ok) throw new Error("Google blocked or server error");
+        
+        reactionsCache = await res.json();
+        updateReactionsUI(); // Обновляем цифры на странице
+
+    } catch(e) { 
+        console.warn("Система реакций временно недоступна (VPN/Блокировка):", e);
+        // Скрываем блок с реакциями, чтобы не смущать нулями
+        document.body.classList.add('reactions-unavailable');
+        const bars = document.querySelectorAll('.reactions-container');
+        bars.forEach(b => b.classList.add('hidden-force'));
+    }
+}
+
+function updateReactionsUI() {
+    // Пробегаемся по всем кнопкам и обновляем цифры из кэша
+    document.querySelectorAll('.reaction-btn').forEach(btn => {
+        const id = btn.dataset.id;
+        const type = btn.dataset.type;
+        if (reactionsCache[id] && reactionsCache[id][type] !== undefined) {
+            btn.querySelector('.count').innerText = reactionsCache[id][type];
+        }
+    });
+}
+
+
+/* =========================================
    3. ЗАГРУЗКА МАТЕРИАЛОВ (С ПАГИНАЦИЕЙ)
    ========================================= */
 async function loadMaterials(restoreCount) {
-    if (isLoading) return; // Защита от повторного вызова
+    if (isLoading) return; 
     isLoading = true;
 
     const container = document.getElementById('feed-container');
     if (!container) { isLoading = false; return; }
 
-    // Добавляем кнопку "Показать еще"
+    // Запускаем загрузку реакций параллельно (не блокируем интерфейс)
+    loadReactionsMap();
+
     let loadMoreContainer = document.getElementById('loadMoreContainer');
     if (!loadMoreContainer) {
         loadMoreContainer = document.createElement('div');
         loadMoreContainer.id = 'loadMoreContainer';
         loadMoreContainer.className = 'text-center mt-4 mb-5 hidden';
-        // Кнопка вызывает renderNextBatch() без аргументов -> подгрузка следующей порции
         loadMoreContainer.innerHTML = `
             <button onclick="renderNextBatch()" class="btn btn-outline-primary px-4 py-2 rounded-pill">
                 Показать еще материалы
@@ -115,18 +203,14 @@ async function loadMaterials(restoreCount) {
     }
 
     try {
-        // Если массив пуст (первая загрузка или обновление), качаем с сервера
         if (allMaterials.length === 0) {
-            const timestamp = Date.now();
-            const response = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json?t=${timestamp}`, {
-                cache: "no-store"
-            });
+            // ОПТИМИЗАЦИЯ: убран no-store
+            const response = await fetch(`${S3_BASE_URL}/data.json`);
             if (!response.ok) throw new Error('Ошибка сети');
             allMaterials = await response.json();
             container.innerHTML = '';
         }
 
-        // Логика отрисовки:
         if (typeof restoreCount === 'number') {
             renderNextBatch(restoreCount);
         } else {
@@ -138,7 +222,7 @@ async function loadMaterials(restoreCount) {
         console.error('Ошибка загрузки:', error);
         container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
     } finally {
-        isLoading = false; // Снимаем флаг
+        isLoading = false; 
     }
 }
 
@@ -148,7 +232,6 @@ function renderNextBatch(customCount) {
     
     if (!allMaterials || allMaterials.length === 0) return;
 
-    // Определяем сколько карточек добавить
     let countToAdd = step;
     if (typeof customCount === 'number') {
         countToAdd = customCount; 
@@ -163,9 +246,7 @@ function renderNextBatch(customCount) {
         else if (item.subject === 'phys') { badgeClass = 'badge-phys'; subjectName = 'Физика'; }
 
         const card = document.createElement('div');
-        // ВАЖНО: Метка заголовка для поиска при возврате
         card.dataset.title = item.title;
-        
         card.className = `material-card glass-card filterDiv ${item.subject}`;
         card.style.cursor = 'pointer';
 
@@ -176,11 +257,40 @@ function renderNextBatch(customCount) {
         }
 
         card.onclick = (e) => {
-            if(e.target.tagName === 'A' || e.target.closest('a')) return;
+            // Чтобы клик по кнопкам реакций не открывал модалку
+            if(e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('a')) return;
             openModal(item);
         };
 
         let filePreview = item.file ? '<div class="text-muted small mt-2"><i class="bi bi-paperclip"></i> Прикреплен файл</div>' : '';
+
+        // === ГЕНЕРАЦИЯ БЛОКА РЕАКЦИЙ ===
+        const likesVal = (reactionsCache[item.id] && reactionsCache[item.id].likes) || 0;
+        const fireVal = (reactionsCache[item.id] && reactionsCache[item.id].fire) || 0;
+        
+        // Проверяем, лайкал ли уже пользователь (localStorage)
+        const isLiked = localStorage.getItem(`reacted_${item.id}_likes`) ? 'active-like' : '';
+        const isFired = localStorage.getItem(`reacted_${item.id}_fire`) ? 'active-fire' : '';
+
+        // Проверяем, не в режиме ли мы "без реакций" (если была ошибка)
+        const hideClass = document.body.classList.contains('reactions-unavailable') ? 'hidden-force' : '';
+
+        const reactionsHtml = `
+        <div class="reactions-container mt-3 d-flex gap-2 ${hideClass}">
+            <button class="btn reaction-btn ${isLiked}" 
+                    data-id="${item.id}" data-type="likes"
+                    onclick="toggleReaction('${item.id}', 'likes', this)">
+                <i class="bi bi-heart${isLiked ? '-fill' : ''}"></i> 
+                <span class="count">${likesVal}</span>
+            </button>
+            
+            <button class="btn reaction-btn ${isFired}" 
+                    data-id="${item.id}" data-type="fire"
+                    onclick="toggleReaction('${item.id}', 'fire', this)">
+                🔥 <span class="count">${fireVal}</span>
+            </button>
+        </div>`;
+        // ================================
 
         card.innerHTML = `
             <div class="card-header-custom">
@@ -193,6 +303,7 @@ function renderNextBatch(customCount) {
                     ${item.text} 
                 </p>
                 ${filePreview}
+                ${reactionsHtml}
                 <div class="text-primary small mt-2 fw-bold">Читать подробнее</div>
             </div>
         `;
@@ -201,19 +312,69 @@ function renderNextBatch(customCount) {
 
     shownCount += nextItems.length;
 
-    // Управление видимостью кнопки "Показать еще"
     if (shownCount >= allMaterials.length) {
         if (btnContainer) btnContainer.classList.add('hidden');
     } else {
         if (btnContainer) btnContainer.classList.remove('hidden');
     }
 
-    // Инициализация кода и формул для новых карточек
     initCodeBlocks(container);
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([container]).catch(err => console.log('MathJax feed error:', err));
     }
 }
+
+// === НОВОЕ: ОБРАБОТКА КЛИКА ПО РЕАКЦИИ ===
+async function toggleReaction(newsId, type, btn) {
+    // 1. Optimistic UI (меняем сразу)
+    const countSpan = btn.querySelector('.count');
+    let current = parseInt(countSpan.innerText) || 0;
+    const storageKey = `reacted_${newsId}_${type}`;
+    const hasReacted = localStorage.getItem(storageKey);
+    
+    let action = 'add';
+    
+    if (hasReacted) {
+        // Убираем лайк
+        current = Math.max(0, current - 1);
+        action = 'remove';
+        localStorage.removeItem(storageKey);
+        
+        if (type === 'likes') {
+            btn.classList.remove('active-like');
+            btn.querySelector('i').className = 'bi bi-heart';
+        } else {
+            btn.classList.remove('active-fire');
+        }
+    } else {
+        // Ставим лайк
+        current++;
+        localStorage.setItem(storageKey, 'true');
+        
+        if (type === 'likes') {
+            btn.classList.add('active-like');
+            btn.querySelector('i').className = 'bi bi-heart-fill';
+        } else {
+            btn.classList.add('active-fire');
+        }
+    }
+    
+    countSpan.innerText = current;
+
+    // 2. Отправляем на сервер (Google)
+    try {
+        await fetch(REACTIONS_API, {
+            method: 'POST',
+            mode: 'no-cors', // Важно для Google Apps Script
+            body: JSON.stringify({ id: newsId, type: type, action: action })
+        });
+    } catch (e) {
+        console.error("Ошибка отправки реакции:", e);
+        // Можно не откатывать интерфейс, чтобы не бесить пользователя. 
+        // При обновлении страницы цифра синхронизируется, если запрос не прошел.
+    }
+}
+
 
 if (document.getElementById('feed-container')) {
     document.addEventListener('DOMContentLoaded', () => loadMaterials());
@@ -224,13 +385,12 @@ if (document.getElementById('feed-container')) {
    4. МОДАЛЬНОЕ ОКНО
    ========================================= */
 function openModal(item) {
-    currentActiveItem = item; // Запоминаем текущую новость
+    currentActiveItem = item; 
 
     const modal = document.getElementById('newsModal');
     const modalBody = document.getElementById('modalBody');
     if (!modal || !modalBody) return;
     
-    // Генерируем контент
     let mediaHtml = '';
     if (item.image) mediaHtml = `<img src="${item.image}" class="img-fluid rounded mb-4 w-100">`;
     
@@ -267,7 +427,6 @@ function openModal(item) {
         ${linkHtml}
     `;
 
-    // Инициализация кода и формул в модалке
     initCodeBlocks(modalBody);
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([modalBody]).catch(err => console.log('MathJax modal error:', err));
@@ -280,16 +439,13 @@ function openModal(item) {
 async function closeModal(force) {
     const modal = document.getElementById('newsModal');
     
-    // Если нажали крестик или фон
     if (force || (window.event && window.event.target === modal)) {
         modal.classList.remove('active');
         document.body.style.overflow = ''; 
         
-        // 1. Сохраняем данные для восстановления
         const targetTitle = currentActiveItem ? currentActiveItem.title : null;
         const countToRestore = shownCount > 0 ? shownCount : step;
         
-        // 2. Сброс данных
         allMaterials = []; 
         shownCount = 0;
         
@@ -298,10 +454,8 @@ async function closeModal(force) {
             container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div></div>';
         }
 
-        // 3. Перезагрузка данных (ждем завершения)
         await loadMaterials(countToRestore);
 
-        // 4. Прокрутка к закрытой новости
         if (targetTitle) {
             setTimeout(() => {
                 const cards = document.querySelectorAll('.material-card');
@@ -318,16 +472,18 @@ async function closeModal(force) {
 
 
 /* =========================================
-   5. ЛОГИКА ДЗ (HOMEWORK)
+   5. ЛОГИКА ДЗ (ОПТИМИЗИРОВАННАЯ)
    ========================================= */
 let isHomeworkMode = false;
-let _namesCache = null;
+let _namesCache = null; // ОПТИМИЗАЦИЯ: Кэш в памяти
 
 async function loadNamesMap() {
-  if (_namesCache) return _namesCache;
-  const ts = Date.now();
-  const resp = await fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${ts}`, { cache: "no-store" });
+  if (_namesCache) return _namesCache; // Если уже загружено - возвращаем из памяти
+  
+  // ОПТИМИЗАЦИЯ: Убрали timestamp, используем кэш браузера
+  const resp = await fetch(`${S3_BASE_URL}/names.json`);
   if (!resp.ok) throw new Error("Не удалось загрузить names.json");
+  
   const names = await resp.json();
   _namesCache = names;
   return names;
@@ -340,19 +496,13 @@ async function validateStudentToken(token) {
   } catch(e) { return false; }
 }
 
-
-/* =========================================
-   5. ЛОГИКА ДЗ (ВХОД И ПЕРЕКЛЮЧЕНИЕ)
-   ========================================= */
-
-// 1. Главная функция-переключатель
 async function toggleHomeworkView() {
     const btn = document.getElementById('hwBtn');
     const feed = document.getElementById('feed-container');
     const hwContainer = document.getElementById('homework-container');
 
     if (!isHomeworkMode) {
-        // === ВКЛЮЧАЕМ РЕЖИМ ДЗ ===
+        // === ВХОД В ДЗ ===
         if (feed) feed.classList.add('hidden');
         if (hwContainer) hwContainer.classList.remove('hidden');
         if (btn) btn.innerHTML = '<i class="bi bi-newspaper me-2"></i>Лента новостей';
@@ -360,7 +510,6 @@ async function toggleHomeworkView() {
         const savedToken = localStorage.getItem('student_token');
         
         if (savedToken) {
-            // Показываем загрузку проверки
             hwContainer.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Проверка доступа...</p></div>';
             const isValid = await validateStudentToken(savedToken);
             if (isValid) {
@@ -374,7 +523,7 @@ async function toggleHomeworkView() {
         }
         isHomeworkMode = true;
     } else {
-        // === ВОЗВРАТ В ЛЕНТУ НОВОСТЕЙ ===
+        // === ВЫХОД В НОВОСТИ ===
         if (feed) feed.classList.remove('hidden');
         if (hwContainer) hwContainer.classList.add('hidden');
         if (btn) btn.innerHTML = '<i class="bi bi-journal-text me-2"></i>Домашнее задание';
@@ -382,7 +531,6 @@ async function toggleHomeworkView() {
     }
 }
 
-// 2. Функция отрисовки формы входа
 function renderLoginForm(initialError = '') {
     const container = document.getElementById('homework-container');
     const errorHtml = initialError ? `<div class="alert alert-danger py-2 small fw-bold mb-3"><i class="bi bi-exclamation-triangle-fill me-2"></i>${initialError}</div>` : '';
@@ -433,11 +581,9 @@ function renderLoginForm(initialError = '') {
     }, 100);
 }
 
-// 3. Функция сохранения токена
 async function saveTokenAndReload() {
   const input = document.getElementById("tokenInput");
   const errorDiv = document.getElementById("loginError");
-
   const token = (input?.value || "").trim();
 
   if (errorDiv) errorDiv.innerText = "";
@@ -465,36 +611,26 @@ async function saveTokenAndReload() {
   }
 }
 
-
-// 4. Функция выхода
 function logoutStudent() {
     localStorage.removeItem('student_token'); 
     renderLoginForm(); 
 }
 
-
-
 /* =========================================
-   ЗАГРУЗКА ДЗ С ИМЕНАМИ ИЗ NAMES.JSON
+   ЗАГРУЗКА ДЗ
    ========================================= */
 async function loadHomework(token) {
     const container = document.getElementById('homework-container');
     container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Вход в систему...</p></div>';
 
     try {
-        const timestamp = Date.now();
-        const [hwResponse, namesResponse] = await Promise.all([
-            fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/homework.json?t=${timestamp}`, { cache: "no-store" }),
-            fetch(`https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/names.json?t=${timestamp}`, { cache: "no-store" })
-        ]);
-
+        // ОПТИМИЗАЦИЯ: Убрали timestamp
+        const hwResponse = await fetch(`${S3_BASE_URL}/homework.json`);
         if (!hwResponse.ok) throw new Error('Не удалось загрузить список заданий');
         const data = await hwResponse.json();
         
-        let studentNames = {};
-        if (namesResponse.ok) {
-            try { studentNames = await namesResponse.json(); } catch (e) {}
-        }
+        // ОПТИМИЗАЦИЯ: Берем имена из кэша (памяти), не качаем файл
+        const studentNames = await loadNamesMap(); 
 
         const myTasks = data.filter(item => {
             if (!item.allowed_tokens || !Array.isArray(item.allowed_tokens) || item.allowed_tokens.length === 0) {
@@ -503,7 +639,7 @@ async function loadHomework(token) {
             return item.allowed_tokens.includes(token);
         });
 
-        const displayName = studentNames[token] || token;
+        const displayName = (studentNames && studentNames[token]) ? studentNames[token] : token;
 
         let htmlContent = `
             <div class="glass-card p-4 mb-5 d-flex flex-column flex-md-row justify-content-between align-items-center animate__animated animate__fadeInDown">
@@ -560,7 +696,13 @@ async function loadHomework(token) {
                         <h4 class="fw-bold mb-3">${item.title}</h4>
                         ${imageHtml}
                         <div class="mb-4 text-muted flex-grow-1" style="overflow-wrap: break-word;">${item.task}</div>
-                        <a href="${item.link || '#'}" target="_blank" class="btn btn-outline-danger w-100 mt-auto">Перейти к выполнению</a>
+                        
+                        <div class="mt-auto pt-3">
+                            <a href="${item.link || '#'}" target="_blank" class="btn btn-outline-danger w-100 mb-2">Перейти к выполнению</a>
+                            <button id="btn-done-${item.id}" onclick="markTaskAsDone('${item.id}', '${token}', this)" class="btn btn-success w-100 text-white">
+                                <i class="bi bi-check-circle me-2"></i>Я сделал
+                            </button>
+                        </div>
                     </div>
                 </div>`;
             });
@@ -587,80 +729,127 @@ async function loadHomework(token) {
     }
 }
 
+// Отправка отчета в Google (no-cors)
+async function markTaskAsDone(hwId, token, btnElement) {
+    if(!confirm("Вы уверены, что выполнили это задание? Учитель увидит отметку.")) return;
+
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Отправка...';
+
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ token: token, hw_id: hwId })
+        });
+
+        btnElement.className = "btn btn-secondary w-100";
+        btnElement.innerHTML = '<i class="bi bi-check2-all"></i> Отправлено на проверку';
+        localStorage.setItem(`done_${token}_${hwId}`, 'true');
+
+    } catch (e) {
+        alert("Ошибка отправки. Проверьте интернет.");
+        btnElement.disabled = false;
+        btnElement.innerText = "Я сделал";
+    }
+}
+
 
 /* =========================================
-   6. ФИЛЬТРАЦИЯ (EVENT LISTENER)
-   ========================================= */
+   6. УВЕДОМЛЕНИЯ (POLLING)
+   ======================================== */
+async function checkNotifications() {
+    const token = localStorage.getItem('student_token');
+    if (!token) return;
+
+    try {
+        const ts = Date.now();
+        // Здесь оставляем no-store, так как уведомления нужны свежие
+        const response = await fetch(`${S3_BASE_URL}/notifications.json?t=${ts}`, { cache: "no-store" });
+        if(!response.ok) return;
+        
+        const alerts = await response.json();
+        if (alerts[token]) {
+            showToast(alerts[token]);
+        }
+    } catch (e) { console.error(e); }
+}
+
+function showToast(message) {
+    if (document.getElementById('liveToast')) return; // Не показывать, если уже висит
+
+    const toastHtml = `
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+      <div id="liveToast" class="toast show bg-warning text-dark" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">🔔 Напоминание</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body fw-bold">
+          ${message}
+        </div>
+      </div>
+    </div>`;
+    
+    document.body.insertAdjacentHTML('beforeend', toastHtml);
+}
+
+// ОПТИМИЗАЦИЯ: Проверка раз в 5 минут (300000 мс) вместо 1 минуты
+setInterval(checkNotifications, 300000);
+setTimeout(checkNotifications, 2000); // И один раз при старте
+
+
+/* =========================================
+   7. УТИЛИТЫ
+   ======================================== */
+
+// Фильтрация новостей
 document.addEventListener('DOMContentLoaded', () => {
     const filterContainer = document.getElementById('filterContainer');
     if (!filterContainer) return;
-
     const btns = filterContainer.querySelectorAll('.filter-btn');
-
     btns.forEach(btn => {
         btn.addEventListener('click', () => {
             btns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             const category = btn.getAttribute('data-filter');
             const cards = document.querySelectorAll('.material-card');
-            
             cards.forEach(card => {
-                if (category === 'all') {
-                    card.classList.remove('hidden');
-                } else {
-                    if (card.classList.contains(category)) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
+                if (category === 'all') card.classList.remove('hidden');
+                else {
+                    if (card.classList.contains(category)) card.classList.remove('hidden');
+                    else card.classList.add('hidden');
                 }
             });
         });
     });
 });
 
-
-/* =========================================
-   7. ФУНКЦИЯ ДЛЯ БЛОКОВ КОДА (PRISM + COPY)
-   ========================================= */
+// Подсветка кода
 function initCodeBlocks(container) {
     if (!container) return;
-    
     const blocks = container.querySelectorAll('pre');
-    
     blocks.forEach(pre => {
         if (pre.parentNode.classList.contains('code-wrapper')) return;
-        
         const wrapper = document.createElement('div');
         wrapper.className = 'code-wrapper position-relative mb-3';
-        
         const btn = document.createElement('button');
         btn.className = 'btn btn-sm btn-dark position-absolute top-0 end-0 m-2 opacity-75';
         btn.innerHTML = '<i class="bi bi-clipboard"></i>';
         btn.style.zIndex = '10';
-        
         btn.onclick = () => {
-            const code = pre.innerText;
-            navigator.clipboard.writeText(code);
-            
+            navigator.clipboard.writeText(pre.innerText);
             btn.innerHTML = '<i class="bi bi-check2"></i>';
-            btn.classList.remove('btn-dark');
             btn.classList.add('btn-success');
-            
             setTimeout(() => {
                 btn.innerHTML = '<i class="bi bi-clipboard"></i>';
                 btn.classList.remove('btn-success');
-                btn.classList.add('btn-dark');
             }, 2000);
         };
-        
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
         wrapper.appendChild(btn);
     });
-    
-    if (window.Prism) {
-        Prism.highlightAllUnder(container);
-    }
+    if (window.Prism) Prism.highlightAllUnder(container);
 }
