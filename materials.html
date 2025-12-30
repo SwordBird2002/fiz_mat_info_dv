@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="liquid">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" result="warp" />
+          <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="20" in="SourceGraphic" in2="warp" />
+        </filter>
+    </svg>
     <script>
       window.MathJax = {
         tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -16,6 +22,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
+       
+          
         /* Текст: тёмно-серый по умолчанию (светлая тема) */
         .text-adaptive {
             color: #495057 !important; /* Серый */
@@ -251,23 +259,77 @@
             border-radius: 0 0 15px 15px;
         }
         /* Фильтры */
-            .filter-btn {
-                border-radius: 20px;
-                padding: 8px 20px;
-                margin: 5px;
-                border: none;
-                font-weight: 500;
-                background: rgba(255, 255, 255, 0.8); /* Светлый полупрозрачный фон */
-                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-                
-                /* ГЛАВНОЕ: Плавный переход всех свойств за 0.3 секунды */
-                transition: all 0.3s ease-in-out;
-            }
+        .filter-btn {
+            /* База */
+            position: relative; /* Важно для псевдо-элементов */
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #333; /* Темный текст для контраста */
             
-            .filter-btn:hover {
-                transform: translateY(-2px); /* Легкое всплытие */
-                background: white;           /* Чуть белее */
-            }
+            /* 1. Основа стекла: очень прозрачный фон + сильный блюр */
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(15px) saturate(180%); /* saturate усиливает цвета под стеклом */
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            
+            /* 2. Граница: тонкая и полупрозрачная, имитирует кромку */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            
+            /* 3. Магия объема: Внутренние тени (inset) для бликов и рефлексов */
+            box-shadow: 
+                /* Верхний левый блик (свет падает сверху) */
+                inset 1px 1px 0 rgba(255, 255, 255, 0.6),
+                /* Нижний правый блик (свет проходит сквозь стекло) */
+                inset -1px -1px 0 rgba(255, 255, 255, 0.2),
+                /* Мягкая тень снаружи */
+                0 4px 15px rgba(0, 0, 0, 0.1);
+                
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Apple-style easing */
+            overflow: hidden; /* Чтобы блик не вылезал */
+            backdrop-filter: blur(10px);
+    
+    /* Добавляем искажение по краям */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Эффект скользящего блика при наведении */
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            
+            /* Градиент, имитирующий отражение света, пробегающее по поверхности */
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.4), 
+                transparent
+            );
+            transition: 0.5s;
+            transform: skewX(-20deg);
+            filter: url(#liquid); 
+        }
+        
+        .filter-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                inset 1px 1px 0 rgba(255, 255, 255, 0.8), /* Ярче блик */
+                inset -1px -1px 0 rgba(255, 255, 255, 0.3),
+                0 8px 25px rgba(0, 0, 0, 0.15); /* Глубже тень */
+        }
+        
+        /* Анимация блика при наведении */
+        .filter-btn:hover::before {
+            left: 150%;
+            transition: 0.7s ease-in-out;
+        }
+        
             
             .filter-btn.active {
                 background: var(--primary-color) !important; /* Цвет активной кнопки */
