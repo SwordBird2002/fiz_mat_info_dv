@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- (опционально) свой CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --bg-color: #05060a;
+            --text-color: #f5f5f5;
+            --card-glass: rgba(15, 15, 20, 0.75);
+            --dl-btn-bg: #ffffff;
+            --dl-btn-text: #000;
+            --accent-glow: rgba(100, 220, 255, 0.2);
+            --loop-blur: 4px;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #eef2f5;
+            --text-color: #222;
+            --card-glass: rgba(255, 255, 255, 0.7);
+            --dl-btn-bg: #111;
+            --dl-btn-text: #fff;
+            --accent-glow: rgba(13, 110, 253, 0.15);
+            --loop-blur: 3px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* === НЕОНОВЫЕ ПЕТЛИ-ФОН ("ЗМЕЙКИ") === */
+        .loop-bg {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: -1;
+            background: radial-gradient(circle at top left, #050915 0, var(--bg-color) 50%, var(--bg-color) 100%);
+        }
+
+        .loop {
+            position: absolute;
+            border-radius: 999px;
+            border: 2px solid;
+            filter: blur(var(--loop-blur));
+            opacity: 0;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        @keyframes loop-spin {
+            0% {
+                transform: translate3d(0,0,0) scale(0.8) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            40% {
+                opacity: 0.85;
+            }
+            75% {
+                opacity: 0.35;
+            }
+            100% {
+                transform: translate3d(0,0,0) scale(1.3) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .loop-1 {
+            width: 520px; height: 220px;
+            top: 5%; left: -10%;
+            border-color: rgba(79, 172, 254, 0.9);
+            box-shadow: 0 0 24px rgba(79, 172, 254, 0.9);
+            animation: loop-spin 26s ease-in-out infinite;
+            transform-origin: 30% 50%;
+        }
+
+        .loop-2 {
+            width: 420px; height: 180px;
+            top: 20%; right: -8%;
+            border-color: rgba(255, 154, 158, 0.9);
+            box-shadow: 0 0 24px rgba(255, 154, 158, 0.9);
+            animation: loop-spin 24s ease-in-out infinite;
+            animation-delay: -8s;
+            transform-origin: 80% 30%;
+        }
+
+        .loop-3 {
+            width: 460px; height: 210px;
+            bottom: 10%; left: 10%;
+            border-color: rgba(132, 250, 176, 0.85);
+            box-shadow: 0 0 24px rgba(132, 250, 176, 0.85);
+            animation: loop-spin 30s ease-in-out infinite;
+            animation-delay: -4s;
+            transform-origin: 20% 80%;
+        }
+
+        .loop-4 {
+            width: 360px; height: 160px;
+            bottom: -5%; right: 5%;
+            border-color: rgba(143, 211, 244, 0.9);
+            box-shadow: 0 0 24px rgba(143, 211, 244, 0.9);
+            animation: loop-spin 34s ease-in-out infinite;
+            animation-delay: -14s;
+            transform-origin: 60% 100%;
+        }
+
+        .loop-5 {
+            width: 280px; height: 120px;
+            top: 40%; left: 35%;
+            border-color: rgba(240, 147, 251, 0.9);
+            box-shadow: 0 0 24px rgba(240, 147, 251, 0.9);
+            animation: loop-spin 22s ease-in-out infinite;
+            animation-delay: -10s;
+            transform-origin: 50% 50%;
+        }
+
+        [data-theme="light"] .loop {
+            opacity: 0.75;
+            mix-blend-mode: normal;
+        }
+
+        /* === LIQUID GLASS КНОПКИ === */
+        .liquid-glass-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            overflow: hidden;
+            border-radius: 2rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+            cursor: pointer;
+            text-decoration: none;
+            user-select: none;
+            transform: translateZ(0);
+            -webkit-font-smoothing: antialiased;
+            will-change: transform, box-shadow;
+            transition: box-shadow 0.3s;
+        }
+
+        .liquid-glass-effect {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            filter: url(#glass-distortion);
+            pointer-events: none;
+        }
+
+        .liquid-glass-tint {
+            position: absolute; inset: 0; z-index: 1;
+            background: rgba(255, 255, 255, 0.10);
+            transition: background 0.3s;
+        }
+        [data-theme="light"] .liquid-glass-tint {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        .liquid-glass-shine {
+            position: absolute; inset: 0; z-index: 2; border-radius: 2rem; pointer-events: none;
+            box-shadow:
+                inset 1px 1px 0px 0 rgba(255,255,255,0.7),
+                inset -1px -1px 0px 0 rgba(255,255,255,0.25);
+        }
+
+        .liquid-glass-text {
+            position: relative; z-index: 3; padding: 10px 24px; color: var(--text-color);
+            display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+
+        .liquid-glass-wrapper.active {
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.35);
+            transform: scale(0.96);
+        }
+
+        /* Без покачивания на десктопе — только тень */
+        @media (hover: hover) and (pointer: fine) {
+            .liquid-glass-wrapper:hover {
+                box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+            }
+        }
+
+        /* На тач-устройствах hover мягкий */
+        @media (hover: none) and (pointer: coarse) {
+            .liquid-glass-wrapper:hover {
+                box-shadow: 0 8px 16px rgba(0,0,0,0.28);
+            }
+        }
+
+        /* === КНОПКИ === */
+        .theme-btn-fixed {
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+            padding: 0;
+            border-radius: 50% !important;
+        }
+        .theme-btn-fixed .liquid-glass-shine { border-radius: 50% !important; }
+
+        #themeIcon {
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            font-size: 1.3rem;
+        }
+
+        .download-btn .liquid-glass-tint { background: var(--dl-btn-bg) !important; }
+        .download-btn .liquid-glass-text { color: var(--dl-btn-text) !important; }
+
+        /* === ПОИСК и КАРТОЧКИ === */
+        .neu-input {
+            width: 100%; max-width: 500px; padding: 16px 50px; border-radius: 50px; border: none; outline: none;
+            background: rgba(255,255,255,0.08); 
+            box-shadow:
+                inset 4px 4px 10px rgba(0,0,0,0.45),
+                inset -4px -4px 10px rgba(255,255,255,0.05);
+            color: var(--text-color); transition: 0.3s;
+        }
+        [data-theme="light"] .neu-input {
+            background: rgba(255,255,255,0.85);
+            box-shadow:
+                inset 4px 4px 10px rgba(0,0,0,0.05),
+                inset -4px -4px 10px rgba(255,255,255,0.6);
+        }
+        .neu-input:focus {
+            background: rgba(255,255,255,0.16);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+        }
+        [data-theme="light"] .neu-input:focus {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+        }
+
+        .file-card {
+            background: var(--card-glass);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: 0.3s;
+            height: 100%;
+        }
+        .file-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.32);
+        }
+
+        .animate-up { animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* === SVG ИКОНКИ ПРЕДМЕТОВ === */
+        .subject-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .subject-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .subject-icon-math { color: #ffb74d; }
+        .subject-icon-cs   { color: #64b5f6; }
+        .subject-icon-phys { color: #ce93d8; }
+
+        .subject-icon svg path,
+        .subject-icon svg rect,
+        .subject-icon svg circle,
+        .subject-icon svg ellipse {
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.7;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .subject-icon-math rect {
+            /* чуть толще контур квадрата */
+            stroke-width: 1.5;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    
+    <!-- SVG FILTER: ЖИДКОЕ СТЕКЛО (усиленный эффект преломления) -->
+    <svg style="position: absolute; width: 0; height: 0;">
+      <filter
+        id="glass-distortion"
+        x="-25%"
+        y="-25%"
+        width="150%"
+        height="150%"
+        filterUnits="objectBoundingBox"
+      >
+        <!-- шум для волн -->
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.02 0.03"
+          numOctaves="2"
+          seed="8"
+          result="noiseMap"
+        />
+        <!-- лёгкий blur, чтобы волны не были "пилой" -->
+        <feGaussianBlur
+          in="noiseMap"
+          stdDeviation="2"
+          result="blurredNoise"
+        />
+        <!-- искажение содержимого по карте шума -->
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="blurredNoise"
+          scale="190"
+          xChannelSelector="R"
+          yChannelSelector="G"
+        />
+      </filter>
+    </svg>
+
+    <!-- НЕОНОВЫЙ ФОН: ПЕТЛИ-ЗМЕЙКИ -->
+    <div class="loop-bg">
+        <div class="loop loop-1"></div>
+        <div class="loop loop-2"></div>
+        <div class="loop loop-3"></div>
+        <div class="loop loop-4"></div>
+        <div class="loop loop-5"></div>
+    </div>
+
+    <div class="container py-5 position-relative" style="z-index: 2;">
+        
+        <!-- HEADER -->
+        <header class="d-flex justify-content-between align-items-center mb-5 animate-up">
+            <a href="materials.html" class="liquid-glass-wrapper">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint"></div>
+                <div class="liquid-glass-shine"></div>
+                <div class="liquid-glass-text">
+                    <i class="bi bi-arrow-left"></i> Назад
+                </div>
+            </a>
+
+            <!-- THEME BTN -->
+            <div onclick="toggleTheme()" class="liquid-glass-wrapper theme-btn-fixed">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint"></div>
+                <div class="liquid-glass-shine"></div>
+                <div class="liquid-glass-text" style="padding: 0; width: 100%; height: 100%; justify-content: center;">
+                    <i id="themeIcon" class="bi bi-moon-stars-fill"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="text-center mb-5 animate-up">
+            <h1 class="fw-bold mb-2">Библиотека</h1>
+            <p class="opacity-75">Полезные материалы</p>
+            
+            <div class="mt-4 position-relative d-inline-block w-100" style="max-width: 500px;">
+                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 opacity-50"></i>
+                <input type="text" id="librarySearch" class="neu-input" placeholder="Найти файл">
+            </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="d-flex justify-content-center gap-3 flex-wrap mb-5 animate-up">
+            <!-- Все -->
+            <div class="liquid-glass-wrapper active filter-btn" data-filter="all">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint" style="background: var(--accent-glow)"></div>
+                <div class="liquid-glass-shine"></div>
+                <div class="liquid-glass-text">
+                    <span>Все</span>
+                </div>
+            </div>
+
+            <!-- Математика -->
+            <div class="liquid-glass-wrapper filter-btn" data-filter="math">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint"></div>
+                <div class="liquid-glass-shine"></div>
+                <div class="liquid-glass-text">
+                    <span class="subject-icon subject-icon-math">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4.5" y="4.5" width="15" height="15" rx="4"></rect>
+                            <path d="M9 12h6M12 9v6"></path>
+                        </svg>
+                    </span>
+                    <span>Математика</span>
+                </div>
+            </div>
+
+            <!-- Информатика -->
+            <div class="liquid-glass-wrapper filter-btn" data-filter="cs">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint"></div>
+                <div class="liquid-glass-shine"></div>
+                <div class="liquid-glass-text">
+                    <span class="subject-icon subject-icon-cs">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3.5" y="5" width="17" height="12" rx="2"></rect>
+                            <path d="M9 10l-2 2 2 2"></path>
+                            <path d="M15 10l2 2-2 2"></path>
+                            <path d="M10 17.5h4"></path>
+                        </svg>
+                    </span>
+                    <span>Информатика</span>
+                </div>
+            </div>
+
+            <!-- Физика -->
+            <div class="liquid-glass-wrapper filter-btn" data-filter="phys">
+                <div class="liquid-glass-effect"></div>
+                <div class="liquid-glass-tint"></div>
+                <div class="liquid-glass-shine"></div>
+                <div class="liquid-glass-text">
+                    <span class="subject-icon subject-icon-phys">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="2.2"></circle>
+                            <ellipse cx="12" cy="12" rx="8" ry="3.4"></ellipse>
+                            <ellipse cx="12" cy="12" rx="8" ry="3.4" transform="rotate(60 12 12)"></ellipse>
+                            <ellipse cx="12" cy="12" rx="8" ry="3.4" transform="rotate(-60 12 12)"></ellipse>
+                        </svg>
+                    </span>
+                    <span>Физика</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID -->
+        <div class="row g-4" id="libraryContainer">
+            <div class="text-center w-100 py-5"><div class="spinner-border text-primary"></div></div>
+        </div>
+    </div>
+
+    <script>
+        const DATA_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json";
+
+        async function load() {
+            try {
+                const res = await fetch(DATA_URL);
+                const data = await res.json();
+                const files = data.filter(i => i.file);
+                const container = document.getElementById('libraryContainer');
+                
+                container.innerHTML = files.length ? '' : '<div class="text-center w-100 py-5 opacity-50">Пусто</div>';
+
+                files.forEach((item, idx) => {
+                    const icon = getIcon(item.file.name);
+                    const el = document.createElement('div');
+                    el.className = `col-md-6 col-lg-4 lib-item ${item.subject} animate-up`;
+                    el.style.animationDelay = idx * 60 + 'ms';
+                    
+                    el.innerHTML = `
+                        <div class="file-card p-4 h-100 d-flex flex-column">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="bi ${icon} fs-1 me-3 opacity-75"></i>
+                                <div class="overflow-hidden">
+                                    <h6 class="fw-bold text-truncate mb-0">${item.file.name}</h6>
+                                    <small class="opacity-50 text-uppercase fw-bold" style="font-size:0.7em">${item.subject}</small>
+                                </div>
+                            </div>
+                            <p class="small opacity-75 mb-4 line-clamp-2">${item.title}</p>
+                            
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="small opacity-50 font-monospace">${item.file.size || ''}</span>
+                                
+                                <a href="${item.file.url}" download class="liquid-glass-wrapper download-btn" style="transform: scale(0.9);">
+                                    <div class="liquid-glass-effect"></div>
+                                    <div class="liquid-glass-tint"></div>
+                                    <div class="liquid-glass-shine"></div>
+                                    <div class="liquid-glass-text py-2 px-3 fs-6">
+                                        <i class="bi bi-download me-2"></i>Скачать
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(el);
+                });
+                initFilters();
+                initSearch();
+            } catch (e) { console.error(e); }
+        }
+
+        function getIcon(n) {
+            const lower = n.toLowerCase();
+            if (lower.endsWith('pdf')) return 'bi-file-pdf-fill text-danger';
+            if (lower.endsWith('zip')) return 'bi-file-zip-fill text-warning';
+            return 'bi-file-text-fill text-primary';
+        }
+
+        function initFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                        const tint = b.querySelector('.liquid-glass-tint');
+                        if (tint) tint.style.background = '';
+                    });
+                    btn.classList.add('active');
+                    const activeTint = btn.querySelector('.liquid-glass-tint');
+                    if (activeTint) activeTint.style.background = 'var(--accent-glow)';
+                    
+                    const filter = btn.dataset.filter;
+                    document.querySelectorAll('.lib-item').forEach(item => {
+                        const show = (filter === 'all' || item.classList.contains(filter));
+                        item.style.display = show ? 'block' : 'none';
+                        if (show) {
+                            item.classList.remove('animate-up');
+                            void item.offsetWidth;
+                            item.classList.add('animate-up');
+                        }
+                    });
+                }
+            });
+        }
+
+        function initSearch() {
+            document.getElementById('librarySearch').oninput = (e) => {
+                const val = e.target.value.toLowerCase();
+                document.querySelectorAll('.lib-item').forEach(item => {
+                    item.style.display = item.innerText.toLowerCase().includes(val) ? 'block' : 'none';
+                });
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            
+            const icon = document.getElementById('themeIcon');
+            icon.style.transform = "rotate(360deg) scale(0)";
+            
+            setTimeout(() => {
+                document.body.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                icon.className = next === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+                icon.style.transform = "rotate(0deg) scale(1)";
+            }, 250);
+        }
+
+        // Init Theme
+        (function initTheme() {
+            const saved = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.body.setAttribute('data-theme', saved);
+            const icon = document.getElementById('themeIcon');
+            if (icon) icon.className = saved === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+        })();
+        
+        load();
+
+        // === Лёгкое покачивание кнопок от акселерометра (ТОЛЬКО ANDROID/ТАЧ) ===
+        (function initGyroButtons() {
+            if (!("DeviceMotionEvent" in window)) return;
+            if (!window.matchMedia || !window.matchMedia("(pointer: coarse)").matches) return;
+
+            const buttons = document.querySelectorAll(".liquid-glass-wrapper");
+            if (!buttons.length) return;
+
+            let lastX = 0, lastY = 0;
+            let ticking = false;
+
+            const MAX_ROT = 4;     // макс. наклон (градусы)
+            const MAX_SHIFT = 4;   // макс. сдвиг (px)
+            const SMOOTH = 0.12;   // сглаживание
+
+            function handleMotion(event) {
+                const acc = event.accelerationIncludingGravity;
+                if (!acc) return;
+
+                let ax = acc.x || 0;
+                let ay = acc.y || 0;
+
+                const normX = Math.max(-1, Math.min(1, ax / 9.8));
+                const normY = Math.max(-1, Math.min(1, ay / 9.8));
+
+                lastX = lastX + (normX - lastX) * SMOOTH;
+                lastY = lastY + (normY - lastY) * SMOOTH;
+
+                if (!ticking) {
+                    ticking = true;
+                    requestAnimationFrame(() => {
+                        const rotX = lastY * MAX_ROT;
+                        const rotY = -lastX * MAX_ROT;
+                        const shiftX = lastX * MAX_SHIFT;
+                        const shiftY = -lastY * MAX_SHIFT;
+
+                        const t = `translate3d(${shiftX}px, ${shiftY}px, 0) ` +
+                                  `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+                        buttons.forEach(btn => {
+                            btn.style.transform = t;
+                        });
+
+                        ticking = false;
+                    });
+                }
+            }
+
+            window.addEventListener("devicemotion", handleMotion, true);
+        })();
+    </script>
+</body>
+</html>
