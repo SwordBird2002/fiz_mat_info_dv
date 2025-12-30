@@ -14,7 +14,7 @@
         --bg-color: #f8f9fa;
         --text-color: #212529;
         --card-bg: rgba(255, 255, 255, 0.4); /* Полупрозрачный белый */
-        --navbar-bg: rgba(33, 37, 41, 0.95);
+        --navbar-bg: rgba(33, 37, 41, 0.7);
         --glass-border: 1px solid rgba(255, 255, 255, 0.3);
         --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
     }
@@ -24,7 +24,7 @@
         --bg-color: #0f172a;
         --text-color: #e2e8f0;
         --card-bg: rgba(30, 41, 59, 0.6); /* Полупрозрачный темный */
-        --navbar-bg: rgba(15, 23, 42, 0.95);
+        --navbar-bg: rgba(15, 23, 42, 0.7);
         --glass-border: 1px solid rgba(255, 255, 255, 0.1);
         --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     }
@@ -37,7 +37,7 @@
         position: relative;
     }
 
-        /* --- ФОНОВЫЕ ШАРЫ  --- */
+    /* --- ФОНОВЫЕ ШАРЫ  --- */
     .background-orbs {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -78,17 +78,14 @@
         animation: moveCircular 15s infinite linear;
     }
     .orb-4 {
-    width: 150px; height: 150px;
-    background: radial-gradient(circle, #f59e0b, #ef4444); /* Оранжевый -> Красный */
-    bottom: 20%; left: 20%; /* Начальная позиция */
-    animation: moveWild 14s infinite ease-in-out; /* Своя уникальная анимация */
-    opacity: 0.5; /* Чуть прозрачнее остальных, чтобы не резал глаз */
+        width: 150px; height: 150px;
+        background: radial-gradient(circle, #f59e0b, #ef4444); /* Оранжевый -> Красный */
+        bottom: 20%; left: 20%; /* Начальная позиция */
+        animation: moveWild 14s infinite ease-in-out; /* Своя уникальная анимация */
+        opacity: 0.5; /* Чуть прозрачнее остальных, чтобы не резал глаз */
     }
 
-    
-
     /* --- АНИМАЦИИ --- */
-    
     @keyframes moveDiagonal {
         0% { transform: translate(0, 0) scale(1); }
         100% { transform: translate(300px, 200px) scale(1.1); }
@@ -113,7 +110,6 @@
         100% { transform: translate(0, 0) scale(1); }
     }
 
-
     /* --- СТЕКЛЯННЫЕ КАРТОЧКИ --- */
     .glass-card {
         background: var(--card-bg);
@@ -123,6 +119,28 @@
         box-shadow: var(--shadow);
         border-radius: 16px;
         color: var(--text-color);
+    }
+
+    /* Стекло для hero-блока */
+    .hero-section {
+        padding: 4rem 0 3rem;
+    }
+    .hero-section .container {
+        background: var(--card-bg);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-radius: 24px;
+        border: var(--glass-border);
+        box-shadow: var(--shadow);
+        padding: 3rem 2rem;
+    }
+
+    /* Стеклянный navbar */
+    .navbar.navbar-dark.bg-dark {
+        background-color: var(--navbar-bg) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
     }
 
     /* Твой логотип-шар */
@@ -138,9 +156,43 @@
 
     /* Кнопка темы */
     .theme-toggle {
-        background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: transform 0.25s ease, color 0.25s ease;
     }
-    
+
+    .theme-toggle:hover {
+        transform: translateY(-1px) scale(1.05);
+    }
+
+    .theme-toggle:active {
+        transform: translateY(0) scale(0.95);
+    }
+
+    @keyframes theme-bounce {
+        0%   { transform: translateY(0) scale(1) rotate(0deg); }
+        30%  { transform: translateY(-2px) scale(1.1) rotate(-6deg); }
+        60%  { transform: translateY(1px) scale(0.96) rotate(4deg); }
+        100% { transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    @keyframes theme-icon-spin {
+        0%   { transform: rotate(0deg) scale(1); }
+        40%  { transform: rotate(220deg) scale(1.2); }
+        100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .theme-toggle--active {
+        animation: theme-bounce 0.55s ease;
+    }
+
+    #themeIcon.theme-icon-spin {
+        animation: theme-icon-spin 0.55s ease;
+    }
+
     /* Исправление цветов для темной темы */
     [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
     [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color: #f1f5f9; }
@@ -148,7 +200,7 @@
     .snowflake {
         position: fixed;
         top: -10px;
-        color: white; /* Цвет снега */
+        color: rgb(90, 20, 20); /* Цвет снега */
         text-shadow: 0 0 5px rgba(255,255,255,0.8); /* Легкое свечение */
         z-index: 9999; /* Чтобы снег был поверх всего (или поставьте -1, если хотите на фоне) */
         pointer-events: none; /* Чтобы сквозь снег можно было кликать */
@@ -167,6 +219,57 @@
         100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 
+    /* Стеклянная кнопка hero */
+    .btn-glass {
+        position: relative;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .btn-glass:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 38px rgba(15, 23, 42, 0.45);
+        background: rgba(255, 255, 255, 0.9) !important;
+    }
+    .btn-glass:active {
+        transform: translateY(0) scale(0.97);
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.4);
+    }
+    [data-theme="dark"] .btn-glass {
+        background: rgba(15, 23, 42, 0.75) !important;
+        border-color: rgba(148, 163, 184, 0.7) !important;
+        color: #e2e8f0 !important;
+    }
+    [data-theme="dark"] .btn-glass:hover {
+        background: rgba(15, 23, 42, 0.95) !important;
+    }
+
+    /* Немного стекла для списка материалов */
+    .list-group-item {
+        background-color: rgba(15, 23, 42, 0.15);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-color: rgba(148, 163, 184, 0.4);
+        color: var(--text-color);
+        transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    [data-theme="light"] .list-group-item {
+        background-color: rgba(255, 255, 255, 0.7);
+        border-color: rgba(148, 163, 184, 0.4);
+    }
+    .list-group-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.2);
+        background-color: rgba(255, 255, 255, 0.92);
+    }
+    [data-theme="dark"] .list-group-item:hover {
+        background-color: rgba(15, 23, 42, 0.85);
+    }
+
 </style>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
@@ -183,30 +286,30 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-    <!-- Это наш новый логотип-шар -->
-    <div class="logo-circle"></div> 
-    <!-- Текст рядом -->
-    <span> ФизМатИнфо 🪐</span>
-</a>
+                <!-- Это наш новый логотип-шар -->
+                <div class="logo-circle"></div> 
+                <!-- Текст рядом -->
+                <span> ФизМатИнфо 🪐</span>
+            </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-    <!-- Ваши старые ссылки -->
-    <li class="nav-item"><a class="nav-link" href="#about">Обо мне</a></li>
-    <li class="nav-item"><a class="nav-link" href="#subjects">Предметы</a></li>
-    <li class="nav-item"><a class="nav-link" href="materials.html">Материалы</a></li>
-    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
-    
-    <!-- Кнопка темы -->
-    <li class="nav-item ms-3">
-        <button class="theme-toggle" onclick="toggleTheme()">
-            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
-        </button>
-    </li>
-</ul>
+                    <!-- Ваши старые ссылки -->
+                    <li class="nav-item"><a class="nav-link" href="#about">Обо мне</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#subjects">Предметы</a></li>
+                    <li class="nav-item"><a class="nav-link" href="materials.html">Материалы</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacts">Контакты</a></li>
+                    
+                    <!-- Кнопка темы -->
+                    <li class="nav-item ms-3">
+                        <button class="theme-toggle" onclick="toggleTheme()">
+                            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                        </button>
+                    </li>
+                </ul>
 
 
             </div>
@@ -218,7 +321,7 @@
         <div class="container">
             <h1 class="display-4 fw-bold">Понятная математика, физика и информатика</h1>
             <p class="lead mb-4">Персональный сайт преподавателя ⚛️</p>
-            <a href="materials.html" class="btn btn-light btn-lg px-4 fw-bold text-primary">Открытые Материалы</a>
+            <a href="materials.html" class="btn btn-light btn-lg px-4 fw-bold text-primary btn-glass">Открытые Материалы</a>
         </div>
     </header>
 
@@ -385,10 +488,31 @@
     function toggleTheme() {
         const currentTheme = document.body.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
+
+        const btn = document.querySelector('.theme-toggle');
+        const icon = document.getElementById('themeIcon');
+
+        // Сбрасываем анимации, чтобы можно было переигрывать при каждом клике
+        if (btn) {
+            btn.classList.remove('theme-toggle--active');
+            void btn.offsetWidth;
+            btn.classList.add('theme-toggle--active');
+        }
+        if (icon) {
+            icon.classList.remove('theme-icon-spin');
+            void icon.offsetWidth;
+            icon.classList.add('theme-icon-spin');
+        }
+
         document.body.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme); // Сохраняем выбор
         updateIcon(newTheme);
+
+        // Убираем классы после завершения анимации
+        setTimeout(() => {
+            if (btn) btn.classList.remove('theme-toggle--active');
+            if (icon) icon.classList.remove('theme-icon-spin');
+        }, 600);
     }
 
     function updateIcon(theme) {
@@ -448,21 +572,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
