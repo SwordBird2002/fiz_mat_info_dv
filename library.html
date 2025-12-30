@@ -291,12 +291,9 @@
             stroke-linejoin: round;
         }
         .subject-icon-math rect {
-            /* чуть толще контур квадрата */
             stroke-width: 1.5;
         }
     </style>
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
 </head>
 <body data-theme="dark">
     
@@ -310,7 +307,6 @@
         height="150%"
         filterUnits="objectBoundingBox"
       >
-        <!-- шум для волн -->
         <feTurbulence
           type="fractalNoise"
           baseFrequency="0.02 0.03"
@@ -318,13 +314,11 @@
           seed="8"
           result="noiseMap"
         />
-        <!-- лёгкий blur, чтобы волны не были "пилой" -->
         <feGaussianBlur
           in="noiseMap"
           stdDeviation="2"
           result="blurredNoise"
         />
-        <!-- искажение содержимого по карте шума -->
         <feDisplacementMap
           in="SourceGraphic"
           in2="blurredNoise"
@@ -450,18 +444,33 @@
     </div>
 
     <script>
+        // Ссылки на ДВА файла
         const DATA_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/data.json";
+        const LIB_URL = "https://mysitedatajson.hb.ru-msk.vkcloud-storage.ru/json/library.json";
 
         async function load() {
             try {
-                const res = await fetch(DATA_URL);
-                const data = await res.json();
-                const files = data.filter(i => i.file);
                 const container = document.getElementById('libraryContainer');
                 
-                container.innerHTML = files.length ? '' : '<div class="text-center w-100 py-5 opacity-50">Пусто</div>';
+                // Загружаем оба файла параллельно
+                const [dataRes, libRes] = await Promise.all([
+                    fetch(DATA_URL).then(r => r.ok ? r.json() : []).catch(() => []),
+                    fetch(LIB_URL).then(r => r.ok ? r.json() : []).catch(() => [])
+                ]);
 
-                files.forEach((item, idx) => {
+                // 1. Файлы из новостей (фильтруем только те, где есть file)
+                const newsFiles = dataRes.filter(i => i.file);
+
+                // 2. Файлы из отдельной библиотеки (берем все, т.к. там только файлы)
+                const extraFiles = libRes;
+
+                // 3. Объединяем (Сначала спец. файлы, потом новости)
+                const allFiles = [...extraFiles, ...newsFiles];
+
+                container.innerHTML = allFiles.length ? '' : '<div class="text-center w-100 py-5 opacity-50">Пусто</div>';
+
+                // Отрисовка карточек
+                allFiles.forEach((item, idx) => {
                     const icon = getIcon(item.file.name);
                     const el = document.createElement('div');
                     el.className = `col-md-6 col-lg-4 lib-item ${item.subject} animate-up`;
@@ -494,9 +503,11 @@
                     `;
                     container.appendChild(el);
                 });
+
                 initFilters();
                 initSearch();
-            } catch (e) { console.error(e); }
+
+            } catch(e) { console.error(e); }
         }
 
         function getIcon(n) {
@@ -578,9 +589,9 @@
             let lastX = 0, lastY = 0;
             let ticking = false;
 
-            const MAX_ROT = 4;     // макс. наклон (градусы)
-            const MAX_SHIFT = 4;   // макс. сдвиг (px)
-            const SMOOTH = 0.12;   // сглаживание
+            const MAX_ROT = 4;
+            const MAX_SHIFT = 4;
+            const SMOOTH = 0.12;
 
             function handleMotion(event) {
                 const acc = event.accelerationIncludingGravity;
@@ -620,4 +631,3 @@
     </script>
 </body>
 </html>
-
