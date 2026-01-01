@@ -466,6 +466,31 @@
         minSpeed: 5,        // Мин. скорость падения (сек)
         maxSpeed: 10        // Макс. скорость падения (сек)
     };
+    (function () {
+      const deviceInfo = {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform,
+        screen: {
+          width: screen.width,
+          height: screen.height,
+          pixelRatio: window.devicePixelRatio,
+        },
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+    
+      fetch("https://functions.yandexcloud.net/d4ercqv78bjai1dkukdf", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          path: location.pathname,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent,
+          device: deviceInfo,
+        }),
+      }).catch(()=>{});
+    })();
+    
 
     function createSnow() {
         const body = document.body;
@@ -501,3 +526,4 @@
     </script>
 </body>
 </html>
+
