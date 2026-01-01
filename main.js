@@ -8,6 +8,16 @@ let isLoading = false;       // Флаг защиты от двойной заг
 let currentActiveItem = null; // Хранит текущую открытую новость (для возврата фокуса)
 
 /* =========================================
+   РЕАКЦИИ (КОНФИГ)
+   ========================================= */
+const REACTIONS_ENDPOINT = "https://functions.yandexcloud.net/d4eiscejofusm4s3jej0"; // TODO: подставь свой URL
+
+// Кэш счётчиков: { [id]: { like: number, fire: number, mind: number } }
+let reactionsData = {};
+let reactionsLoaded = false;
+
+
+/* =========================================
    1. УПРАВЛЕНИЕ ТЕМОЙ
    ========================================= */
 function initTheme() {
@@ -134,6 +144,11 @@ async function loadMaterials(restoreCount) {
                 renderNextBatch();
             }
         }
+
+        // Загрузка реакций один раз после появления первых карточек
+        if (!reactionsLoaded) {
+            loadReactions();
+        }
     } catch (error) {
         console.error('Ошибка загрузки:', error);
         container.innerHTML = '<p class="text-center text-danger">Не удалось загрузить материалы.</p>';
@@ -182,6 +197,9 @@ function renderNextBatch(customCount) {
 
         let filePreview = item.file ? '<div class="text-muted small mt-2"><i class="bi bi-paperclip"></i> Прикреплен файл</div>' : '';
 
+        // Важно: используем item.id для привязки реакций
+        const newsIdAttr = (item.id !== undefined && item.id !== null) ? String(item.id) : '';
+
         card.innerHTML = `
             <div class="card-header-custom">
                 <span class="subject-badge ${badgeClass}">${subjectName}</span>
@@ -193,9 +211,38 @@ function renderNextBatch(customCount) {
                     ${item.text} 
                 </p>
                 ${filePreview}
-                <div class="text-primary small mt-2 fw-bold">Читать подробнее</div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-primary small fw-bold">Читать подробнее</div>
+                    <div class="reaction-bar" data-news-id="${newsIdAttr}">
+                        <button class="reaction-btn" type="button" data-reaction="like" title="Нравится">❤️</button>
+                        <span class="reaction-count" data-reaction-count="like">0</span>
+
+                        <button class="reaction-btn" type="button" data-reaction="fire" title="Круто">🔥</button>
+                        <span class="reaction-count" data-reaction-count="fire">0</span>
+
+                        <button class="reaction-btn" type="button" data-reaction="mind" title="Взорвало мозг">🤯</button>
+                        <span class="reaction-count" data-reaction-count="mind">0</span>
+                    </div>
+                </div>
             </div>
         `;
+
+        // Локальный обработчик кликов по реакциям, чтобы не триггерить открытие модалки
+        const reactionBar = card.querySelector('.reaction-bar');
+        if (reactionBar) {
+            reactionBar.addEventListener('click', (ev) => {
+                const btn = ev.target.closest('.reaction-btn');
+                if (!btn) return;
+                ev.stopPropagation();
+
+                const newsId = reactionBar.getAttribute('data-news-id');
+                const reaction = btn.getAttribute('data-reaction');
+                if (!newsId || !reaction) return;
+
+                sendReaction(newsId, reaction, reactionBar);
+            });
+        }
+
         container.appendChild(card);
     });
 
@@ -213,6 +260,9 @@ function renderNextBatch(customCount) {
     if (typeof MathJax !== 'undefined') {
         MathJax.typesetPromise([container]).catch(err => console.log('MathJax feed error:', err));
     }
+
+    // Применяем уже загруженные реакции к только что созданным карточкам
+    applyReactionsToUI();
 }
 
 if (document.getElementById('feed-container')) {
@@ -662,5 +712,72 @@ function initCodeBlocks(container) {
     
     if (window.Prism) {
         Prism.highlightAllUnder(container);
+    }
+}
+
+
+/* =========================================
+   8. РЕАКЦИИ: ЗАГРУЗКА, ПРИМЕНЕНИЕ, ОТПРАВКА
+   ========================================= */
+
+// GET: загрузить все реакции из единого reactions.json
+async function loadReactions() {
+    if (!REACTIONS_ENDPOINT) return;
+    try {
+        const res = await fetch(REACTIONS_ENDPOINT, { method: 'GET' });
+        if (!res.ok) return;
+        const data = await res.json();
+        // Ожидаем, что backend вернёт просто объект вида { "1": { like: 3, fire: 1, mind: 0 }, ... }
+        reactionsData = (data && typeof data === 'object') ? data : {};
+        reactionsLoaded = true;
+        applyReactionsToUI();
+    } catch (e) {
+        console.error('Ошибка загрузки реакций', e);
+    }
+}
+
+// Применение имеющихся счётчиков к DOM
+function applyReactionsToUI() {
+    const bars = document.querySelectorAll('.reaction-bar');
+    bars.forEach(bar => {
+        const id = bar.getAttribute('data-news-id');
+        if (!id) return;
+        const stats = reactionsData[id] || {};
+        updateReactionBarCounts(bar, stats);
+    });
+}
+
+// Обновить конкретную панель реакций по counters
+function updateReactionBarCounts(barEl, counters) {
+    if (!barEl) return;
+    const spans = barEl.querySelectorAll('.reaction-count');
+    spans.forEach(span => {
+        const type = span.getAttribute('data-reaction-count');
+        const val = counters && counters[type] != null ? counters[type] : 0;
+        span.textContent = val;
+    });
+}
+
+// POST: отправка реакции и обновление локального состояния
+async function sendReaction(newsId, reaction, barEl) {
+    if (!REACTIONS_ENDPOINT) return;
+    try {
+        const res = await fetch(REACTIONS_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: String(newsId), reaction })
+        });
+        if (!res.ok) {
+            console.error('Bad response for reaction:', res.status);
+            return;
+        }
+        const data = await res.json();
+        // Ожидаем формат { ok: true, counters: { like: N, fire: M, mind: K } }
+        if (data && data.counters) {
+            reactionsData[String(newsId)] = data.counters;
+            updateReactionBarCounts(barEl, data.counters);
+        }
+    } catch (e) {
+        console.error('Ошибка при отправке реакции', e);
     }
 }
