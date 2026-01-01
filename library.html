@@ -511,11 +511,48 @@
         }
 
         function getIcon(n) {
-            const lower = n.toLowerCase();
-            if (lower.endsWith('pdf')) return 'bi-file-pdf-fill text-danger';
-            if (lower.endsWith('zip')) return 'bi-file-zip-fill text-warning';
-            return 'bi-file-text-fill text-primary';
+            if (!n) return 'bi-file-earmark text-secondary';
+        
+            const lower = n.toLowerCase().trim();
+        
+            // убираем хвосты вроде " (1)"
+            const clean = lower.replace(/\s*\(.+\)$/, '');
+        
+            // основные типы
+            if (clean.endsWith('.pdf')) return 'bi-file-pdf-fill text-danger';
+        
+            // архивы
+            if (clean.endsWith('.zip') || clean.endsWith('.rar') || clean.endsWith('.7z'))
+                return 'bi-file-zip-fill text-warning';
+        
+            // документы Word
+            if (clean.endsWith('.doc') || clean.endsWith('.docx'))
+                return 'bi-file-word-fill text-primary';
+        
+            // Excel
+            if (clean.endsWith('.xls') || clean.endsWith('.xlsx'))
+                return 'bi-file-excel-fill text-success';
+        
+            // презентации
+            if (clean.endsWith('.ppt') || clean.endsWith('.pptx'))
+                return 'bi-file-ppt-fill text-warning';
+        
+            // картинки
+            if (clean.endsWith('.png') || clean.endsWith('.jpg') || clean.endsWith('.jpeg') || clean.endsWith('.gif') || clean.endsWith('.webp'))
+                return 'bi-file-image-fill text-info';
+        
+            // код
+            if (clean.endsWith('.py') || clean.endsWith('.js') || clean.endsWith('.ts') || clean.endsWith('.html') || clean.endsWith('.css') || clean.endsWith('.cpp') || clean.endsWith('.c') || clean.endsWith('.cs') || clean.endsWith('.java'))
+                return 'bi-file-code-fill text-success';
+        
+            // текст
+            if (clean.endsWith('.txt') || clean.endsWith('.md'))
+                return 'bi-file-text-fill text-secondary';
+        
+            // по умолчанию
+            return 'bi-file-earmark-fill text-primary';
         }
+
 
         function initFilters() {
             document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -631,3 +668,4 @@
     </script>
 </body>
 </html>
+
