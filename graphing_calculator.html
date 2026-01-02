@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Графический калькулятор | ФизМатИнфо 🪐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap / Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --bg-color: #fdfaf7;
+            --text-color: #111827;
+            --muted-color: #6b7280;
+            --card-bg: rgba(255, 255, 255, 0.86);
+            --navbar-bg: rgba(255, 255, 255, 0.94);
+            --glass-border: 1px solid rgba(148, 163, 184, 0.4);
+            --shadow: 0 12px 32px rgba(148, 163, 184, 0.35);
+            --axis-color: #111827;
+            --grid-color: rgba(209, 213, 219, 0.9);
+            --accent-soft: rgba(251, 113, 133, 0.13);
+        }
+
+        /* Переопределение переменных в тёмной теме — привязано к body */
+        body[data-theme="dark"] {
+            --bg-color: #020617;
+            --text-color: #e5e7eb;
+            --muted-color: #9ca3af;
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --navbar-bg: rgba(15, 23, 42, 0.96);
+            --glass-border: 1px solid rgba(31, 41, 55, 0.95);
+            --shadow: 0 20px 42px rgba(0, 0, 0, 0.9);
+            --axis-color: #e5e7eb;
+            --grid-color: rgba(55, 65, 81, 0.9);
+            --accent-soft: rgba(248, 113, 113, 0.2);
+        }
+
+        body {
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(254, 249, 195, 0.8), transparent 52%),
+                radial-gradient(circle at 90% 100%, rgba(254, 215, 170, 0.85), transparent 60%),
+                linear-gradient(135deg, #fdf2f8 0%, #fdfaf7 45%, #e0f2fe 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.3s ease;
+        }
+
+        body[data-theme="dark"] {
+            background:
+                radial-gradient(circle at 0% 0%, rgba(248, 113, 113, 0.4), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(30, 64, 175, 0.7), transparent 60%),
+                radial-gradient(circle at 50% 30%, rgba(56, 189, 248, 0.25), transparent 60%),
+                linear-gradient(135deg, #020617 0%, #020617 45%, #020617 100%);
+        }
+
+        code {
+            font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+            color: #b91c1c;
+            background-color: rgba(248, 250, 252, 0.7);
+            padding: 0.1rem 0.3rem;
+            border-radius: 999px;
+            font-size: 0.85em;
+        }
+        body[data-theme="dark"] code {
+            background-color: rgba(15, 23, 42, 0.9);
+            color: #fecaca;
+        }
+
+        .text-adaptive {
+            color: var(--text-color) !important;
+        }
+        .text-adaptive-muted {
+            color: var(--muted-color) !important;
+        }
+
+        /* Абстрактный фон: "волны" + мягкий шар */
+        .background-orbs {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .orb-soft {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #ece6df);
+            filter: blur(70px);
+            opacity: 0.5;
+            top: -140px;
+            right: -120px;
+            animation: softPulse 18s ease-in-out infinite alternate;
+        }
+        .grid-wave {
+            position: absolute;
+            width: 120%;
+            height: 220px;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(148, 163, 184, 0.12),
+                    rgba(148, 163, 184, 0.12) 1px,
+                    transparent 1px,
+                    transparent 22px
+                );
+            top: 30%;
+            left: -10%;
+            transform: skewY(-8deg);
+            opacity: 0.4;
+            mix-blend-mode: soft-light;
+        }
+        body[data-theme="dark"] .grid-wave {
+            opacity: 0.16;
+        }
+        @keyframes softPulse {
+            0%   { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            50%  { transform: translate(-40px, 30px) scale(1.08); opacity: 0.6; }
+            100% { transform: translate(-80px, 60px) scale(1); opacity: 0.48; }
+        }
+
+        /* Навбар */
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 1px 0 rgba(148, 163, 184, 0.35);
+        }
+        .navbar-brand, .nav-link {
+            color: var(--text-color) !important;
+        }
+        .nav-link.active {
+            font-weight: 600;
+        }
+        body[data-theme="dark"] .navbar-toggler-icon { filter: invert(1); }
+
+        .logo-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
+            position: relative;
+            box-shadow: 0 0 26px rgba(56, 189, 248, 0.7);
+        }
+        .logo-circle::after {
+            content: "f";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #0b1120;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: var(--glass-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+        }
+
+        .page-header {
+            margin-top: 6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        /* Стеклянная кнопка темы */
+        .glass-toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow:
+                inset 1px 1px 0 rgba(255,255,255,0.7),
+                inset -1px -1px 0 rgba(148,163,184,0.5),
+                0 12px 30px rgba(148,163,184,0.4);
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease,
+                color 0.25s ease;
+        }
+        body[data-theme="dark"] .glass-toggle-btn {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: rgba(148, 163, 184, 0.95);
+            color: #e5e7eb;
+            box-shadow:
+                inset 1px 1px 0 rgba(148,163,184,0.5),
+                inset -1px -1px 0 rgba(15,23,42,1),
+                0 14px 34px rgba(0,0,0,0.9);
+        }
+        .glass-toggle-btn:hover {
+            transform: translateY(-1px) scale(1.05);
+            box-shadow: 0 18px 40px rgba(148, 163, 184, 0.5);
+        }
+        .glass-toggle-btn:active {
+            transform: translateY(0) scale(0.96);
+        }
+        #themeIcon {
+            transition: transform 0.45s cubic-bezier(0.68,-0.55,0.27,1.55);
+            transform-origin: center;
+        }
+
+        /* Калькулятор */
+        .calc-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 992px) {
+            .calc-layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .expr-input {
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--text-color);
+            font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+            font-size: 0.9rem;
+        }
+        body[data-theme="dark"] .expr-input {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: rgba(75, 85, 99, 0.95);
+            color: #e5e7eb;
+        }
+        .expr-input:focus {
+            box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.8);
+            border-color: transparent;
+        }
+
+        .expr-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 999px;
+            flex-shrink: 0;
+            border: 2px solid rgba(15, 23, 42, 0.3);
+            cursor: pointer;
+        }
+        body[data-theme="dark"] .color-dot {
+            border-color: rgba(15, 23, 42, 0.95);
+        }
+
+        .expr-delete-btn {
+            border: none;
+            background: transparent;
+            color: rgba(148, 163, 184, 0.9);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 999px;
+        }
+        .expr-delete-btn:hover {
+            background: rgba(148, 163, 184, 0.18);
+        }
+
+        .expr-label {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
+        .tool-chip {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--muted-color);
+        }
+        body[data-theme="dark"] .tool-chip {
+            background: rgba(15, 23, 42, 0.96);
+            color: var(--muted-color);
+        }
+
+        .btn-glass {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--text-color);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+        }
+        body[data-theme="dark"] .btn-glass {
+            background: rgba(15, 23, 42, 0.96);
+            color: #e5e7eb;
+        }
+        .btn-glass:hover {
+            background: var(--accent-soft);
+            border-color: rgba(248, 113, 113, 0.7);
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+        #graph-canvas {
+            width: 100%;
+            height: 480px;
+            display: block;
+            background:
+                radial-gradient(circle at 15% 0%, rgba(254, 243, 199, 0.8), transparent 55%),
+                radial-gradient(circle at 85% 100%, rgba(254, 215, 170, 0.85), transparent 60%),
+                linear-gradient(to bottom, rgba(255,255,255,0.96), rgba(248, 250, 252, 0.96));
+        }
+        body[data-theme="dark"] #graph-canvas {
+            background:
+                radial-gradient(circle at 15% 0%, rgba(248, 113, 113, 0.32), transparent 55%),
+                radial-gradient(circle at 85% 100%, rgba(30, 64, 175, 0.65), transparent 60%),
+                linear-gradient(to bottom, rgba(15,23,42,0.98), rgba(15, 23, 42, 0.98));
+        }
+
+        .canvas-toolbar {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .canvas-tool-btn {
+            border: none;
+            border-radius: 999px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.94);
+            color: var(--text-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.75);
+        }
+        body[data-theme="dark"] .canvas-tool-btn {
+            background: rgba(15, 23, 42, 0.96);
+            color: #e5e7eb;
+            border-color: rgba(75, 85, 99, 0.95);
+        }
+        .canvas-tool-btn:hover {
+            background: var(--accent-soft);
+        }
+
+        /* Тултип для точек пересечения */
+        .intersection-tooltip {
+            position: absolute;
+            pointer-events: none;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: rgba(15, 23, 42, 0.95);
+            color: #f9fafb;
+            border: 1px solid rgba(248, 250, 252, 0.4);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.45);
+            transform: translate(-50%, -110%);
+            opacity: 0;
+            transition: opacity 0.15s ease-out;
+            white-space: nowrap;
+        }
+        body[data-theme="light"] .intersection-tooltip {
+            background: rgba(255, 255, 255, 0.95);
+            color: #111827;
+            border-color: rgba(148, 163, 184, 0.7);
+        }
+        .intersection-tooltip.visible {
+            opacity: 1;
+        }
+
+        footer {
+            color: var(--muted-color);
+        }
+    </style>
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+</head>
+<body>
+<div class="background-orbs">
+    <div class="grid-wave"></div>
+    <div class="orb-soft"></div>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+            <div class="logo-circle"></div>
+            <span class="text-adaptive">ФизМатИнфо 🪐</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="nav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="materials.html" class="nav-link">Материалы</a></li>
+                <li class="nav-item"><a href="library.html" class="nav-link">Файлы</a></li>
+                <li class="nav-item"><a href="graph.html" class="nav-link active">Графический калькулятор</a></li>
+
+                <li class="nav-item ms-2">
+                    <button class="glass-toggle-btn" onclick="toggleTheme()" aria-label="Переключить тему">
+                        <i id="themeIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="page-header text-center">
+        <h1 class="page-title mb-2 text-adaptive">Графический калькулятор</h1>
+        <p class="mb-0 text-adaptive-muted">
+            Вводи функции от <code>x</code> (например <code>sin(x)</code>, <code>x^2</code>, <code>exp(x)</code>).<br>
+            Перетаскивай, приближай, сравнивай графики — точки пересечения подсветятся, а при наведении покажут координаты.
+        </p>
+    </div>
+
+    <div class="glass-card p-4 mb-4">
+        <div class="calc-layout">
+            <!-- Левая панель: функции -->
+            <div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-semibold text-adaptive">Функции</span>
+                    <button id="addExprBtn" class="btn-glass">
+                        <i class="bi bi-plus-lg me-1"></i> Добавить
+                    </button>
+                </div>
+                <small class="text-adaptive-muted d-block mb-2">
+                    Поддерживаются функции <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>sqrt</code>, <code>log</code>, <code>exp</code> и др. (из <code>Math</code>).
+                </small>
+
+                <div id="expr-list" class="mt-2"></div>
+
+                <div class="mt-3 d-flex flex-wrap gap-2">
+                    <div class="tool-chip">
+                        <span class="badge bg-warning rounded-pill me-1"></span>
+                        <span>ЛКМ — перетащить график</span>
+                    </div>
+                    <div class="tool-chip">
+                        <i class="bi bi-mouse me-1"></i> Колесо мыши — зум
+                    </div>
+                    <div class="tool-chip">
+                        <i class="bi bi-circle-fill me-1 text-danger" style="font-size: 0.5rem;"></i>
+                        <span>Пересечения: наведи курсор, чтобы увидеть координаты</span>
+                    </div>
+                    <div class="tool-chip">
+                        <i class="bi bi-palette2 me-1"></i>
+                        <span>Клик по точке цвета — сменить цвет графика</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая панель: график -->
+            <div class="canvas-wrapper glass-card">
+                <canvas id="graph-canvas"></canvas>
+                <div class="canvas-toolbar">
+                    <button class="canvas-tool-btn" id="zoomInBtn" title="Приблизить">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <button class="canvas-tool-btn" id="zoomOutBtn" title="Отдалить">
+                        <i class="bi bi-dash-lg"></i>
+                    </button>
+                    <button class="canvas-tool-btn" id="resetViewBtn" title="Сбросить область">
+                        <i class="bi bi-bullseye"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="text-center py-4">
+    <small class="text-adaptive-muted">&copy; 2026 Fiz | Mat | Info</small>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // === ТЕМА ===
+    (function initTheme() {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.body.setAttribute('data-theme', theme);
+        updateThemeIcon(theme);
+    })();
+
+    function toggleTheme() {
+        const current = document.body.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        const icon = document.getElementById('themeIcon');
+
+        if (icon) {
+            icon.style.transform = 'rotate(360deg) scale(0)';
+        }
+
+        setTimeout(() => {
+            document.body.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+            if (icon) {
+                icon.style.transform = 'rotate(0deg) scale(1)';
+            }
+            draw();
+        }, 220);
+    }
+
+    function updateThemeIcon(theme) {
+        const icon = document.getElementById('themeIcon');
+        if (!icon) return;
+        icon.classList.remove('bi-moon-stars-fill', 'bi-sun-fill');
+        icon.classList.add(theme === 'dark' ? 'bi-sun-fill' : 'bi-moon-stars-fill');
+    }
+
+    // === ГРАФИЧЕСКИЙ КАЛЬКУЛЯТОР ===
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+    const canvasWrapper = document.querySelector('.canvas-wrapper');
+
+    // тултип для точек пересечения
+    const intersectionTooltip = document.createElement('div');
+    intersectionTooltip.className = 'intersection-tooltip';
+    canvasWrapper.appendChild(intersectionTooltip);
+
+    let width = 0;
+    let height = 0;
+
+    let xMin = -10, xMax = 10;
+    let yMin = -6,  yMax =  6;
+
+    const colors = [
+        '#ef4444',
+        '#22c55e',
+        '#3b82f6',
+        '#eab308',
+        '#a855f7',
+        '#f97316',
+        '#06b6d4'
+    ];
+
+    const expressions = []; // { id, color, expr, compiled }
+    let nextExprId = 1;
+    let intersections = []; // {x, y}
+
+    const SETTINGS_KEY = 'graph_settings_v2';
+
+    function saveSettings() {
+        try {
+            const data = {
+                xMin, xMax, yMin, yMax,
+                expressions: expressions.map(e => ({
+                    expr: e.expr || '',
+                    color: e.color || null
+                }))
+            };
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.warn('Не удалось сохранить настройки графика', e);
+        }
+    }
+
+    function loadSettings() {
+        try {
+            const raw = localStorage.getItem(SETTINGS_KEY);
+            if (!raw) return null;
+            const data = JSON.parse(raw);
+            if (!data || typeof data !== 'object') return null;
+            return data;
+        } catch (e) {
+            console.warn('Не удалось прочитать настройки графика', e);
+            return null;
+        }
+    }
+
+    function compileExpression(expr) {
+        if (!expr.trim()) return null;
+        const banned = /(window|document|eval|Function|constructor)/;
+        if (banned.test(expr)) return null;
+
+        try {
+            const f = new Function('x', 'with (Math) { return ' + expr + '; }');
+            const test = f(0);
+            if (!isFinite(test) && test !== 0) {
+                return null;
+            }
+            return f;
+        } catch (e) {
+            console.warn('Ошибка компиляции выражения:', e);
+            return null;
+        }
+    }
+
+    function resizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        canvas.width = width * window.devicePixelRatio;
+        canvas.height = height * window.devicePixelRatio;
+        ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+        draw();
+    }
+
+    function drawGrid() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
+        ctx.lineWidth = 1;
+
+        const gridColor = getComputedStyle(document.body).getPropertyValue('--grid-color') || 'rgba(209,213,219,0.9)';
+        ctx.strokeStyle = gridColor.trim();
+
+        const niceStep = (range) => {
+            const raw = range / 10;
+            const pow10 = Math.pow(10, Math.floor(Math.log10(Math.abs(raw) || 1)));
+            const unit = raw / pow10;
+            let step;
+            if (unit < 1.5) step = 1;
+            else if (unit < 3.5) step = 2;
+            else if (unit < 7.5) step = 5;
+            else step = 10;
+            return step * pow10;
+        };
+
+        const stepX = niceStep(xMax - xMin);
+        const stepY = niceStep(yMax - yMin);
+
+        for (let x = 0; x >= xMin; x -= stepX) drawVerticalLine(x);
+        for (let x = stepX; x <= xMax; x += stepX) drawVerticalLine(x);
+
+        for (let y = 0; y >= yMin; y -= stepY) drawHorizontalLine(y);
+        for (let y = stepY; y <= yMax; y += stepY) drawHorizontalLine(y);
+
+        ctx.restore();
+    }
+
+    function worldToScreen(x, y) {
+        const sx = (x - xMin) / (xMax - xMin) * width;
+        const sy = height - (y - yMin) / (yMax - yMin) * height;
+        return [sx, sy];
+    }
+
+    function drawVerticalLine(x) {
+        const [sx1, sy1] = worldToScreen(x, yMin);
+        const [sx2, sy2] = worldToScreen(x, yMax);
+        ctx.beginPath();
+        ctx.moveTo(sx1, sy1);
+        ctx.lineTo(sx2, sy2);
+        ctx.stroke();
+    }
+
+    function drawHorizontalLine(y) {
+        const [sx1, sy1] = worldToScreen(xMin, y);
+        const [sx2, sy2] = worldToScreen(xMax, y);
+        ctx.beginPath();
+        ctx.moveTo(sx1, sy1);
+        ctx.lineTo(sx2, sy2);
+        ctx.stroke();
+    }
+
+    function drawAxes() {
+        const axisColor = getComputedStyle(document.body).getPropertyValue('--axis-color') || '#111827';
+        ctx.strokeStyle = axisColor.trim();
+        ctx.lineWidth = 1.4;
+
+        if (yMin < 0 && yMax > 0) {
+            const [sx1, sy] = worldToScreen(xMin, 0);
+            const [sx2, sy2] = worldToScreen(xMax, 0);
+            ctx.beginPath();
+            ctx.moveTo(sx1, sy);
+            ctx.lineTo(sx2, sy2);
+            ctx.stroke();
+        }
+        if (xMin < 0 && xMax > 0) {
+            const [sx, sy1] = worldToScreen(0, yMin);
+            const [sx2, sy2] = worldToScreen(0, yMax);
+            ctx.beginPath();
+            ctx.moveTo(sx, sy1);
+            ctx.lineTo(sx2, sy2);
+            ctx.stroke();
+        }
+    }
+
+    function drawTicksAndLabels() {
+        ctx.save();
+        const axisColor = getComputedStyle(document.body).getPropertyValue('--axis-color') || '#111827';
+        ctx.fillStyle = axisColor.trim();
+        ctx.strokeStyle = axisColor.trim();
+        ctx.lineWidth = 1;
+        ctx.font = '11px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+        const niceStep = (range) => {
+            const raw = range / 10;
+            const pow10 = Math.pow(10, Math.floor(Math.log10(Math.abs(raw) || 1)));
+            const unit = raw / pow10;
+            let step;
+            if (unit < 1.5) step = 1;
+            else if (unit < 3.5) step = 2;
+            else if (unit < 7.5) step = 5;
+            else step = 10;
+            return step * pow10;
+        };
+
+        const stepX = niceStep(xMax - xMin);
+        const stepY = niceStep(yMax - yMin);
+
+        if (yMin < 0 && yMax > 0) {
+            for (let x = 0; x >= xMin; x -= stepX) {
+                if (Math.abs(x) < 1e-10) continue;
+                const [sx, sy] = worldToScreen(x, 0);
+                ctx.beginPath();
+                ctx.moveTo(sx, sy - 4);
+                ctx.lineTo(sx, sy + 4);
+                ctx.stroke();
+                ctx.fillText(String(x), sx + 3, sy - 6);
+            }
+            for (let x = stepX; x <= xMax; x += stepX) {
+                if (Math.abs(x) < 1e-10) continue;
+                const [sx, sy] = worldToScreen(x, 0);
+                ctx.beginPath();
+                ctx.moveTo(sx, sy - 4);
+                ctx.lineTo(sx, sy + 4);
+                ctx.stroke();
+                ctx.fillText(String(x), sx + 3, sy - 6);
+            }
+        }
+
+        if (xMin < 0 && xMax > 0) {
+            for (let y = 0; y >= yMin; y -= stepY) {
+                if (Math.abs(y) < 1e-10) continue;
+                const [sx, sy] = worldToScreen(0, y);
+                ctx.beginPath();
+                ctx.moveTo(sx - 4, sy);
+                ctx.lineTo(sx + 4, sy);
+                ctx.stroke();
+                ctx.fillText(String(y), sx + 6, sy - 2);
+            }
+            for (let y = stepY; y <= yMax; y += stepY) {
+                if (Math.abs(y) < 1e-10) continue;
+                const [sx, sy] = worldToScreen(0, y);
+                ctx.beginPath();
+                ctx.moveTo(sx - 4, sy);
+                ctx.lineTo(sx + 4, sy);
+                ctx.stroke();
+                ctx.fillText(String(y), sx + 6, sy - 2);
+            }
+        }
+
+        ctx.restore();
+    }
+
+    function drawExpressions() {
+        const steps = Math.min(width, 900);
+
+        expressions.forEach(({ compiled, color }) => {
+            if (!compiled) return;
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = color || '#ef4444';
+
+            let started = false;
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const x = xMin + t * (xMax - xMin);
+                let y;
+                try {
+                    y = compiled(x);
+                    if (!isFinite(y)) {
+                        started = false;
+                        continue;
+                    }
+                } catch {
+                    started = false;
+                    continue;
+                }
+                const [sx, sy] = worldToScreen(x, y);
+                if (!started) {
+                    ctx.moveTo(sx, sy);
+                    started = true;
+                } else {
+                    ctx.lineTo(sx, sy);
+                }
+            }
+            ctx.stroke();
+        });
+    }
+
+    function computeIntersections() {
+        intersections = [];
+        const n = expressions.length;
+        if (n < 2) return;
+
+        const steps = Math.min(width, 900);
+        const stepSize = (xMax - xMin) / steps;
+
+        const addPoint = (x0, y0) => {
+            const threshold = (xMax - xMin) / 200;
+            for (const p of intersections) {
+                if (Math.abs(p.x - x0) < threshold && Math.abs(p.y - y0) < threshold) {
+                    return;
+                }
+            }
+            intersections.push({ x: x0, y: y0 });
+        };
+
+        for (let a = 0; a < n; a++) {
+            const fa = expressions[a].compiled;
+            if (!fa) continue;
+            for (let b = a + 1; b < n; b++) {
+                const fb = expressions[b].compiled;
+                if (!fb) continue;
+
+                let prevDiff = null;
+                let prevX = null;
+
+                for (let i = 0; i <= steps; i++) {
+                    const x = xMin + i * stepSize;
+                    let ya, yb;
+                    try {
+                        ya = fa(x);
+                        yb = fb(x);
+                        if (!isFinite(ya) || !isFinite(yb)) {
+                            prevDiff = null;
+                            prevX = null;
+                            continue;
+                        }
+                    } catch {
+                        prevDiff = null;
+                        prevX = null;
+                        continue;
+                    }
+
+                    const diff = ya - yb;
+                    if (prevDiff !== null && prevX !== null && diff * prevDiff <= 0) {
+                        const x1 = prevX;
+                        const x2 = x;
+                        const d1 = prevDiff;
+                        const d2 = diff;
+
+                        let x0;
+                        if (Math.abs(d2 - d1) < 1e-12) {
+                            x0 = (x1 + x2) / 2;
+                        } else {
+                            x0 = x1 - d1 * (x2 - x1) / (d2 - d1);
+                        }
+
+                        let y0;
+                        try {
+                            y0 = fa(x0);
+                            if (!isFinite(y0)) y0 = (ya + yb) / 2;
+                        } catch {
+                            y0 = (ya + yb) / 2;
+                        }
+
+                        if (x0 >= xMin && x0 <= xMax && y0 >= yMin && y0 <= yMax && isFinite(y0)) {
+                            addPoint(x0, y0);
+                        }
+                    }
+
+                    prevDiff = diff;
+                    prevX = x;
+                }
+            }
+        }
+    }
+
+    function drawIntersections() {
+        if (!intersections.length) return;
+
+        const theme = document.body.getAttribute('data-theme') || 'light';
+        const fillColor = theme === 'dark' ? '#fef9c3' : '#1f2937';
+        const strokeColor = '#f97316';
+
+        ctx.save();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = strokeColor;
+        ctx.fillStyle = fillColor;
+
+        intersections.forEach(p => {
+            const [sx, sy] = worldToScreen(p.x, p.y);
+            ctx.beginPath();
+            ctx.arc(sx, sy, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+        });
+
+        ctx.restore();
+    }
+
+    function draw() {
+        if (!width || !height) return;
+        drawGrid();
+        drawAxes();
+        drawTicksAndLabels();
+        drawExpressions();
+        computeIntersections();
+        drawIntersections();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const exprListEl = document.getElementById('expr-list');
+    const addExprBtn = document.getElementById('addExprBtn');
+
+    function createExprRow(initialValue = '', initialColor = null) {
+        if (expressions.length >= 7) return;
+
+        const id = nextExprId++;
+        const color = initialColor || colors[(id - 1) % colors.length];
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'expr-row';
+        wrapper.dataset.id = String(id);
+
+        const dot = document.createElement('div');
+        dot.className = 'color-dot';
+        dot.style.background = color;
+
+        const label = document.createElement('div');
+        label.className = 'expr-label text-adaptive-muted';
+        label.textContent = 'y =';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'form-control expr-input';
+        input.placeholder = 'например, sin(x) или x**2';
+        input.value = initialValue;
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'expr-delete-btn';
+        delBtn.innerHTML = '<i class="bi bi-x-lg"></i>';
+        delBtn.title = 'Удалить функцию';
+
+        wrapper.appendChild(dot);
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+        wrapper.appendChild(delBtn);
+        exprListEl.appendChild(wrapper);
+
+        const obj = { id, color, expr: initialValue, compiled: compileExpression(initialValue || '0') };
+        expressions.push(obj);
+        draw();
+        saveSettings();
+
+        input.addEventListener('input', () => {
+            obj.expr = input.value;
+            obj.compiled = compileExpression(input.value);
+            draw();
+            saveSettings();
+        });
+
+        delBtn.addEventListener('click', () => {
+            const idx = expressions.findIndex(e => e.id === id);
+            if (idx !== -1) expressions.splice(idx, 1);
+            wrapper.remove();
+            draw();
+            saveSettings();
+        });
+
+        // смена цвета по клику
+        dot.addEventListener('click', () => {
+            let idx = colors.indexOf(obj.color);
+            if (idx === -1) idx = 0;
+            idx = (idx + 1) % colors.length;
+            obj.color = colors[idx];
+            dot.style.background = obj.color;
+            draw();
+            saveSettings();
+        });
+    }
+
+    addExprBtn.addEventListener('click', () => {
+        createExprRow('');
+    });
+
+    (function initExpressionsFromSettings() {
+        const saved = loadSettings();
+        if (saved) {
+            if (typeof saved.xMin === 'number') xMin = saved.xMin;
+            if (typeof saved.xMax === 'number') xMax = saved.xMax;
+            if (typeof saved.yMin === 'number') yMin = saved.yMin;
+            if (typeof saved.yMax === 'number') yMax = saved.yMax;
+
+            if (Array.isArray(saved.expressions) && saved.expressions.length) {
+                saved.expressions.forEach(item => {
+                    if (typeof item === 'string') {
+                        createExprRow(item);
+                    } else if (item && typeof item === 'object') {
+                        createExprRow(String(item.expr || ''), item.color || null);
+                    }
+                });
+                draw();
+                return;
+            }
+        }
+        createExprRow('sin(x)');
+        createExprRow('x**2 / 4');
+        saveSettings();
+        draw();
+    })();
+
+    function zoom(factor) {
+        const centerX = (xMin + xMax) / 2;
+        const centerY = (yMin + yMax) / 2;
+        const newWidth = (xMax - xMin) * factor;
+        const newHeight = (yMax - yMin) * factor;
+        xMin = centerX - newWidth / 2;
+        xMax = centerX + newWidth / 2;
+        yMin = centerY - newHeight / 2;
+        yMax = centerY + newHeight / 2;
+        draw();
+        saveSettings();
+    }
+
+    document.getElementById('zoomInBtn').addEventListener('click', () => zoom(0.8));
+    document.getElementById('zoomOutBtn').addEventListener('click', () => zoom(1.25));
+    document.getElementById('resetViewBtn').addEventListener('click', () => {
+        xMin = -10; xMax = 10;
+        yMin = -6;  yMax = 6;
+        draw();
+        saveSettings();
+    });
+
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const factor = e.deltaY < 0 ? 0.9 : 1.1;
+        zoom(factor);
+    }, { passive: false });
+
+    let isPanning = false;
+    let panStart = null;
+    let panStartWorld = null;
+
+    function startPan(clientX, clientY) {
+        isPanning = true;
+        panStart = { x: clientX, y: clientY };
+        panStartWorld = { xMin, xMax, yMin, yMax };
+        hideIntersectionTooltip();
+    }
+
+    function movePan(clientX, clientY) {
+        if (!isPanning || !panStart || !panStartWorld) return;
+        const dxPx = clientX - panStart.x;
+        const dyPx = clientY - panStart.y;
+
+        const dxWorld = -dxPx / width * (panStartWorld.xMax - panStartWorld.xMin);
+        const dyWorld =  dyPx / height * (panStartWorld.yMax - panStartWorld.yMin);
+
+        xMin = panStartWorld.xMin + dxWorld;
+        xMax = panStartWorld.xMax + dxWorld;
+        yMin = panStartWorld.yMin + dyWorld;
+        yMax = panStartWorld.yMax + dyWorld;
+
+        draw();
+    }
+
+    function endPan() {
+        if (!isPanning) return;
+        isPanning = false;
+        panStart = null;
+        panStartWorld = null;
+        saveSettings();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        startPan(e.clientX, e.clientY);
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (!isPanning) {
+            handleIntersectionHover(e);
+        } else {
+            movePan(e.clientX, e.clientY);
+        }
+    });
+    window.addEventListener('mouseup', endPan);
+
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return;
+        const t = e.touches[0];
+        startPan(t.clientX, t.clientY);
+    });
+    canvas.addEventListener('touchmove', (e) => {
+        if (e.touches.length !== 1) return;
+        const t = e.touches[0];
+        movePan(t.clientX, t.clientY);
+        e.preventDefault();
+    }, { passive: false });
+    canvas.addEventListener('touchend', endPan);
+    canvas.addEventListener('touchcancel', endPan);
+
+    canvas.addEventListener('mouseleave', hideIntersectionTooltip);
+
+    function hideIntersectionTooltip() {
+        intersectionTooltip.classList.remove('visible');
+    }
+
+    function handleIntersectionHover(e) {
+        if (!intersections.length) {
+            hideIntersectionTooltip();
+            return;
+        }
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+
+        let nearest = null;
+        let nearestDist = Infinity;
+        const radiusPx = 10;
+
+        for (const p of intersections) {
+            const [sx, sy] = worldToScreen(p.x, p.y);
+            const dx = mx - sx;
+            const dy = my - sy;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < radiusPx && dist < nearestDist) {
+                nearestDist = dist;
+                nearest = { x: p.x, y: p.y, sx, sy };
+            }
+        }
+
+        if (!nearest) {
+            hideIntersectionTooltip();
+            return;
+        }
+
+        // Позиционируем тултип
+        intersectionTooltip.textContent = `(${nearest.x.toFixed(2)}; ${nearest.y.toFixed(2)})`;
+        intersectionTooltip.style.left = `${nearest.sx}px`;
+        intersectionTooltip.style.top = `${nearest.sy}px`;
+        intersectionTooltip.classList.add('visible');
+    }
+</script>
+</body>
+</html>
