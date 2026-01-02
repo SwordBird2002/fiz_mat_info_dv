@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Python-песочница | ФизМатИнфо 🐍</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap / Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- CodeMirror (подсветка синтаксиса) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/material-palenight.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/theme/eclipse.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/hint/show-hint.css">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --bg-color: #fdfaf7;
+            --text-color: #111827;
+            --muted-color: #6b7280;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --navbar-bg: rgba(255, 255, 255, 0.94);
+            --glass-border: 1px solid rgba(148, 163, 184, 0.4);
+            --shadow: 0 12px 32px rgba(148, 163, 184, 0.35);
+            --accent-soft: rgba(59, 130, 246, 0.12);
+        }
+
+        body[data-theme="dark"] {
+            --bg-color: #020617;
+            --text-color: #e5e7eb;
+            --muted-color: #9ca3af;
+            --card-bg: rgba(15, 23, 42, 0.94);
+            --navbar-bg: rgba(15, 23, 42, 0.96);
+            --glass-border: 1px solid rgba(31, 41, 55, 0.95);
+            --shadow: 0 20px 42px rgba(0, 0, 0, 0.9);
+            --accent-soft: rgba(56, 189, 248, 0.18);
+        }
+
+        body {
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 8% 0%, rgba(219, 234, 254, 0.9), transparent 55%),
+                radial-gradient(circle at 100% 90%, rgba(254, 226, 226, 0.9), transparent 60%),
+                linear-gradient(135deg, #fdf2f8 0%, #fdfaf7 45%, #eff6ff 100%);
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.3s ease;
+        }
+
+        body[data-theme="dark"] {
+            background:
+                radial-gradient(circle at 0% 0%, rgba(8, 47, 73, 0.9), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(30, 64, 175, 0.9), transparent 60%),
+                linear-gradient(145deg, #020617 0%, #020617 45%, #020617 100%);
+        }
+
+        .text-adaptive {
+            color: var(--text-color) !important;
+        }
+        .text-adaptive-muted {
+            color: var(--muted-color) !important;
+        }
+
+        /* Навбар */
+        .navbar {
+            background-color: var(--navbar-bg) !important;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 1px 0 rgba(148, 163, 184, 0.35);
+        }
+        .navbar-brand, .nav-link {
+            color: var(--text-color) !important;
+        }
+        .nav-link.active {
+            font-weight: 600;
+        }
+        body[data-theme="dark"] .navbar-toggler-icon { filter: invert(1); }
+
+        .logo-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #38bdf8, #0ea5e9 40%, #0284c7 100%);
+            position: relative;
+            box-shadow: 0 0 26px rgba(56, 189, 248, 0.7);
+        }
+        .logo-circle::after {
+            content: "f";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #0b1120;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: var(--glass-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+        }
+
+        .page-header {
+            margin-top: 6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+
+        /* Стеклянная кнопка темы */
+        .glass-toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow:
+                inset 1px 1px 0 rgba(255,255,255,0.7),
+                inset -1px -1px 0 rgba(148,163,184,0.5),
+                0 12px 30px rgba(148,163,184,0.4);
+            transition:
+                background 0.25s ease,
+                border-color 0.25s ease,
+                color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+        body[data-theme="dark"] .glass-toggle-btn {
+            background: rgba(15, 23, 42, 0.96);
+            border-color: rgba(148, 163, 184, 0.95);
+            color: #e5e7eb;
+            box-shadow:
+                inset 1px 1px 0 rgba(148,163,184,0.5),
+                inset -1px -1px 0 rgba(15,23,42,1),
+                0 14px 34px rgba(0,0,0,0.9);
+        }
+        .glass-toggle-btn:hover {
+            box-shadow: 0 18px 40px rgba(148, 163, 184, 0.5);
+        }
+        #themeIcon {
+            transition: color 0.25s ease;
+        }
+
+        /* Python-иконка, которую ты прислал */
+        .python-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+            background: transparent;
+        }
+        .python-logo svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Layout песочницы */
+        .sandbox-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+            gap: 1.5rem;
+        }
+        @media (max-width: 992px) {
+            .sandbox-layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .editor-wrapper {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: #0f172a;
+        }
+        body[data-theme="light"] .editor-wrapper {
+            background: #f9fafb;
+        }
+
+        .output-wrapper {
+            border-radius: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.96);
+            color: #e5e7eb;
+            font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+            font-size: 0.85rem;
+        }
+
+        .output-header {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+
+        .output-body {
+            padding: 0.75rem;
+            max-height: 360px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+
+        .output-line {
+            margin: 0;
+        }
+
+        .output-line.error {
+            color: #fecaca;
+        }
+
+        .output-line.system {
+            color: #a5b4fc;
+        }
+
+        .tool-chip {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            padding: 4px 10px;
+            font-size: 0.78rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--muted-color);
+        }
+        body[data-theme="dark"] .tool-chip {
+            background: rgba(15, 23, 42, 0.96);
+            color: var(--muted-color);
+        }
+
+        .btn-glass {
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.7);
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--text-color);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+        }
+        body[data-theme="dark"] .btn-glass {
+            background: rgba(15, 23, 42, 0.96);
+            color: #e5e7eb;
+        }
+        .btn-glass:hover {
+            background: var(--accent-soft);
+            border-color: rgba(129, 140, 248, 0.9);
+        }
+
+        .btn-glass-sm {
+            padding: 4px 10px;
+            font-size: 0.78rem;
+        }
+
+        .status-pill {
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            background: rgba(15, 118, 110, 0.16);
+            color: #0f766e;
+        }
+        body[data-theme="dark"] .status-pill {
+            background: rgba(45, 212, 191, 0.12);
+            color: #67e8f9;
+        }
+
+        footer {
+            color: var(--muted-color);
+        }
+
+        /* CodeMirror фон и текст */
+        .CodeMirror {
+            height: 380px;
+            font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+            font-size: 0.9rem;
+        }
+        body[data-theme="dark"] .CodeMirror {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+        body[data-theme="light"] .CodeMirror {
+            background: #f9fafb;
+            color: #111827;
+        }
+    </style>
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="index.html">
+            <div class="logo-circle"></div>
+            <span class="text-adaptive">ФизМатИнфо 🪐</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="nav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
+                <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                <li class="nav-item"><a href="materials.html" class="nav-link">Материалы</a></li>
+                <li class="nav-item"><a href="library.html" class="nav-link">Файлы</a></li>
+                <li class="nav-item"><a href="graph.html" class="nav-link">Графики</a></li>
+                <li class="nav-item"><a href="python.html" class="nav-link active">Python-песочница</a></li>
+
+                <li class="nav-item ms-2">
+                    <button class="glass-toggle-btn" onclick="toggleTheme()" aria-label="Переключить тему">
+                        <i id="themeIcon" class="bi bi-moon-stars-fill"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="page-header d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <!-- Твой SVG Python -->
+            <div class="python-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><linearGradient id="python-original-a" gradientUnits="userSpaceOnUse" x1="70.252" y1="1237.476" x2="170.659" y2="1151.089" gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)"><stop offset="0" stop-color="#5A9FD4"/><stop offset="1" stop-color="#306998"/></linearGradient><linearGradient id="python-original-b" gradientUnits="userSpaceOnUse" x1="209.474" y1="1098.811" x2="173.62" y2="1149.537" gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)"><stop offset="0" stop-color="#FFD43B"/><stop offset="1" stop-color="#FFE873"/></linearGradient><path fill="url(#python-original-a)" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/><path fill="url(#python-original-b)" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/><radialGradient id="python-original-c" cx="1825.678" cy="444.45" r="26.743" gradientTransform="matrix(0 -.24 -1.055 0 532.979 557.576)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#B8B8B8" stop-opacity=".498"/><stop offset="1" stop-color="#7F7F7F" stop-opacity="0"/></radialGradient><path opacity=".444" fill="url(#python-original-c)" d="M97.309 119.597c0 3.543-14.816 6.416-33.091 6.416-18.276 0-33.092-2.873-33.092-6.416 0-3.544 14.815-6.417 33.092-6.417 18.275 0 33.091 2.872 33.091 6.417z"/></svg>
+            </div>
+            <div>
+                <h1 class="page-title mb-1 text-adaptive">Python-песочница</h1>
+                <p class="mb-0 text-adaptive-muted">
+                    Код выполняется прямо в браузере (Pyodide). Можно даже попробовать установить дополнительные библиотеки.
+                </p>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+            <div class="tool-chip">
+                <i class="bi bi-lightning-charge-fill text-warning"></i>
+                <span>Shift+Enter — запуск кода</span>
+            </div>
+            <div class="tool-chip">
+                <i class="bi bi-box-seam"></i>
+                <span>pip-установка только pure-Python пакетов</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card p-4 mb-4 sandbox-layout">
+        <!-- Редактор -->
+        <section>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-semibold text-adaptive">Редактор кода</span>
+                <div class="d-flex gap-2">
+                    <button id="runBtn" class="btn-glass btn-glass-sm">
+                        <i class="bi bi-play-fill me-1"></i> Запустить
+                    </button>
+                    <button id="clearBtn" class="btn-glass btn-glass-sm">
+                        <i class="bi bi-trash me-1"></i> Очистить вывод
+                    </button>
+                    <button id="resetCodeBtn" class="btn-glass btn-glass-sm">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Пример
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-wrapper">
+                <textarea id="py-editor"></textarea>
+            </div>
+
+            <div class="mt-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="fw-semibold text-adaptive" style="font-size:0.9rem;">Библиотеки</span>
+                    <span class="text-adaptive-muted" style="font-size:0.8rem;">(экспериментально)</span>
+                </div>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <input id="pkg-name" type="text" class="form-control form-control-sm" style="max-width: 260px;"
+                           placeholder="Например, numpy или matplotlib">
+                    <button id="installPkgBtn" class="btn-glass btn-glass-sm">
+                        <i class="bi bi-download me-1"></i> Установить
+                    </button>
+                    <span id="pkg-status" class="text-adaptive-muted" style="font-size:0.8rem;"></span>
+                </div>
+                <small class="d-block mt-1 text-adaptive-muted" style="font-size:0.78rem;">
+                    Pyodide уже содержит: <code>numpy</code>, <code>pandas</code>, <code>matplotlib</code> и др. —
+                    их можно подключать через <code>import</code> или <code>pyodide.loadPackage()</code>.
+                    Через <code>micropip</code> можно ставить многие pure-Python пакеты из PyPI.
+                </small>
+            </div>
+        </section>
+
+        <!-- Вывод -->
+        <section>
+            <div class="output-wrapper d-flex flex-column h-100">
+                <div class="output-header">
+                    <span><i class="bi bi-terminal me-1"></i>Вывод</span>
+                    <span id="runtime-status" class="status-pill">Pyodide загружается…</span>
+                </div>
+                <div id="py-output" class="output-body">
+                    <p class="output-line system">Ожидаю первый запуск кода 🙂</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer class="text-center py-4">
+    <small class="text-adaptive-muted">&copy; 2026 Fiz | Mat | Info — Python-песочница</small>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- CodeMirror JS -->
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/python/python.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/edit/matchbrackets.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/addon/hint/show-hint.js"></script>
+
+<!-- Pyodide -->
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+
+<script>
+    // === Тема ===
+    (function initTheme() {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored || (prefersDark ? 'dark' : 'light');
+        document.body.setAttribute('data-theme', theme);
+        updateThemeIcon(theme);
+    })();
+
+    function toggleTheme() {
+        const current = document.body.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateThemeIcon(next);
+        updateEditorTheme();
+    }
+
+    function updateThemeIcon(theme) {
+        const icon = document.getElementById('themeIcon');
+        if (!icon) return;
+        icon.classList.remove('bi-moon-stars-fill', 'bi-sun-fill');
+        icon.classList.add(theme === 'dark' ? 'bi-sun-fill' : 'bi-moon-stars-fill');
+    }
+
+    // === CodeMirror ===
+    const defaultCode = `# Пример: базовая математика и NumPy
+
+import math
+
+print("Привет из Python-песочницы! 🐍")
+print("Корень из 2:", math.sqrt(2))
+
+# Пример с numpy (уже встроен в Pyodide)
+try:
+    import numpy as np
+    a = np.linspace(0, 2 * math.pi, 5)
+    print("\\nТочки на [0, 2π]:", a)
+    print("sin(x) для этих точек:", np.round(np.sin(a), 3))
+except Exception as e:
+    print("\\nNumPy недоступен:", e)
+`;
+
+    const editorElement = document.getElementById('py-editor');
+    const cm = CodeMirror.fromTextArea(editorElement, {
+        mode: "python",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        indentUnit: 4,
+        indentWithTabs: false,
+        tabSize: 4
+    });
+
+    function updateEditorTheme() {
+        const theme = document.body.getAttribute('data-theme') || 'light';
+        cm.setOption("theme", theme === 'dark' ? "material-palenight" : "eclipse");
+    }
+
+    cm.setValue(defaultCode);
+    updateEditorTheme();
+
+    // Shift+Enter = запуск
+    cm.on("keydown", function(_, e) {
+        if (e.key === "Enter" && e.shiftKey) {
+            e.preventDefault();
+            runPython();
+        }
+    });
+
+    // === Вывод ===
+    const outputEl = document.getElementById('py-output');
+    const runtimeStatusEl = document.getElementById('runtime-status');
+    const runBtn = document.getElementById('runBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resetCodeBtn = document.getElementById('resetCodeBtn');
+    const pkgInput = document.getElementById('pkg-name');
+    const pkgBtn = document.getElementById('installPkgBtn');
+    const pkgStatus = document.getElementById('pkg-status');
+
+    function appendOutput(text, type = "normal") {
+        const p = document.createElement('p');
+        p.className = "output-line";
+        if (type === "error") p.classList.add('error');
+        if (type === "system") p.classList.add('system');
+        p.textContent = text;
+        outputEl.appendChild(p);
+        outputEl.scrollTop = outputEl.scrollHeight;
+    }
+
+    function clearOutput() {
+        outputEl.innerHTML = "";
+    }
+
+    clearBtn.addEventListener('click', () => {
+        clearOutput();
+        appendOutput("Вывод очищен.", "system");
+    });
+
+    resetCodeBtn.addEventListener('click', () => {
+        cm.setValue(defaultCode);
+    });
+
+    // === Pyodide с перехватом stdout/stderr через js_print ===
+    let pyodideReadyPromise = (async () => {
+        try {
+            const pyodide = await loadPyodide();
+
+            // JS-функции, доступные из Python как from js import js_print
+            globalThis.js_print = (s) => appendOutput(s);
+            globalThis.js_print_err = (s) => appendOutput(s, "error");
+
+            const redirectCode = `
+import sys
+from js import js_print, js_print_err
+
+class _StdoutCatcher:
+    def write(self, s):
+        s = str(s)
+        if s.strip():
+            js_print(s)
+    def flush(self): pass
+
+class _StderrCatcher:
+    def write(self, s):
+        s = str(s)
+        if s.strip():
+            js_print_err(s)
+    def flush(self): pass
+
+sys.stdout = _StdoutCatcher()
+sys.stderr = _StderrCatcher()
+`;
+            await pyodide.runPythonAsync(redirectCode);
+
+            runtimeStatusEl.textContent = "Готово к запуску";
+            runtimeStatusEl.style.background = "rgba(22,163,74,0.12)";
+            runtimeStatusEl.style.color = "#16a34a";
+
+            return pyodide;
+        } catch (e) {
+            console.error(e);
+            runtimeStatusEl.textContent = "Ошибка инициализации Pyodide";
+            runtimeStatusEl.style.background = "rgba(220,38,38,0.2)";
+            runtimeStatusEl.style.color = "#b91c1c";
+            appendOutput("Не удалось инициализировать Pyodide: " + e, "error");
+            return null;
+        }
+    })();
+
+    async function runPython() {
+        const pyodide = await pyodideReadyPromise;
+        if (!pyodide) return;
+
+        const code = cm.getValue();
+        runtimeStatusEl.textContent = "Выполнение...";
+        runtimeStatusEl.style.background = "rgba(59,130,246,0.16)";
+        runtimeStatusEl.style.color = "#1d4ed8";
+
+        try {
+            await pyodide.runPythonAsync(code);
+        } catch (e) {
+            appendOutput(String(e), "error");
+        } finally {
+            runtimeStatusEl.textContent = "Готово";
+            runtimeStatusEl.style.background = "rgba(22,163,74,0.12)";
+            runtimeStatusEl.style.color = "#16a34a";
+        }
+    }
+
+    runBtn.addEventListener('click', runPython);
+
+    // === Установка пакетов ===
+    async function installPackage() {
+        const name = (pkgInput.value || "").trim();
+        if (!name) {
+            pkgStatus.textContent = "Укажи имя пакета.";
+            return;
+        }
+        const pyodide = await pyodideReadyPromise;
+        if (!pyodide) return;
+
+        pkgStatus.textContent = `Установка ${name}…`;
+        pkgStatus.style.color = "";
+
+        try {
+            const builtin = ["numpy", "pandas", "matplotlib", "scipy", "sympy"];
+            if (builtin.includes(name)) {
+                await pyodide.loadPackage(name);
+            } else {
+                await pyodide.loadPackage("micropip");
+                const code = `
+import micropip
+await micropip.install("${name}")
+`;
+                await pyodide.runPythonAsync(code);
+            }
+
+            pkgStatus.textContent = `Пакет "${name}" установлен (если совместим с Pyodide).`;
+            pkgStatus.style.color = "#16a34a";
+            appendOutput(`>>> Пакет "${name}" установлен.`, "system");
+        } catch (e) {
+            console.error(e);
+            pkgStatus.textContent = `Не удалось установить "${name}": см. вывод.`;
+            pkgStatus.style.color = "#b91c1c";
+            appendOutput(`Ошибка установки "${name}": ${e}`, "error");
+        }
+    }
+
+    pkgBtn.addEventListener('click', installPackage);
+    pkgInput.addEventListener('keydown', (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            installPackage();
+        }
+    });
+</script>
+</body>
+</html>
