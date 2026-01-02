@@ -306,16 +306,23 @@
             color: #111827;
         }
         #installPkgBtn {
-            background: rgba(255,255,255,0.12);
-            color: var(--text-color);
-            border: 1px solid rgba(148,163,184,0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow:
-                inset 1px 1px 0 rgba(255,255,255,0.6),
-                inset -1px -1px 0 rgba(148,163,184,0.45),
-                0 12px 30px rgba(148,163,184,0.35);
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+            font-weight: 600;
         }
+        
+        #installPkgBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.5);
+        }
+        
+        #installPkgBtn:active {
+            transform: translateY(0);
+        }
+
 
     </style>
 
@@ -689,4 +696,5 @@ await micropip.install("${name}")
 </script>
 </body>
 </html>
+
 
