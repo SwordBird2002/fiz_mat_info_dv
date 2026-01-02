@@ -161,7 +161,7 @@
             transition: color 0.25s ease;
         }
 
-        /* Python-иконка, которую ты прислал */
+        /* Python-иконка */
         .python-logo {
             width: 52px;
             height: 52px;
@@ -222,19 +222,19 @@
             padding: 0.75rem;
             max-height: 360px;
             overflow: auto;
-            white-space: pre-wrap;
+            font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+            font-size: 0.85rem;
         }
 
         .output-line {
             margin: 0;
+            white-space: pre-wrap;
         }
-
+        .output-line.system {
+            color: #9ca3af;
+        }
         .output-line.error {
             color: #fecaca;
-        }
-
-        .output-line.system {
-            color: #a5b4fc;
         }
 
         .tool-chip {
@@ -320,12 +320,12 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div id="nav" class="collapse navbar-collapse">
+        <div id="nav" class="collapse.navbar-collapse">
             <ul class="navbar-nav ms-auto align-items-center gap-2">
                 <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
                 <li class="nav-item"><a href="materials.html" class="nav-link">Материалы</a></li>
                 <li class="nav-item"><a href="library.html" class="nav-link">Файлы</a></li>
-                <li class="nav-item"><a href="graphing_calculator.html" class="nav-link">Графики</a></li>
+                <li class="nav-item"><a href="graph.html" class="nav-link">Графики</a></li>
                 <li class="nav-item"><a href="python_sandbox.html" class="nav-link active">Python-песочница</a></li>
 
                 <li class="nav-item ms-2">
@@ -341,14 +341,14 @@
 <main class="container">
     <div class="page-header d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3">
         <div class="d-flex align-items-center gap-3">
-            <!-- Твой SVG Python -->
             <div class="python-logo">
+                <!-- SVG Python -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><linearGradient id="python-original-a" gradientUnits="userSpaceOnUse" x1="70.252" y1="1237.476" x2="170.659" y2="1151.089" gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)"><stop offset="0" stop-color="#5A9FD4"/><stop offset="1" stop-color="#306998"/></linearGradient><linearGradient id="python-original-b" gradientUnits="userSpaceOnUse" x1="209.474" y1="1098.811" x2="173.62" y2="1149.537" gradientTransform="matrix(.563 0 0 -.568 -29.215 707.817)"><stop offset="0" stop-color="#FFD43B"/><stop offset="1" stop-color="#FFE873"/></linearGradient><path fill="url(#python-original-a)" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"/><path fill="url(#python-original-b)" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.297 15.312 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.578-7.735 2.467-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"/><radialGradient id="python-original-c" cx="1825.678" cy="444.45" r="26.743" gradientTransform="matrix(0 -.24 -1.055 0 532.979 557.576)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#B8B8B8" stop-opacity=".498"/><stop offset="1" stop-color="#7F7F7F" stop-opacity="0"/></radialGradient><path opacity=".444" fill="url(#python-original-c)" d="M97.309 119.597c0 3.543-14.816 6.416-33.091 6.416-18.276 0-33.092-2.873-33.092-6.416 0-3.544 14.815-6.417 33.092-6.417 18.275 0 33.091 2.872 33.091 6.417z"/></svg>
             </div>
             <div>
                 <h1 class="page-title mb-1 text-adaptive">Python-песочница</h1>
                 <p class="mb-0 text-adaptive-muted">
-                    Код выполняется прямо в браузере (Pyodide). Можно даже попробовать установить дополнительные библиотеки.
+                    Код выполняется прямо в браузере (Pyodide). Можно пробовать учебные примеры, алгоритмы, перебор таблиц истинности и т.п.
                 </p>
             </div>
         </div>
@@ -394,13 +394,13 @@
                 <div class="d-flex flex-wrap gap-2 align-items-center">
                     <input id="pkg-name" type="text" class="form-control form-control-sm" style="max-width: 260px;"
                            placeholder="Например, numpy или matplotlib">
-                    <button id="installPkgBtn" class="btn-glass btn-glass-sm">
+                    <button id="installPkgBtn" class="btn-glass.btn-glass-sm">
                         <i class="bi bi-download me-1"></i> Установить
                     </button>
                     <span id="pkg-status" class="text-adaptive-muted" style="font-size:0.8rem;"></span>
                 </div>
                 <small class="d-block mt-1 text-adaptive-muted" style="font-size:0.78rem;">
-                    Pyodide уже содержит: <code>numpy</code>, <code>pandas</code>, <code>matplotlib</code> и др. —
+                    В Pyodide уже есть <code>numpy</code>, <code>pandas</code>, <code>matplotlib</code> и др. —
                     их можно подключать через <code>import</code> или <code>pyodide.loadPackage()</code>.
                     Через <code>micropip</code> можно ставить многие pure-Python пакеты из PyPI.
                 </small>
@@ -465,21 +465,12 @@
     }
 
     // === CodeMirror ===
-    const defaultCode = `# Пример: базовая математика и NumPy
+    const defaultCode = `# Пример кода: 
 
 import math
 
 print("Привет из Python-песочницы! 🐍")
 print("Корень из 2:", math.sqrt(2))
-
-# Пример с numpy (уже встроен в Pyodide)
-try:
-    import numpy as np
-    a = np.linspace(0, 2 * math.pi, 5)
-    print("\\nТочки на [0, 2π]:", a)
-    print("sin(x) для этих точек:", np.round(np.sin(a), 3))
-except Exception as e:
-    print("\\nNumPy недоступен:", e)
 `;
 
     const editorElement = document.getElementById('py-editor');
@@ -519,11 +510,12 @@ except Exception as e:
     const pkgBtn = document.getElementById('installPkgBtn');
     const pkgStatus = document.getElementById('pkg-status');
 
-    function appendOutput(text, type = "normal") {
-        const p = document.createElement('p');
-        p.className = "output-line";
-        if (type === "error") p.classList.add('error');
-        if (type === "system") p.classList.add('system');
+    let stdout_buffer = "";
+    let stderr_buffer = "";
+
+    function appendOutputLine(text, type = "normal") {
+        const p = document.createElement("p");
+        p.className = "output-line" + (type === "error" ? " error" : "");
         p.textContent = text;
         outputEl.appendChild(p);
         outputEl.scrollTop = outputEl.scrollHeight;
@@ -531,43 +523,61 @@ except Exception as e:
 
     function clearOutput() {
         outputEl.innerHTML = "";
+        stdout_buffer = "";
+        stderr_buffer = "";
     }
 
     clearBtn.addEventListener('click', () => {
         clearOutput();
-        appendOutput("Вывод очищен.", "system");
+        appendOutputLine("Вывод очищен.", "system");
     });
 
     resetCodeBtn.addEventListener('click', () => {
         cm.setValue(defaultCode);
     });
 
-    // === Pyodide с перехватом stdout/stderr через js_print ===
+    // === Pyodide с перехватом stdout/stderr ===
     let pyodideReadyPromise = (async () => {
         try {
             const pyodide = await loadPyodide();
 
-            // JS-функции, доступные из Python как from js import js_print
-            globalThis.js_print = (s) => appendOutput(s);
-            globalThis.js_print_err = (s) => appendOutput(s, "error");
+            // JS-функции для Python: буферизуем по \\n
+            globalThis.js_print = (s) => {
+                s = String(s);
+                stdout_buffer += s;
+                let idx;
+                while ((idx = stdout_buffer.indexOf("\n")) !== -1) {
+                    const line = stdout_buffer.slice(0, idx);
+                    appendOutputLine(line);
+                    stdout_buffer = stdout_buffer.slice(idx + 1);
+                }
+            };
+
+            globalThis.js_print_err = (s) => {
+                s = String(s);
+                stderr_buffer += s;
+                let idx;
+                while ((idx = stderr_buffer.indexOf("\n")) !== -1) {
+                    const line = stderr_buffer.slice(0, idx);
+                    appendOutputLine(line, "error");
+                    stderr_buffer = stderr_buffer.slice(idx + 1);
+                }
+            };
 
             const redirectCode = `
-import sys
-from js import js_print, js_print_err
+import sys, js
 
 class _StdoutCatcher:
     def write(self, s):
-        s = str(s)
-        if s.strip():
-            js_print(s)
-    def flush(self): pass
+        js.js_print(s)
+    def flush(self):
+        pass
 
 class _StderrCatcher:
     def write(self, s):
-        s = str(s)
-        if s.strip():
-            js_print_err(s)
-    def flush(self): pass
+        js.js_print_err(s)
+    def flush(self):
+        pass
 
 sys.stdout = _StdoutCatcher()
 sys.stderr = _StderrCatcher()
@@ -584,7 +594,7 @@ sys.stderr = _StderrCatcher()
             runtimeStatusEl.textContent = "Ошибка инициализации Pyodide";
             runtimeStatusEl.style.background = "rgba(220,38,38,0.2)";
             runtimeStatusEl.style.color = "#b91c1c";
-            appendOutput("Не удалось инициализировать Pyodide: " + e, "error");
+            appendOutputLine("Не удалось инициализировать Pyodide: " + e, "error");
             return null;
         }
     })();
@@ -601,8 +611,17 @@ sys.stderr = _StderrCatcher()
         try {
             await pyodide.runPythonAsync(code);
         } catch (e) {
-            appendOutput(String(e), "error");
+            appendOutputLine(String(e), "error");
         } finally {
+            // добиваем хвосты в буфере без \\n, если есть
+            if (stdout_buffer.trim() !== "") {
+                appendOutputLine(stdout_buffer);
+                stdout_buffer = "";
+            }
+            if (stderr_buffer.trim() !== "") {
+                appendOutputLine(stderr_buffer, "error");
+                stderr_buffer = "";
+            }
             runtimeStatusEl.textContent = "Готово";
             runtimeStatusEl.style.background = "rgba(22,163,74,0.12)";
             runtimeStatusEl.style.color = "#16a34a";
@@ -639,12 +658,12 @@ await micropip.install("${name}")
 
             pkgStatus.textContent = `Пакет "${name}" установлен (если совместим с Pyodide).`;
             pkgStatus.style.color = "#16a34a";
-            appendOutput(`>>> Пакет "${name}" установлен.`, "system");
+            appendOutputLine(`>>> Пакет "${name}" установлен.`, "system");
         } catch (e) {
             console.error(e);
             pkgStatus.textContent = `Не удалось установить "${name}": см. вывод.`;
             pkgStatus.style.color = "#b91c1c";
-            appendOutput(`Ошибка установки "${name}": ${e}`, "error");
+            appendOutputLine(`Ошибка установки "${name}": ${e}`, "error");
         }
     }
 
@@ -658,4 +677,3 @@ await micropip.install("${name}")
 </script>
 </body>
 </html>
-
