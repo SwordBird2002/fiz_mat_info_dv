@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банк заданий ЕГЭ 2025</title>
+    
+    <!-- Tailwind CSS (с поддержкой Dark Mode) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Включение по классу 'dark'
+        }
+    </script>
+    
+    <!-- Syntax Highlight -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <!-- MathJax -->
+    <script>window.MathJax = { tex: { inlineMath: [['$', '$']] }, svg: { fontCache: 'global' } };</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* Плавный переход цветов */
+        body, div, h1, h2, h3, p, select, button { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        /* Темная тема для скроллбара */
+        .dark ::-webkit-scrollbar { width: 10px; }
+        .dark ::-webkit-scrollbar-track { background: #1e293b; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-900 font-sans min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-100">
+
+    <div class="container mx-auto p-4 max-w-5xl flex-grow">
+        <!-- Header -->
+        <header class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 flex items-center justify-between dark:bg-slate-800 dark:border-slate-700">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/30">EGE</div>
+                <div>
+                    <h1 class="text-xl font-bold dark:text-white">Банк Заданий</h1>
+                    <p class="text-slate-500 text-sm dark:text-slate-400">ЕГЭ Информатика. Генератор заданий.</p>
+                </div>
+            </div>
+            
+            <!-- Dark Mode Toggle -->
+            <button onclick="toggleTheme()" class="p-3 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-yellow-400 dark:hover:bg-slate-600 transition-all">
+                <!-- Sun Icon -->
+                <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <!-- Moon Icon -->
+                <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+        </header>
+
+        <!-- Controls -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-4 dark:bg-slate-800 dark:border-slate-700">
+            <div class="flex-grow">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Выберите номер задания</label>
+                <select id="taskSelect" class="bg-slate-50 border border-slate-300 text-slate-900 rounded-lg block w-full p-2.5 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                    <script>
+                        for(let i=1; i<=27; i++) document.write(`<option value="${i}">Задание №${i}</option>`);
+                    </script>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button onclick="loadRandomTaskFromS3()" class="h-[42px] bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 rounded-lg transition-all shadow-lg shadow-blue-500/20 active:scale-95 w-full md:w-auto">
+                    Получить случайное
+                </button>
+            </div>
+        </div>
+
+        <!-- Task Area -->
+        <div id="taskContainer" class="hidden space-y-6">
+            <!-- Question Block -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden dark:bg-slate-800 dark:border-slate-700">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4 dark:border-slate-700">
+                    <h2 class="text-xl font-bold dark:text-white">Условие</h2>
+                    <span class="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded dark:bg-blue-900/30 dark:text-blue-400" id="taskId">ID</span>
+                </div>
+                <!-- Prose dark mode classes -->
+                <div id="taskContent" class="prose max-w-none text-slate-700 dark:text-slate-300 dark:prose-invert">
+                    <div class="animate-pulse flex space-x-4">
+                        <div class="flex-1 space-y-6 py-1">
+                            <div class="h-2 bg-slate-200 rounded dark:bg-slate-700"></div>
+                            <div class="space-y-3">
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="h-2 bg-slate-200 rounded col-span-2 dark:bg-slate-700"></div>
+                                    <div class="h-2 bg-slate-200 rounded col-span-1 dark:bg-slate-700"></div>
+                                </div>
+                                <div class="h-2 bg-slate-200 rounded dark:bg-slate-700"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Answer Block -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden dark:bg-slate-800 dark:border-slate-700">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-500"></div>
+                <div class="flex items-center justify-between cursor-pointer select-none group" onclick="toggleAnswer()">
+                    <h3 class="text-lg font-bold group-hover:text-blue-600 transition-colors dark:text-white dark:group-hover:text-blue-400">Ответ и Решение</h3>
+                    <div class="flex items-center gap-2 text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition dark:bg-slate-700 dark:text-blue-400 dark:hover:bg-slate-600">
+                        <span class="text-sm font-bold uppercase tracking-wider">Показать</span>
+                        <svg id="arrowIcon" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+                
+                <div id="answerContent" class="hidden mt-6 space-y-6 border-t border-slate-100 pt-6 dark:border-slate-700">
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase mb-2">Ответ</div>
+                        <div id="ansVal" class="inline-block bg-emerald-50 text-emerald-700 font-mono text-xl font-bold px-4 py-2 rounded-lg border border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/50"></div>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-400 uppercase mb-2">Решение (Python)</div>
+                        <div class="relative group">
+                            <pre class="rounded-lg !text-sm !m-0 !bg-slate-900 shadow-inner"><code id="solutionCode" class="language-python"></code></pre>
+                            <button onclick="copyCode()" class="absolute top-2 right-2 p-1.5 bg-white/10 text-white rounded hover:bg-white/20 opacity-0 group-hover:opacity-100 transition" title="Копировать">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                     <div id="notesBlock" class="hidden bg-amber-50 border border-amber-100 rounded-xl p-4 dark:bg-amber-900/10 dark:border-amber-900/30">
+                        <div class="flex gap-3">
+                            <div class="text-amber-500 mt-0.5"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                            <div>
+                                <div class="text-xs font-bold text-amber-600 uppercase mb-1 dark:text-amber-500">Примечание</div>
+                                <div id="notesVal" class="text-sm text-slate-700 italic dark:text-slate-300"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === КОНФИГУРАЦИЯ ===
+        const S3_BASE_URL = "https://e737331b0629-mysitedv.s3.ru1.storage.beget.cloud/tasks";
+
+        // === ТЕМА ===
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+        
+        // Запуск при загрузке
+        initTheme();
+
+        // === ЛОГИКА ===
+        async function loadRandomTaskFromS3() {
+            const taskNum = document.getElementById('taskSelect').value;
+            const container = document.getElementById('taskContainer');
+            
+            // Сброс UI
+            container.classList.remove('hidden');
+            document.getElementById('answerContent').classList.add('hidden');
+            document.getElementById('taskContent').innerHTML = '<div class="animate-pulse text-slate-400">Загрузка задания из облака...</div>';
+            
+            // Сброс стрелки
+            document.getElementById('arrowIcon').style.transform = 'rotate(0deg)';
+
+            try {
+                const response = await fetch(`${S3_BASE_URL}/${taskNum}/index.json?t=${Date.now()}`);
+                
+                if (!response.ok) {
+                    if(response.status === 404) throw new Error("Заданий этого типа пока нет в базе.");
+                    throw new Error("Ошибка доступа к серверу.");
+                }
+
+                const tasks = await response.json();
+                if (tasks.length === 0) throw new Error("Список заданий пуст.");
+
+                const task = tasks[Math.floor(Math.random() * tasks.length)];
+
+                // Рендер
+                document.getElementById('taskId').innerText = `ID: ${task.id}`;
+                document.getElementById('taskContent').innerHTML = task.html;
+                document.getElementById('ansVal').innerText = task.answer;
+                document.getElementById('solutionCode').textContent = task.solution_code;
+                
+                if (task.notes) {
+                    document.getElementById('notesBlock').classList.remove('hidden');
+                    document.getElementById('notesVal').innerText = task.notes;
+                } else {
+                    document.getElementById('notesBlock').classList.add('hidden');
+                }
+
+                if (window.MathJax) await MathJax.typesetPromise();
+                Prism.highlightAll();
+
+            } catch (e) {
+                document.getElementById('taskContent').innerHTML = `
+                    <div class="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-xl border border-red-100 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="font-medium">${e.message}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function toggleAnswer() {
+            const content = document.getElementById('answerContent');
+            const arrow = document.getElementById('arrowIcon');
+            const isHidden = content.classList.contains('hidden');
+            
+            if (isHidden) {
+                content.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function copyCode() {
+            const code = document.getElementById('solutionCode').innerText;
+            navigator.clipboard.writeText(code);
+            alert("Код скопирован!");
+        }
+    </script>
+</body>
+</html>
