@@ -306,22 +306,14 @@
             color: #111827;
         }
         #installPkgBtn {
-            border-radius: 12px;
-            background: linear-gradient(135deg, #4f46e5, #6366f1);
-            color: white;
-            border: none;
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
-            font-weight: 600;
+            all: unset;
+            display: inline-block;
         }
         
-        #installPkgBtn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.5);
+        #installPkgBtn.btn-glass.btn-glass-sm {
+            all: revert-layer;
         }
-        
-        #installPkgBtn:active {
-            transform: translateY(0);
-        }
+
 
 
     </style>
@@ -413,9 +405,10 @@
                 <div class="d-flex flex-wrap gap-2 align-items-center">
                     <input id="pkg-name" type="text" class="form-control form-control-sm" style="max-width: 260px;"
                            placeholder="Например, numpy или matplotlib">
-                    <button id="installPkgBtn" class="btn-glass.btn-glass-sm">
+                    <button id="installPkgBtn" class="btn-glass btn-glass-sm">
                         <i class="bi bi-download me-1"></i> Установить
                     </button>
+
                     <span id="pkg-status" class="text-adaptive-muted" style="font-size:0.8rem;"></span>
                 </div>
                 <small class="d-block mt-1 text-adaptive-muted" style="font-size:0.78rem;">
@@ -696,5 +689,6 @@ await micropip.install("${name}")
 </script>
 </body>
 </html>
+
 
 
