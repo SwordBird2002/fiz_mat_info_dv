@@ -10,6 +10,44 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
+        /* --- АДАПТИВНОСТЬ (Добавить в <style>) --- */
+
+/* 1. Графика сжимается под экран */
+svg, img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* 2. Формулы можно скроллить пальцем, если они длинные */
+.formula-row, mjx-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+}
+
+/* 3. Улучшения для мобильных экранов */
+@media (max-width: 768px) {
+    /* Уменьшаем отступы, чтобы контент влезал */
+    .content-card {
+        padding: 15px !important; 
+        margin-bottom: 20px !important;
+    }
+    
+    /* Уменьшаем размер заголовков */
+    h2 { font-size: 1.4rem !important; }
+    h4 { font-size: 1.2rem !important; }
+    
+    /* Сайдбар скрываем (он заменен на верхнее меню) */
+    .sidebar { display: none !important; }
+    
+    /* Таблицы получают горизонтальный скролл */
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+}
+
         body { background-color: #f0f2f5; font-family: 'Segoe UI', system-ui, sans-serif; color: #333; }
         
         /* Сайдбар */
@@ -1569,3 +1607,4 @@
 
 </body>
 </html>
+
