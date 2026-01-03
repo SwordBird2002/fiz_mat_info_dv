@@ -67,7 +67,27 @@ svg, img {
 
         /* Формулы */
         .formula-box { background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #adb5bd; }
-        .formula-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 1.1rem; }
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;       /* Чтобы переносилось на телефоне */
+            align-items: center;   /* ВЫРАВНИВАНИЕ ПО ЦЕНТРУ (Вертикально) */
+            gap: 8px 15px;         /* Отступы между элементами */
+            
+            /* Стили для названия формулы (текст описания) */
+            color: #6c757d;        /* СЕРЫЙ ЦВЕТ */
+            font-weight: 700;      /* ЖИРНЫЙ ТЕКСТ */
+            
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        /* Чтобы сама математическая формула оставалась черной и не жирной */
+        .formula-row mjx-container, 
+        .formula-row .MathJax {
+            color: #212529;        /* Возвращаем черный цвет формуле */
+            font-weight: normal;   /* Убираем жирность у формулы */
+        }
+        
         .formula-num { font-weight: bold; color: #6c757d; margin-right: 15px; min-width: 20px; font-size: 0.9rem; }
         
         h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #212529; }
@@ -1607,4 +1627,5 @@ svg, img {
 
 </body>
 </html>
+
 
