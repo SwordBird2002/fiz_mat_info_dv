@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочники ЕГЭ 2025</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Иконки (Bootstrap Icons) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-bg: #f8f9fa;
+            --card-hover-transform: translateY(-5px);
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Герой-секция (Заголовок) */
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 3rem 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
+        }
+
+        /* Карточки предметов */
+        .subject-card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            height: 100%;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-decoration: none; /* Убираем подчеркивание ссылки */
+            color: inherit;
+            display: block;
+            overflow: hidden;
+        }
+
+        .subject-card:hover {
+            transform: var(--card-hover-transform);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Цветовые акценты */
+        .accent-math { color: #0d6efd; }
+        .accent-phys { color: #dc3545; }
+        .accent-info { color: #198754; } /* На будущее */
+
+        .card-body {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .btn-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f1f3f5;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            margin-top: 1rem;
+        }
+
+        .subject-card:hover .btn-arrow {
+            background: #0d6efd;
+            color: white;
+        }
+
+        /* Футер */
+        footer {
+            margin-top: auto;
+            padding: 2rem 0;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка -->
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="fw-bold display-5 mb-2">Справочники для ЕГЭ</h1>
+            <p class="lead opacity-75">Вся теория, формулы и шпаргалки в одном месте</p>
+        </div>
+    </header>
+
+    <!-- Основное меню -->
+    <main class="container py-4">
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Карточка: МАТЕМАТИКА -->
+            <div class="col-md-5 col-lg-4">
+                <!-- Укажите здесь реальное имя вашего файла -->
+                <a href="math_theory.html" class="subject-card border-top border-4 border-primary">
+                    <div class="card-body">
+                        <div class="card-icon accent-math">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+                        <h3 class="fw-bold">Математика</h3>
+                        <p class="text-muted">Профильный уровень</p>
+                        <div class="small text-muted mb-3">
+                            • Алгебра и Геометрия<br>
+                            • Производные и Графики<br>
+                            • Теория вероятностей
+                        </div>
+                        <div class="btn-arrow">
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Карточка: ФИЗИКА -->
+            <div class="col-md-5 col-lg-4">
+                <!-- Укажите здесь реальное имя вашего файла -->
+                <a href="phys_theory.html" class="subject-card border-top border-4 border-danger">
+                    <div class="card-body">
+                        <div class="card-icon accent-phys">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+                        <h3 class="fw-bold">Физика</h3>
+                        <p class="text-muted">Полный курс</p>
+                        <div class="small text-muted mb-3">
+                            • Механика и МКТ<br>
+                            • Электродинамика<br>
+                            • Квантовая физика
+                        </div>
+                        <div class="btn-arrow">
+                            <i class="bi bi-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+                         
+            <div class="col-md-5 col-lg-4">
+                <a href="info_theory.html" class="subject-card border-top border-4 border-success">
+                    <div class="card-body">
+                        <div class="card-icon accent-info">
+                            <i class="bi bi-laptop"></i>
+                        </div>
+                        <h3 class="fw-bold">Информатика</h3>
+                        <p class="text-muted">Python и Excel</p>
+                        <div class="btn-arrow"><i class="bi bi-arrow-right"></i></div>
+                    </div>
+                </a>
+            </div> 
+            
+
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <p class="mb-0"></p>
+            <small></small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (Опционально, для эффектов) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
