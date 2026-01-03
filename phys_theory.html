@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Формулы ЕГЭ Физика (по заданиям)</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { background-color: #f0f2f5; font-family: 'Segoe UI', system-ui, sans-serif; color: #333; }
+        
+        /* Сайдбар */
+        .sidebar { position: sticky; top: 20px; height: 95vh; overflow-y: auto; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+        
+        /* Карточки */
+        .content-card { background: white; border-radius: 12px; padding: 30px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.03); border-top: 5px solid #6c757d; scroll-margin-top: 20px; }
+        
+        /* Цвета карточек по темам (для визуального разделения) */
+        .card-mech { border-top-color: #0d6efd; }
+        .card-mkt { border-top-color: #fd7e14; }
+        .card-elec { border-top-color: #ffc107; }
+        .card-opt { border-top-color: #198754; }
+        .card-atom { border-top-color: #6f42c1; }
+
+        /* Формулы */
+        .formula-box { background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #adb5bd; }
+        .formula-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 1.1rem; }
+        .formula-num { font-weight: bold; color: #6c757d; margin-right: 15px; min-width: 20px; font-size: 0.9rem; }
+        
+        h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #212529; }
+        .nav-link { color: #495057; font-size: 0.9rem; padding: 5px 10px; border-radius: 6px; }
+        .nav-link:hover { color: #0d6efd; background-color: #e7f1ff; }
+        .section-header { font-size: 0.75rem; text-transform: uppercase; color: #adb5bd; font-weight: 700; margin-top: 15px; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <!-- Навигация -->
+        <div class="col-md-3 col-lg-2 d-none d-md-block">
+            <div class="sidebar">
+                <h5 class="mb-4 fw-bold text-dark">ЕГЭ Физика</h5>
+                <nav class="nav flex-column">
+                    <div class="section-header">Механика</div>
+                    <a class="nav-link" href="#task1">Задание 1 (Кинематика)</a>
+                    <a class="nav-link" href="#task2">Задание 2 (Динамика)</a>
+                    <a class="nav-link" href="#task3">Задание 3 (Энергия)</a>
+                    <a class="nav-link" href="#task4">Задания 4-6 (Механика)</a>
+                    
+                    <div class="section-header">МКТ</div>
+                    <a class="nav-link" href="#task7">Задание 7 (Идеал. газ)</a>
+                    <a class="nav-link" href="#task8">Задание 8 (КПД)</a>
+                    <a class="nav-link" href="#task9">Задание 9 (Термодинамика)</a>
+                    
+                    <div class="section-header">Электродинамика</div>
+                    <a class="nav-link" href="#task10">Задания 10, 11, 14, 15</a>
+                    <a class="nav-link" href="#task12">Задание 12 (Магнетизм)</a>
+                    
+                    <div class="section-header">Кванты</div>
+                    <a class="nav-link" href="#task13">Задания 13, 17 (Оптика)</a>
+                    <a class="nav-link" href="#task16">Задание 16 (Ядерная)</a>
+                    <a class="nav-link" href="#task-exp">Эксперимент и Логика</a>
+
+                </nav>
+            </div>
+        </div>
+
+        <!-- Контент -->
+        <div class="col-md-9 col-lg-10">
+
+            <!-- Задание 1 -->
+            <div id="task1" class="content-card card-mech">
+                <h2>№1. Кинематика</h2>
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ a = \frac{\Delta V}{\Delta t} $$</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ x(t) = x_0 + v_{0x}t + \frac{a_x t^2}{2} $$</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ S_x = \frac{v_x^2 - v_{0x}^2}{2a_x} $$</div>
+                    <div class="text-muted small mt-2">
+                        <em>Если дан график \( v(t) \): путь = площадь фигуры под графиком.</em><br>
+                        \( S_x \) — перемещение, \( x \) — координата.
+                    </div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-md-8">
+                        <div class="bg-white border rounded p-3 text-center">
+                            <h5>Движение тела, брошенного под углом</h5>
+                            <svg width="350" height="200" viewBox="0 0 350 200">
+                                <!-- Оси -->
+                                <line x1="20" y1="180" x2="330" y2="180" stroke="black" marker-end="url(#arrow_black_k)"/>
+                                <line x1="20" y1="180" x2="20" y2="20" stroke="black" marker-end="url(#arrow_black_k)"/>
+                                
+                                <!-- Траектория -->
+                                <path d="M 20 180 Q 175 -50 330 180" stroke="#adb5bd" stroke-width="2" fill="none" stroke-dasharray="5"/>
+                                
+                                <!-- Векторы в начале -->
+                                <line x1="20" y1="180" x2="60" y2="120" stroke="#dc3545" stroke-width="2" marker-end="url(#arrow_red_k)"/>
+                                <text x="65" y="130" fill="#dc3545" font-weight="bold">v₀</text>
+                                
+                                <!-- Векторы в верхней точке -->
+                                <circle cx="175" cy="65" r="3" fill="#333"/>
+                                <line x1="175" y1="65" x2="215" y2="65" stroke="#0d6efd" stroke-width="2" marker-end="url(#arrow_blue_k)"/>
+                                <text x="190" y="55" fill="#0d6efd" font-size="12">vₓ (const)</text>
+                                <text x="175" y="85" fill="#333" font-size="12">v_y = 0</text>
+                                
+                                <!-- Ускорение g -->
+                                <line x1="175" y1="90" x2="175" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrow_black_k)"/>
+                                <text x="180" y="110" fill="#333" font-weight="bold">g</text>
+                
+                                <!-- Маркеры стрелок -->
+                                <defs>
+                                    <marker id="arrow_red_k" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#dc3545" /></marker>
+                                    <marker id="arrow_blue_k" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#0d6efd" /></marker>
+                                    <marker id="arrow_black_k" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#000" /></marker>
+                                </defs>
+                            </svg>
+                            <div class="row text-start mt-2 small">
+                                <div class="col-6 border-end">
+                                    <strong>По горизонтали (X):</strong>
+                                    <br>\( a_x = 0 \)
+                                    <br>\( v_x = v_0 \cos\alpha = \text{const} \)
+                                </div>
+                                <div class="col-6">
+                                    <strong>По вертикали (Y):</strong>
+                                    <br>\( a_y = -g \)
+                                    <br>\( v_y = v_0 \sin\alpha - gt \)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Задание 2 -->
+            <div id="task2" class="content-card card-mech">
+                <h2>№2. Динамика</h2>
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ F_{\text{упр}} = k \cdot |\Delta x| $$   (Закон Гука)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ F_{\text{тяг}} = G \frac{m_1 m_2}{R^2} $$  (Гравитация)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ F_{\text{тр}} = \mu N $$  (Трение скольжения)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ \vec{F} = m\vec{a} $$  (II закон Ньютона)</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ p = \rho g h $$  (Гидростатическое давление)</div>
+                </div>
+            </div>
+
+            <!-- Задание 3 -->
+            <div id="task3" class="content-card card-mech">
+                <h2>№3. Энергия, Импульс, Работа</h2>
+                <!-- №3 ЭНЕРГИЯ, ИМПУЛЬС, РАБОТА (ВИЗУАЛИЗАЦИЯ) -->
+<div class="row mt-4 g-3">
+    
+    <!-- 1. Механическая Работа -->
+    <div class="col-md-4">
+        <div class="bg-white border rounded p-3 h-100 text-center">
+            <h5 class="text-primary" style="font-size: 1rem;">Работа силы (Угол α)</h5>
+            <svg width="200" height="140" viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arrow_en_red" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#dc3545" /></marker>
+                    <marker id="arrow_en_blue" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#0d6efd" /></marker>
+                </defs>
+
+                <!-- Земля -->
+                <line x1="10" y1="120" x2="190" y2="120" stroke="#333" stroke-width="1"/>
+                
+                <!-- Брусок -->
+                <rect x="30" y="90" width="40" height="30" fill="#e9ecef" stroke="#333"/>
+                
+                <!-- Вектор S (Перемещение) -->
+                <line x1="70" y1="105" x2="140" y2="105" stroke="#0d6efd" stroke-width="2" marker-end="url(#arrow_en_blue)"/>
+                <text x="165" y="110" fill="#0d6efd" font-weight="bold">S</text>
+
+                <!-- Вектор F (Сила) -->
+                <line x1="50" y1="105" x2="110" y2="60" stroke="#dc3545" stroke-width="2" marker-end="url(#arrow_en_red)"/>
+                <text x="100" y="55" fill="#dc3545" font-weight="bold">F</text>
+
+                <!-- Угол альфа -->
+                <path d="M 80 105 Q 85 95 82 82" fill="none" stroke="#666" stroke-dasharray="2,2"/>
+                <text x="85" y="90" font-size="12">α</text>
+
+                <!-- Проекция силы -->
+                <line x1="110" y1="60" x2="110" y2="105" stroke="#999" stroke-dasharray="3"/>
+            </svg>
+            <div class="small mt-2 text-muted">
+                $$ A = F \cdot S \cdot \cos\alpha $$
+                Работа совершается только "вдоль" движения.
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Закон сохранения энергии -->
+    <div class="col-md-4">
+        <div class="bg-white border rounded p-3 h-100 text-center">
+            <h5 class="text-success" style="font-size: 1rem;">Превращение энергии</h5>
+            <svg width="200" height="140" viewBox="0 0 200 140">
+                <!-- Горка -->
+                <path d="M 20 20 Q 20 120 120 120 L 180 120" stroke="#333" stroke-width="2" fill="none"/>
+                
+                <!-- Верхнее положение -->
+                <circle cx="20" cy="20" r="8" fill="#198754"/>
+                <text x="35" y="25" font-size="11" fill="#198754" font-weight="bold">Eₚ=max</text>
+                <text x="35" y="38" font-size="10" fill="#666">h=max, v=0</text>
+
+                <!-- Нижнее положение -->
+                <circle cx="120" cy="112" r="8" fill="white" stroke="#198754" stroke-dasharray="2"/>
+                <text x="135" y="110" font-size="11" fill="#198754" font-weight="bold">Eₖ=max</text>
+                <text x="135" y="123" font-size="10" fill="#666"></text>
+
+                <!-- Стрелка превращения -->
+                <path d="M 50 50 L 90 80" stroke="#adb5bd" stroke-width="1.5" marker-end="url(#arrow_en_blue)"/>
+            </svg>
+            <div class="small mt-2 text-muted">
+                $$ mgh = \frac{mv^2}{2} $$
+                (Если нет трения)
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Импульс (Столкновение) -->
+    <div class="col-md-4">
+        <div class="bg-white border rounded p-3 h-100 text-center">
+            <h5 class="text-warning text-dark" style="font-size: 1rem;">Закон сохр. импульса</h5>
+            <svg width="200" height="140" viewBox="0 0 200 140">
+                <!-- До удара -->
+                <text x="10" y="20" font-size="10" font-weight="bold" fill="#666">ДО УДАРА:</text>
+                <circle cx="40" cy="40" r="10" fill="#dc3545"/>
+                <line x1="40" y1="40" x2="80" y2="40" stroke="#333" stroke-width="1.5" marker-end="url(#arrow_en_black)"/>
+                
+                <circle cx="120" cy="40" r="10" fill="#0d6efd"/>
+                <line x1="120" y1="40" x2="100" y2="40" stroke="#333" stroke-width="1.5" marker-end="url(#arrow_en_black)"/>
+
+                <!-- После удара -->
+                <text x="10" y="80" font-size="10" font-weight="bold" fill="#666">ПОСЛЕ (Слиплись):</text>
+                <g transform="translate(80, 100)">
+                    <circle cx="-10" cy="0" r="10" fill="#dc3545"/>
+                    <circle cx="10" cy="0" r="10" fill="#0d6efd"/>
+                    <line x1="0" y1="0" x2="30" y2="0" stroke="#333" stroke-width="1.5" marker-end="url(#arrow_en_black)"/>
+                    <text x="35" y="5" font-size="12" font-style="italic"></text>
+                </g>
+
+                <defs>
+                    <marker id="arrow_en_black" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#333" /></marker>
+                </defs>
+            </svg>
+            <div class="small mt-2 text-muted">
+                $$ m_1\vec{v}_1 + m_2\vec{v}_2 = (m_1+m_2)\vec{u} $$
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ E_p = mgh $$ (Потенциальная энергия)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ E_k = \frac{mV^2}{2} = \frac{p^2}{2m} $$ (Кинетическая энергия)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ A = F \cdot S \cdot \cos\alpha $$ (Работа силы)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ N = \frac{A}{t} = F \cdot V $$ (Мощность)</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ \vec{p} = m\vec{V} $$ (Импульс тела)</div>
+                </div>
+            </div>
+
+            <!-- Задания 4, 5, 6 -->
+            <div id="task4" class="content-card card-mech">
+                <h2>№4, 5, 6. Колебания и Статика</h2>
+                
+                <h5 class="text-muted mt-3">Колебания и Волны</h5>
+                <!-- №4 КОЛЕБАНИЯ И ВОЛНЫ (ВИЗУАЛИЗАЦИЯ) -->
+<div class="row mt-4">
+    <!-- Блок 1: Маятники -->
+    <div class="col-md-6 mb-3">
+        <div class="bg-white border rounded p-3 h-100 text-center">
+            <h5 class="text-primary">Периоды колебаний</h5>
+            
+            <svg width="250" height="180" viewBox="0 0 250 180" xmlns="http://www.w3.org/2000/svg">
+                <!-- Общие стили -->
+                <defs>
+                    <marker id="arrow_black_osc" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+                    </marker>
+                </defs>
+
+                <!-- 1. НИТЯНОЙ (Слева) -->
+                <g transform="translate(50, 20)">
+                    <line x1="-20" y1="0" x2="20" y2="0" stroke="#333" stroke-width="2"/> <!-- Потолок -->
+                    <line x1="0" y1="0" x2="30" y2="100" stroke="#333" stroke-width="1.5"/> <!-- Нить -->
+                    <circle cx="30" cy="100" r="10" fill="#dc3545" stroke="#333"/> <!-- Груз -->
+                    
+                    <!-- Обозначение L -->
+                    <text x="-15" y="60" fill="#333" font-size="12" font-style="italic">l</text>
+                    
+                    <!-- g -->
+                    <line x1="45" y1="20" x2="45" y2="50" stroke="#adb5bd" stroke-width="2" marker-end="url(#arrow_black_osc)"/>
+                    <text x="50" y="40" fill="#adb5bd" font-size="10">g</text>
+
+                    <!-- Формула -->
+                    <text x="-20" y="140" font-size="13" font-weight="bold" fill="#333">2π√(l/g)</text>
+                    <text x="-10" y="155" font-size="10" fill="#666"></text>
+                </g>
+
+                <!-- 2. ПРУЖИННЫЙ (Справа) -->
+                <g transform="translate(180, 20)">
+                    <line x1="-20" y1="0" x2="20" y2="0" stroke="#333" stroke-width="2"/> <!-- Потолок -->
+                    <!-- Пружина (зигзаг) -->
+                    <path d="M 0 0 L -5 10 L 5 20 L -5 30 L 5 40 L -5 50 L 5 60 L 0 70" fill="none" stroke="#333" stroke-width="1.5"/>
+                    <rect x="-15" y="70" width="30" height="30" fill="#0d6efd" stroke="#333"/>
+                    
+                    <text x="20" y="40" fill="#333" font-size="12" font-style="italic">k</text>
+                    <text x="-5" y="90" fill="white" font-size="12" font-weight="bold">m</text>
+
+                    <!-- Формула -->
+                    <text x="-35" y="140" font-size="13" font-weight="bold" fill="#333">2π√(m/k)</text>
+                    <text x="-25" y="155" font-size="10" fill="#666"></text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Блок 2: Волны -->
+    <div class="col-md-6 mb-3">
+        <div class="bg-white border rounded p-3 h-100 text-center">
+            <h5 class="text-success">Характеристики волны</h5>
+            <svg width="250" height="180" viewBox="0 0 250 180">
+                <!-- Оси -->
+                <line x1="10" y1="90" x2="240" y2="90" stroke="#333" stroke-width="1"/>
+                <line x1="20" y1="160" x2="20" y2="20" stroke="#333" stroke-width="1"/>
+                
+                <!-- Синусоида -->
+                <path d="M 20 90 Q 50 20 80 90 T 140 90 T 200 90" stroke="#198754" stroke-width="2" fill="none"/>
+                
+                <!-- Амплитуда A -->
+                <line x1="50" y1="90" x2="50" y2="55" stroke="#dc3545" stroke-width="1.5" marker-end="url(#arrow_black_osc)"/>
+                <text x="55" y="75" fill="#dc3545" font-weight="bold" font-size="12">A</text>
+                
+                <!-- Длина волны lambda -->
+                <!-- Линия между горбами -->
+                <line x1="50" y1="40" x2="170" y2="40" stroke="#0d6efd" stroke-width="1.5"/>
+                <line x1="50" y1="35" x2="50" y2="45" stroke="#0d6efd" stroke-width="1.5"/> <!-- Засечка 1 -->
+                <line x1="170" y1="35" x2="170" y2="45" stroke="#0d6efd" stroke-width="1.5"/> <!-- Засечка 2 -->
+                
+                <text x="105" y="35" fill="#0d6efd" font-weight="bold" font-size="14">λ</text>
+                <text x="90" y="160" font-size="11" fill="#666">Расстояние между</text>
+                <text x="90" y="172" font-size="11" fill="#666">соседними горбами</text>
+            </svg>
+            <div class="formula-box mt-2 py-1">
+                $$ v = \lambda \cdot \nu = \frac{\lambda}{T} $$
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ \nu = \frac{1}{T} $$ (Частота)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ \lambda = v \cdot T = \frac{v}{\nu} $$ (Длина волны)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ T = 2\pi \sqrt{\frac{l}{g}} $$ (Нитяной маятник)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ T = 2\pi \sqrt{\frac{m}{k}} $$ (Пружинный маятник)</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ E_{p\text{ пруж}} = \frac{kx^2}{2} $$</div>
+                </div>
+
+                <h5 class="text-muted mt-3">Статика и Гидростатика</h5>
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">6.</span> $$ F_{\text{Арх}} = \rho_{\text{ж}} g V_{\text{погр}} $$ (Архимедова сила)</div>
+                    <div class="formula-row"><span class="formula-num">7.</span> $$ \rho = \frac{m}{V} $$</div>
+                    <div class="formula-row"><span class="formula-num">8.</span> $$ P = \frac{F}{S} $$ (Давление твердого тела)</div>
+                    <div class="formula-row"><span class="formula-num">9.</span> $$ \frac{F_1}{F_2} = \frac{l_2}{l_1} \text{ или } M_1 = M_2 $$ (Рычаг)</div>
+                    <div class="formula-row"><span class="formula-num">10.</span> $$ a_{\text{ц}} = \frac{V^2}{R} = \omega^2 R $$ (Центростремительное ускорение)</div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center bg-white border rounded p-3">
+                            <svg width="200" height="200" viewBox="0 0 200 200" class="me-4 flex-shrink-0">
+                                <!-- Стакан -->
+                                <line x1="50" y1="20" x2="50" y2="180" stroke="#333" stroke-width="2"/>
+                                <line x1="150" y1="20" x2="150" y2="180" stroke="#333" stroke-width="2"/>
+                                <line x1="50" y1="180" x2="150" y2="180" stroke="#333" stroke-width="2"/>
+                                
+                                <!-- Вода -->
+                                <path d="M 50 60 L 150 60 L 150 180 L 50 180 Z" fill="rgba(13, 110, 253, 0.2)" />
+                                <path d="M 50 60 Q 100 65 150 60" fill="none" stroke="#0d6efd" />
+                
+                                <!-- Тело (Кубик) -->
+                                <rect x="80" y="80" width="40" height="40" fill="#adb5bd" stroke="#333" />
+                
+                                <!-- Векторы сил -->
+                                <!-- Сила Архимеда (Вверх) -->
+                                <line x1="100" y1="80" x2="100" y2="40" stroke="#dc3545" stroke-width="3" marker-end="url(#arrow_red)" />
+                                <text x="125" y="45" fill="#dc3545" font-weight="bold" font-size="14">Fₐ</text>
+                                
+                                <!-- Сила Тяжести (Вниз) -->
+                                <line x1="100" y1="100" x2="100" y2="150" stroke="#333" stroke-width="3" marker-end="url(#arrow_black)" />
+                                <text x="125" y="145" fill="#333" font-weight="bold" font-size="14">mg</text>
+                                
+                                <!-- Стрелки (маркеры) -->
+                                <defs>
+                                    <marker id="arrow_red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                                        <path d="M0,0 L0,6 L9,3 z" fill="#dc3545" />
+                                    </marker>
+                                    <marker id="arrow_black" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                                        <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+                                    </marker>
+                                </defs>
+                            </svg>
+                            
+                            <div>
+                                <h5>Условия плавания тел</h5>
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-2"><strong>1. Тонет:</strong> \( mg > F_{\text{А}} \) <br><span class="text-muted small">(\( \rho_{\text{тела}} > \rho_{\text{жид}} \))</span></li>
+                                    <li class="mb-2"><strong>2. Всплывает:</strong> \( mg < F_{\text{А}} \) <br><span class="text-muted small">(\( \rho_{\text{тела}} < \rho_{\text{жид}} \))</span></li>
+                                    <li><strong>3. Плавает:</strong> \( mg = F_{\text{А}} \) <br><span class="text-muted small">Сила тяжести уравновешена силой Архимеда.</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- Задание 7 -->
+            <div id="task7" class="content-card card-mkt">
+                <h2>№7. Идеальный газ (МКТ)</h2>
+                <!-- ВИЗУАЛИЗАЦИЯ: ТЕРМОДИНАМИКА И ГАЗ -->
+<div class="row mt-4 g-3">
+    
+    <!-- 1. ПЕРВОЕ НАЧАЛО ТЕРМОДИНАМИКИ (Цилиндр) -->
+    <div class="col-md-7">
+        <div class="bg-white border rounded p-3 h-100">
+            <h5 class="text-danger">Первое начало термодинамики</h5>
+            <div class="d-flex align-items-center justify-content-center">
+                <svg width="250" height="160" viewBox="0 0 250 160" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                         <marker id="arrow_red_th" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#dc3545" /></marker>
+                         <marker id="arrow_blue_th" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#0d6efd" /></marker>
+                    </defs>
+
+                    <!-- Цилиндр -->
+                    <rect x="60" y="40" width="100" height="100" fill="none" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- Газ внутри (точки) -->
+                    <circle cx="80" cy="60" r="2" fill="#adb5bd"/> <circle cx="120" cy="80" r="2" fill="#adb5bd"/>
+                    <circle cx="90" cy="110" r="2" fill="#adb5bd"/> <circle cx="140" cy="50" r="2" fill="#adb5bd"/>
+                    <circle cx="70" cy="90" r="2" fill="#adb5bd"/> <circle cx="110" cy="120" r="2" fill="#adb5bd"/>
+
+                    <!-- Поршень -->
+                    <rect x="160" y="40" width="10" height="100" fill="#dee2e6" stroke="#333"/>
+                    
+                    <!-- 1. Тепло Q (Вход) -->
+                    <path d="M 20 120 Q 40 100 55 110" stroke="#dc3545" stroke-width="3" fill="none" marker-end="url(#arrow_red_th)"/>
+                    <text x="10" y="110" fill="#dc3545" font-weight="bold" font-size="16">Q</text>
+                    <text x="10" y="130" font-size="10" fill="#666">Нагрев</text>
+
+                    <!-- 2. Внутренняя энергия dU (Спираль/Термометр) -->
+                    <text x="85" y="90" fill="#dc3545" font-weight="bold" font-size="14">ΔU</text>
+                    <text x="75" y="105" font-size="10" fill="#666">(t° растет)</text>
+
+                    <!-- 3. Работа A (Выход поршня) -->
+                    <line x1="175" y1="90" x2="220" y2="90" stroke="#0d6efd" stroke-width="3" marker-end="url(#arrow_blue_th)"/>
+                    <text x="245" y="95" fill="#0d6efd" font-weight="bold" font-size="16"></text>
+                    <text x="180" y="110" font-size="10" fill="#666">Расширение</text>
+                </svg>
+            </div>
+            <div class="formula-box mt-2 py-2 text-center">
+                $$ Q = \Delta U + A $$
+                <span class="small text-muted d-block">Тепло = Нагрев газа + Работа поршня</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. СТЕПЕНИ СВОБОДЫ (i) -->
+    <div class="col-md-5">
+        <div class="bg-white border rounded p-3 h-100">
+            <h5 class="text-primary" style="font-size: 1rem;">Коэффициент \( i \) в формуле \( U \)</h5>
+            <p class="small text-muted mb-2">От строения молекулы зависит формула внутренней энергии \( U = \frac{i}{2}\nu RT \).</p>
+            
+            <div class="d-flex flex-column gap-3">
+                <!-- Одноатомный -->
+                <div class="d-flex align-items-center border-bottom pb-2">
+                    <svg width="50" height="50" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="10" fill="#198754"/>
+                        <!-- Стрелки движения -->
+                        <line x1="25" y1="25" x2="40" y2="25" stroke="#333" stroke-width="1"/>
+                        <line x1="25" y1="25" x2="25" y2="10" stroke="#333" stroke-width="1"/>
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#333" stroke-width="1"/>
+                    </svg>
+                    <div class="ms-2 lh-1">
+                        <strong>i = 3</strong> <span class="badge bg-success rounded-pill">Одноатомный</span>
+                        <div class="small text-muted mt-1">He, Ne, Ar (инертные)</div>
+                    </div>
+                </div>
+
+                <!-- Двухатомный -->
+                <div class="d-flex align-items-center">
+                    <svg width="60" height="50" viewBox="0 0 60 50">
+                        <!-- Гантелька -->
+                        <line x1="15" y1="25" x2="45" y2="25" stroke="#0d6efd" stroke-width="4"/>
+                        <circle cx="15" cy="25" r="8" fill="#0d6efd"/>
+                        <circle cx="45" cy="25" r="8" fill="#0d6efd"/>
+                        <!-- Вращение -->
+                        <path d="M 20 15 Q 30 5 40 15" fill="none" stroke="#333" stroke-dasharray="2"/>
+                    </svg>
+                    <div class="ms-2 lh-1">
+                        <strong>i = 5</strong> <span class="badge bg-primary rounded-pill">Двухатомный</span>
+                        <div class="small text-muted mt-1">O₂, N₂, H₂, Воздух</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ p = nkT $$</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ E_k = \frac{3}{2}kT $$ (Средняя кин. энергия)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ p = \frac{2}{3}n E_k $$ (Основное ур-ние МКТ)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ pV = \frac{m}{M}RT = \nu RT $$ (Менделеев-Клапейрон)</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ n = \frac{N}{V} $$ (Концентрация)</div>
+                    <div class="formula-row"><span class="formula-num">6.</span> $$ \frac{p_1 V_1}{T_1} = \frac{p_2 V_2}{T_2} $$ (Объединенный закон)</div>
+                    <div class="row mt-4">
+                        <div class="col-md-6 text-center">
+                            <div class="p-3 border rounded bg-white">
+                                <h5 class="mb-3">Графики изопроцессов (в pV)</h5>
+                                <svg width="250" height="200" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Оси -->
+                                    <line x1="30" y1="180" x2="240" y2="180" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+                                    <line x1="30" y1="180" x2="30" y2="20" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+                                    <text x="20" y="20" font-family="serif" font-size="16" font-style="italic">p</text>
+                                    <text x="230" y="170" font-family="serif" font-size="16" font-style="italic">V</text>
+                    
+                                    <!-- Изобара (p=const) -->
+                                    <line x1="30" y1="60" x2="220" y2="60" stroke="#0d6efd" stroke-width="3" />
+                                    <text x="80" y="50" fill="#0d6efd" font-size="14" font-weight="bold">Изобара (T↑)</text>
+                    
+                                    <!-- Изохора (V=const) -->
+                                    <line x1="180" y1="180" x2="180" y2="20" stroke="#198754" stroke-width="3" />
+                                    <text x="185" y="100" fill="#198754" font-size="14" font-weight="bold">Изохора</text>
+                    
+                                    <!-- Изотерма (pV=const) -->
+                                    <path d="M 40 170 Q 60 80 220 70" stroke="#dc3545" stroke-width="3" fill="none"/>
+                                    <text x="80" y="130" fill="#dc3545" font-size="14" font-weight="bold">Изотерма</text>
+                                </svg>
+                                <p class="small text-muted mt-2 text-start">
+                                    <span class="text-danger">●</span> <strong>Изотерма:</strong> Гипербола. Чем выше, тем больше T.<br>
+                                    <span class="text-primary">●</span> <strong>Изобара:</strong> Горизонталь. V растет \(\to\) Газ расширяется \(\to\) Работа > 0.<br>
+                                    <span class="text-success">●</span> <strong>Изохора:</strong> Вертикаль. Работа газа = 0.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Схема работы газа -->
+                        <div class="col-md-6 text-center">
+                             <div class="p-3 border rounded bg-white h-100 d-flex flex-column justify-content-center">
+                                <h5>Геометрический смысл работы</h5>
+                                <svg width="250" height="150" viewBox="0 0 250 150">
+                                     <!-- Оси -->
+                                     <line x1="30" y1="130" x2="230" y2="130" stroke="black" />
+                                     <line x1="30" y1="130" x2="30" y2="10" stroke="black" />
+                                     
+                                     <!-- Процесс -->
+                                     <path d="M 80 80 L 180 40" stroke="#333" stroke-width="2" />
+                                     <!-- Площадь -->
+                                     <path d="M 80 80 L 180 40 L 180 130 L 80 130 Z" fill="rgba(253, 126, 20, 0.3)" />
+                                     
+                                     <text x="110" y="110" font-size="14" fill="#fd7e14" font-weight="bold">A = S</text>
+                                     <text x="230" y="125" font-size="12">V</text>
+                                     <text x="20" y="20" font-size="12">p</text>
+                                </svg>
+                                <p class="small text-muted">Работа газа равна площади под графиком процесса в координатах pV.</p>
+                             </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!-- Задание 8 -->
+            <div id="task8" class="content-card card-mkt">
+                <h2>№8. Тепловые двигатели</h2>
+                <!-- ФАЗОВЫЕ ПЕРЕХОДЫ И ТЕПЛОТА (ЕДИНЫЙ ГРАФИК) -->
+<div id="thermal-processes" class="content-card border-top border-danger">
+    <h2 class="text-danger">Фазовые переходы и Теплота</h2>
+    
+    <div class="row">
+        <!-- ГРАФИК-ЛЕСЕНКА -->
+        <div class="col-lg-7 mb-3">
+            <div class="bg-white border rounded p-3 text-center h-100">
+                <h5 class="fw-bold text-muted mb-3">График нагревания и переходов (T от Q)</h5>
+                
+                <svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Оси -->
+                    <line x1="40" y1="220" x2="380" y2="220" stroke="#333" stroke-width="2" marker-end="url(#arrow_t)"/>
+                    <line x1="40" y1="220" x2="40" y2="20" stroke="#333" stroke-width="2" marker-end="url(#arrow_t)"/>
+                    <text x="7" y="20" font-weight="bold">T,°C</text>
+                    <text x="350" y="210" font-weight="bold">Q, Дж</text>
+                    <text x="360" y="235" font-size="10" fill="#666">Время t</text>
+
+                    <!-- Обозначения температур -->
+                    <line x1="35" y1="140" x2="45" y2="140" stroke="#333"/>
+                    <text x="5" y="145" font-size="12" font-weight="bold">T пл</text>
+                    
+                    <line x1="35" y1="80" x2="45" y2="80" stroke="#333"/>
+                    <text x="5" y="85" font-size="12" font-weight="bold">T кип</text>
+
+                    <!-- УЧАСТОК 1: Нагрев льда -->
+                    <line x1="40" y1="180" x2="100" y2="140" stroke="#0d6efd" stroke-width="3"/>
+                    <text x="50" y="160" font-size="12" fill="#0d6efd" font-weight="bold">1</text>
+
+                    <!-- УЧАСТОК 2: Плавление -->
+                    <line x1="100" y1="140" x2="160" y2="140" stroke="#6f42c1" stroke-width="3"/>
+                    <text x="125" y="130" font-size="12" fill="#6f42c1" font-weight="bold">2</text>
+
+                    <!-- УЧАСТОК 3: Нагрев воды -->
+                    <line x1="160" y1="140" x2="220" y2="80" stroke="#0d6efd" stroke-width="3"/>
+                    <text x="180" y="100" font-size="12" fill="#0d6efd" font-weight="bold">3</text>
+
+                    <!-- УЧАСТОК 4: Кипение -->
+                    <line x1="220" y1="80" x2="300" y2="80" stroke="#6f42c1" stroke-width="3"/>
+                    <text x="255" y="70" font-size="12" fill="#6f42c1" font-weight="bold">4</text>
+
+                    <!-- УЧАСТОК 5: Нагрев пара -->
+                    <line x1="300" y1="80" x2="360" y2="40" stroke="#0d6efd" stroke-width="3"/>
+                    <text x="330" y="50" font-size="12" fill="#0d6efd" font-weight="bold">5</text>
+
+                    <!-- Маркер стрелки -->
+                    <defs>
+                        <marker id="arrow_t" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#333" /></marker>
+                    </defs>
+
+                    <!-- Сетка пунктиром -->
+                    <line x1="100" y1="140" x2="100" y2="220" stroke="#ccc" stroke-dasharray="3"/>
+                    <line x1="160" y1="140" x2="160" y2="220" stroke="#ccc" stroke-dasharray="3"/>
+                    <line x1="220" y1="80" x2="220" y2="220" stroke="#ccc" stroke-dasharray="3"/>
+                    <line x1="300" y1="80" x2="300" y2="220" stroke="#ccc" stroke-dasharray="3"/>
+                </svg>
+
+                <div class="small text-muted fst-italic mt-2">
+                    Горизонтальные участки — фазовые переходы (температура НЕ меняется!)
+                </div>
+            </div>
+        </div>
+
+        <!-- ФОРМУЛЫ -->
+        <div class="col-lg-5">
+            <div class="h-100 d-flex flex-column justify-content-center">
+                
+                <!-- Нагревание / Охлаждение -->
+                <div class="formula-box border-start border-primary border-4">
+                    <h6 class="text-primary fw-bold mb-1">1, 3, 5. Нагревание</h6>
+                    <div class="d-flex align-items-center">
+                        <span class="display-12 me-6">$$ Q = cm\Delta t $$</span>
+                    </div>
+                    <div class="small text-muted">
+                        \( c \) — уд. теплоемкость [Дж/(кг·°C)]<br>
+                        \( \Delta t = t_{кон} - t_{нач} \)
+                    </div>
+                </div>
+
+                <!-- Плавление / Кристаллизация -->
+                <div class="formula-box border-start border-purple border-4" style="border-left-color: #6f42c1 !important;">
+                    <h6 class="fw-bold mb-1" style="color: #6f42c1;">2. Плавление</h6>
+                    <div class="d-flex align-items-center">
+                        <span class="display-12 me-6">$$ Q = \pm \lambda m $$</span>
+                    </div>
+                    <div class="small text-muted">
+                        \( \lambda \) — уд. теплота плавления [Дж/кг]<br>
+                        "+" — плавим, "−" — отвердеваем.
+                    </div>
+                </div>
+
+                <!-- Парообразование / Конденсация -->
+                <div class="formula-box border-start border-purple border-4" style="border-left-color: #6f42c1 !important;">
+                    <h6 class="fw-bold mb-1" style="color: #6f42c1;">4. Кипение</h6>
+                    <div class="d-flex align-items-center">
+                        <span class="display-12 me-6">$$ Q = \pm L m $$</span>
+                    </div>
+                    <div class="small text-muted">
+                        \( L \) (или \( r \)) — уд. теплота парообр. [Дж/кг]<br>
+                        Только при \( T = T_{кип} \)!
+                    </div>
+                </div>
+
+                <!-- Сгорание (Отдельно) -->
+                <div class="formula-box border-start border-danger border-4">
+                    <h6 class="text-danger fw-bold mb-1">Сгорание топлива</h6>
+                    <div class="d-flex align-items-center">
+                        <span class="display-12 me-6">$$ Q = q m $$</span>
+                    </div>
+                    <div class="small text-muted">
+                        \( q \) — уд. теплота сгорания [Дж/кг]
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ \eta = \frac{A_{\text{п}}}{Q_1} $$</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ \eta = \frac{Q_1 - Q_2}{Q_1} \cdot 100\% $$</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ \eta_{\text{max}} = \frac{T_1 - T_2}{T_1} $$ (Только для цикла Карно)</div>
+                </div>
+                <div class="text-muted small">\( Q_1 \) — тепло от нагревателя, \( Q_2 \) — тепло холодильнику.</div>
+            </div>
+
+            <!-- Задание 9 -->
+            <div id="task9" class="content-card card-mkt">
+                <h2>№9. Термодинамика</h2>
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ A = p \Delta V $$ (Работа газа, при \( p=\text{const} \))</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ U = \frac{3}{2}\frac{m}{M}RT $$ (Внутр. энергия одноатомного)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ U = \frac{i}{2}\nu RT $$ (i=3 для одноатомного, i=5 для двухатомного)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ Q = \Delta U + A $$ (I закон термодинамики)</div>
+                </div>
+            </div>
+
+            <!-- Задания 10, 11, 14, 15 -->
+            <!-- №10-15 ЭЛЕКТРИЧЕСТВО (С ВИЗУАЛИЗАЦИЕЙ) -->
+<div id="task10" class="content-card card-elec">
+    <h2>№10, 11, 14, 15. Электродинамика</h2>
+    <div class="row mt-4 justify-content-center">
+        <div class="col-md-10">
+            <div class="bg-white border rounded p-3">
+                <h5 class="text-primary">Природа электрического тока</h5>
+                <svg width="400" height="160" viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Определения маркеров стрелок -->
+                    <defs>
+                        <marker id="arrow_blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#0d6efd" />
+                        </marker>
+                        <marker id="arrow_red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#dc3545" />
+                        </marker>
+                    </defs>
+    
+                    <!-- Цилиндр (проводник) -->
+                    <!-- Тело -->
+                    <rect x="50" y="30" width="300" height="100" fill="rgba(233, 236, 239, 0.5)" stroke="none"/>
+                    <line x1="50" y1="30" x2="350" y2="30" stroke="#6c757d" stroke-width="2"/>
+                    <line x1="50" y1="130" x2="350" y2="130" stroke="#6c757d" stroke-width="2"/>
+                    
+                    <!-- Левый эллипс (задний) -->
+                    <ellipse cx="50" cy="80" rx="15" ry="50" fill="#e9ecef" stroke="#6c757d" stroke-width="2" stroke-dasharray="4"/>
+                    
+                    <!-- Правый эллипс (передний - Сечение S) -->
+                    <ellipse cx="350" cy="80" rx="15" ry="50" fill="rgba(13, 110, 253, 0.2)" stroke="#0d6efd" stroke-width="2"/>
+                    
+                    <!-- Обозначения S и l -->
+                    <line x1="350" y1="80" x2="350" y2="30" stroke="#0d6efd" stroke-width="1" stroke-dasharray="2"/>
+                    <text x="360" y="70" font-weight="bold" fill="#0d6efd">S</text>
+                    
+                    <line x1="50" y1="145" x2="350" y2="145" stroke="#6c757d" stroke-width="1"/>
+                    <text x="195" y="158" fill="#6c757d">l (длина)</text>
+    
+                    <!-- Направление тока I -->
+                    <line x1="150" y1="10" x2="250" y2="10" stroke="#dc3545" stroke-width="3" marker-end="url(#arrow_red)"/>
+                    <text x="190" y="25" fill="#dc3545" font-weight="bold">I (Ток)</text>
+    
+                    <!-- Электроны (движутся ПРОТИВ тока) -->
+                    <g transform="translate(0,0)">
+                        <!-- Электрон 1 -->
+                        <circle cx="280" cy="60" r="6" fill="#0d6efd"/>
+                        <text x="276" y="64" fill="white" font-size="10" font-weight="bold">-</text>
+                        <line x1="280" y1="60" x2="250" y2="60" stroke="#0d6efd" stroke-width="2" marker-end="url(#arrow_blue)"/>
+                        
+                        <!-- Электрон 2 -->
+                        <circle cx="200" cy="100" r="6" fill="#0d6efd"/>
+                        <text x="196" y="104" fill="white" font-size="10" font-weight="bold">-</text>
+                        <line x1="200" y1="100" x2="170" y2="100" stroke="#0d6efd" stroke-width="2" marker-end="url(#arrow_blue)"/>
+                        
+                        <!-- Электрон 3 -->
+                        <circle cx="120" cy="70" r="6" fill="#0d6efd"/>
+                        <text x="116" y="74" fill="white" font-size="10" font-weight="bold">-</text>
+                        <line x1="120" y1="70" x2="90" y2="70" stroke="#0d6efd" stroke-width="2" marker-end="url(#arrow_blue)"/>
+                    </g>
+                    <text x="240" y="55" fill="#0d6efd" font-size="12">v (дрейфа)</text>
+                </svg>
+                <div class="row mt-2 small text-muted">
+                    <div class="col-md-6 border-end">
+                        <strong>Формула тока:</strong> $$ I = q \cdot n \cdot S \cdot v $$
+                        где \( n \) — концентрация частиц.
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Важно:</strong> Электроны движутся <em>против</em> направления вектора тока I.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <!-- 1. ЗАКОН ОМА (ВИЗУАЛИЗАЦИЯ) -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-4 text-center">
+            <div class="p-2 border rounded bg-white">
+                <svg width="150" height="130" viewBox="0 0 150 130">
+                    <!-- Треугольник -->
+                    <polygon points="75,10 10,120 140,120" fill="none" stroke="#333" stroke-width="2"/>
+                    <line x1="10" y1="75" x2="140" y2="75" stroke="#333" stroke-width="2"/>
+                    <line x1="75" y1="75" x2="75" y2="120" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- Буквы -->
+                    <text x="70" y="55" font-size="24" font-weight="bold" fill="#dc3545">U</text>
+                    <text x="35" y="105" font-size="24" font-weight="bold" fill="#0d6efd">I</text>
+                    <text x="100" y="105" font-size="24" font-weight="bold" fill="#198754">R</text>
+                </svg>
+                <p class="small text-muted mt-1 fst-italic">Закрой пальцем то, что ищешь</p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h4>Основные законы</h4>
+            <div class="formula-box">
+                <div class="formula-row"><span class="formula-num">1.</span> $$ I = \frac{U}{R} $$ (Для участка цепи)</div>
+                <div class="formula-row"><span class="formula-num">2.</span> $$ I = \frac{\mathcal{E}}{R + r} $$ (Для полной цепи)</div>
+                <div class="formula-row"><span class="formula-num">3.</span> $$ R = \rho \frac{l}{S} $$ (Сопротивление провода)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. ТАБЛИЦА СОЕДИНЕНИЙ (СЕРИЯ / ПАРАЛЛЕЛЬ) -->
+    <h3>Типы соединения проводников</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 40%">Последовательное</th>
+                    <th style="width: 20%">Параметр</th>
+                    <th style="width: 40%">Параллельное</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Схемы -->
+                <tr>
+                    <td class="py-3">
+                        <svg width="180" height="60" viewBox="0 0 180 60">
+                            <!-- Провод -->
+                            <line x1="10" y1="30" x2="170" y2="30" stroke="#333" stroke-width="2"/>
+                            <!-- Резистор 1 -->
+                            <rect x="40" y="20" width="40" height="20" fill="#fff" stroke="#333" stroke-width="2"/>
+                            <text x="55" y="35" font-size="12">R1</text>
+                            <!-- Резистор 2 -->
+                            <rect x="100" y="20" width="40" height="20" fill="#fff" stroke="#333" stroke-width="2"/>
+                            <text x="115" y="35" font-size="12">R2</text>
+                        </svg>
+                        <br><span class="badge bg-secondary text-white small">Как вагоны поезда</span>
+                    </td>
+                    <td class="fw-bold text-muted">СХЕМА</td>
+                    <td class="py-3">
+                        <svg width="180" height="80" viewBox="0 0 180 80">
+                            <!-- Верхняя ветка -->
+                            <line x1="20" y1="40" x2="50" y2="40" stroke="#333" stroke-width="2"/> <!-- Вход -->
+                            <line x1="50" y1="20" x2="50" y2="60" stroke="#333" stroke-width="2"/> <!-- Развилка -->
+                            
+                            <!-- R1 -->
+                            <line x1="50" y1="20" x2="70" y2="20" stroke="#333" stroke-width="2"/>
+                            <rect x="70" y="10" width="40" height="20" fill="#fff" stroke="#333" stroke-width="2"/>
+                            <line x1="110" y1="20" x2="130" y2="20" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- R2 -->
+                            <line x1="50" y1="60" x2="70" y2="60" stroke="#333" stroke-width="2"/>
+                            <rect x="70" y="50" width="40" height="20" fill="#fff" stroke="#333" stroke-width="2"/>
+                            <line x1="110" y1="60" x2="130" y2="60" stroke="#333" stroke-width="2"/>
+
+                            <!-- Выход -->
+                            <line x1="130" y1="20" x2="130" y2="60" stroke="#333" stroke-width="2"/>
+                            <line x1="130" y1="40" x2="160" y2="40" stroke="#333" stroke-width="2"/>
+                        </svg>
+                        <br><span class="badge bg-secondary text-white small">Как этажи дома</span>
+                    </td>
+                </tr>
+                
+                <!-- Ток -->
+                <tr>
+                    <td>$$ I = I_1 = I_2 $$<br><span class="text-success small">Одинаковый везде</span></td>
+                    <td class="fw-bold">Ток (I)</td>
+                    <td>$$ I = I_1 + I_2 $$<br><span class="text-muted small">Суммируется (течет как река)</span></td>
+                </tr>
+
+                <!-- Напряжение -->
+                <tr>
+                    <td>$$ U = U_1 + U_2 $$<br><span class="text-muted small">Делится между R</span></td>
+                    <td class="fw-bold">Напряжение (U)</td>
+                    <td>$$ U = U_1 = U_2 $$<br><span class="text-success small">Одинаковое везде</span></td>
+                </tr>
+
+                <!-- Сопротивление -->
+                <tr>
+                    <td class="bg-light">
+                        $$ R = R_1 + R_2 $$
+                        <div class="small text-danger mt-1">Всегда увеличивается</div>
+                    </td>
+                    <td class="fw-bold">Сопротивление (R)</td>
+                    <td class="bg-light">
+                        $$ \frac{1}{R} = \frac{1}{R_1} + \frac{1}{R_2} $$
+                        <div class="small text-muted mt-1">Или \( R = \frac{R_1 R_2}{R_1+R_2} \)</div>
+                        <div class="small text-danger">Всегда уменьшается</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 3. ПОЛНАЯ ЦЕПЬ И КОНДЕНСАТОРЫ -->
+    <div class="row mt-4 g-3">
+        <!-- Полная цепь -->
+        <div class="col-md-6">
+            <div class="border rounded p-3 h-100">
+                <h5 class="text-primary">Полная цепь (ЭДС)</h5>
+                <svg width="200" height="100" viewBox="0 0 200 100" class="mx-auto d-block">
+                    <!-- Контур -->
+                    <rect x="20" y="20" width="160" height="60" rx="5" fill="none" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- Источник ЭДС (вверху) -->
+                    <line x1="90" y1="10" x2="90" y2="30" stroke="#333" stroke-width="2"/> <!-- Короткая (-) -->
+                    <line x1="100" y1="5" x2="100" y2="35" stroke="#333" stroke-width="2"/> <!-- Длинная (+) -->
+                    <rect x="85" y="15" width="20" height="10" fill="white" stroke="none"/> <!-- Стираем линию под источником -->
+                    
+                    <text x="85" y="45" font-size="12" font-weight="bold">r, ε</text>
+
+                    <!-- Внешнее R (внизу) -->
+                    <rect x="80" y="70" width="40" height="20" fill="white" stroke="#333" stroke-width="2"/>
+                    <text x="95" y="85" font-size="12" font-weight="bold">R</text>
+                </svg>
+                <div class="formula-box mt-2">
+                    <div class="small">
+                        \( U_{\text{внеш}} = \mathcal{E} - I \cdot r \)<br>
+                        Короткое замыкание (\( R=0 \)): \( I_{k.z.} = \mathcal{E}/r \)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Конденсаторы (Шпаргалка) -->
+        <div class="col-md-6">
+            <div class="border rounded p-3 h-100 bg-light">
+                <h5 class="text-warning text-dark">Конденсаторы (C)</h5>
+                <p class="small mb-2">Правила соединения для C — <strong>наоборот</strong> по сравнению с R!</p>
+                <ul class="list-group small">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Параллельно
+                        <span class="badge bg-primary rounded-pill">\( C = C_1 + C_2 \)</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Последовательно
+                        <span class="badge bg-secondary rounded-pill">\( 1/C = \dots \)</span>
+                    </li>
+                </ul>
+                <div class="formula-box mt-2 py-2">
+                    $$ W = \frac{CU^2}{2} = \frac{q^2}{2C} $$
+                </div>
+            </div>
+        </div>
+        <h5 class="text-muted mt-3">Электростатика и ток</h5>
+        <div class="formula-box">
+            <div class="formula-row"><span class="formula-num">1.</span> $$ F_k = k \frac{|q_1|\cdot|q_2|}{r^2} $$ (Закон Кулона)</div>
+            <div class="formula-row"><span class="formula-num">2.</span> $$ I = \frac{q}{t} $$</div>
+            <div class="formula-row"><span class="formula-num">3.</span> $$ U = \frac{A}{q} $$</div>
+            <div class="formula-row"><span class="formula-num">4.</span> $$ R = \frac{U}{I} = \rho \frac{l}{S} $$ (Закон Ома и сопротивление)</div>
+            <div class="formula-row"><span class="formula-num">5.</span> $$ I = \frac{\mathcal{E}}{R+r} $$ (Ом для полной цепи)</div>
+        </div>
+
+        <h5 class="text-muted mt-3">Конденсаторы</h5>
+        <div class="formula-box">
+            <div class="formula-row"><span class="formula-num">1.</span> $$ C = \frac{q}{U} $$</div>
+            <div class="formula-row"><span class="formula-num">2.</span> $$ C_{\text{пар}} = C_1 + C_2 $$ (Параллельное)</div>
+            <div class="formula-row"><span class="formula-num">3.</span> $$ \frac{1}{C_{\text{посл}}} = \frac{1}{C_1} + \frac{1}{C_2} $$ (Последовательное)</div>
+            <div class="formula-row"><span class="formula-num">4.</span> $$ W = \frac{q^2}{2C} = \frac{CU^2}{2} $$ (Энергия)</div>
+            <div class="formula-row"><span class="formula-num">5.</span> $$ C = \frac{\varepsilon \varepsilon_0 S}{d} $$ (Плоский конденсатор)</div>
+        </div>
+        
+    </div>
+</div>
+
+
+            <!-- Задание 12 -->
+            <div id="task12" class="content-card card-elec">
+                <h2>№12. Магнетизм</h2>
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ W_m = \frac{LI^2}{2} $$ (Энергия магн. поля)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ \Phi = B S \cos\alpha $$ (Магнитный поток)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ L = \frac{\Phi}{I} $$ (Индуктивность)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ F_{\text{А}} = I B l \sin\alpha $$ (Сила Ампера)</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ F_{\text{Л}} = q v B \sin\alpha $$ (Сила Лоренца)</div>
+                    <div class="formula-row"><span class="formula-num">6.</span> $$ \mathcal{E}_i = - \frac{\Delta \Phi}{\Delta t} $$ (Закон Фарадея)</div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-md-8">
+                        <div class="bg-white border rounded p-3 text-center">
+                            <h5 class="text-danger">Движение заряда в магнитном поле</h5>
+                            <svg width="300" height="220" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Фон поля (Крестики - от нас) -->
+                                <defs>
+                                    <pattern id="b-field" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <path d="M15,15 L25,25 M25,15 L15,25" stroke="#adb5bd" stroke-width="2"/>
+                                    </pattern>
+                                </defs>
+                                <rect x="0" y="0" width="300" height="220" fill="url(#b-field)"/>
+                                <text x="10" y="20" fill="#adb5bd" font-weight="bold">B ⊗ (от нас)</text>
+                
+                                <!-- Траектория (Пунктирный круг) -->
+                                <circle cx="150" cy="110" r="70" fill="none" stroke="#666" stroke-width="1.5" stroke-dasharray="5,5"/>
+                
+                                <!-- Частица (+q) -->
+                                <circle cx="220" cy="110" r="10" fill="#dc3545" stroke="white" stroke-width="2"/>
+                                <text x="214" y="115" fill="white" font-weight="bold" font-size="14">+</text>
+                
+                                <!-- Вектор скорости V (Касательная) -->
+                                <line x1="220" y1="110" x2="220" y2="50" stroke="#0d6efd" stroke-width="3" marker-end="url(#arrow_blue)"/>
+                                <text x="225" y="60" fill="#0d6efd" font-weight="bold" font-size="16">v</text>
+                
+                                <!-- Вектор Силы Лоренца F (К центру) -->
+                                <line x1="220" y1="110" x2="160" y2="110" stroke="#198754" stroke-width="3" marker-end="url(#arrow_green)"/>
+                                <text x="170" y="100" fill="#198754" font-weight="bold" font-size="16">Fₗ</text>
+                
+                                <!-- Маркер для зеленой стрелки -->
+                                <defs>
+                                    <marker id="arrow_green" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                                        <path d="M0,0 L0,6 L9,3 z" fill="#198754" />
+                                    </marker>
+                                </defs>
+                            </svg>
+                            
+                            <div class="alert alert-light border mt-2 text-start">
+                                <strong>Правило левой руки (для + заряда):</strong>
+                                <ul class="mb-0 small">
+                                    <li>1. Четыре пальца — по скорости \( \vec{v} \).</li>
+                                    <li>2. Линии поля \( \vec{B} \) (крестики) — входят в ладонь.</li>
+                                    <li>3. Большой палец — покажет силу Лоренца \( F_л \).</li>
+                                </ul>
+                                <div class="mt-2 text-center fw-bold text-muted small">
+                                    Итог: Сила всегда перпендикулярна скорости \(\to\) движение по окружности.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                
+            </div>
+
+            <!-- Задания 13, 17 -->
+            <div id="task13" class="content-card card-opt">
+                <h2>№13, 17. Оптика</h2>
+                <div class="formula-box">
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ \frac{1}{F} = \frac{1}{d} + \frac{1}{f} $$ (Формула линзы)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ D = \frac{1}{F} $$ (Оптическая сила)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ \Gamma = \frac{f}{d} = \frac{H}{h} $$ (Увеличение)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ d \sin \varphi = k \lambda $$ (Дифракционная решетка)</div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-md-10">
+                        <div class="text-center bg-white border rounded p-3">
+                            <h5>Построение в собирающей линзе</h5>
+                            <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                                <style>.ray {stroke: orange; stroke-width: 1.5; stroke-dasharray: 4;}</style>
+                                
+                                <!-- Оптическая ось -->
+                                <line x1="0" y1="100" x2="400" y2="100" stroke="#999" stroke-width="1" stroke-dasharray="5"/>
+                                
+                                <!-- Линза -->
+                                <line x1="200" y1="20" x2="200" y2="180" stroke="#0d6efd" stroke-width="3" />
+                                <path d="M 195 25 L 200 20 L 205 25 M 195 175 L 200 180 L 205 175" stroke="#0d6efd" stroke-width="2" fill="none"/>
+                                
+                                <!-- Фокусы -->
+                                <circle cx="120" cy="100" r="3" fill="#333"/><text x="115" y="120" font-size="12">F</text>
+                                <circle cx="280" cy="100" r="3" fill="#333"/><text x="275" y="120" font-size="12">F</text>
+                                
+                                <!-- Предмет (Стрелка вверх) -->
+                                <line x1="80" y1="100" x2="80" y2="60" stroke="#333" stroke-width="3" />
+                                <polygon points="77,65 83,65 80,60" fill="#333" />
+                                
+                                <!-- Луч 1: Параллельно оси -> через фокус -->
+                                <line x1="80" y1="60" x2="200" y2="60" class="ray" />
+                                <line x1="200" y1="60" x2="360" y2="140" class="ray" />
+                                
+                                <!-- Луч 2: Через центр (не преломляется) -->
+                                <line x1="80" y1="60" x2="360" y2="140" class="ray" />
+                                
+                                <!-- Изображение (Стрелка вниз) -->
+                                <line x1="320" y1="100" x2="320" y2="128" stroke="#dc3545" stroke-width="3" />
+                                <polygon points="317,123 323,123 320,128" fill="#dc3545" />
+                                <text x="310" y="145" fill="#dc3545" font-size="12">Изображение</text>
+                            </svg>
+                            <div class="small text-start mt-2">
+                                <strong>Правила построения:</strong>
+                                <ol>
+                                    <li>Луч параллельно главной оптической оси \(\to\) преломляется и идет через Фокус.</li>
+                                    <li>Луч через оптический центр \(\to\) идет не преломляясь.</li>
+                                    <li>Где лучи пересеклись — там верхушка изображения.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4 justify-content-center">
+                        <div class="col-md-10">
+                            <div class="text-center bg-white border rounded p-3">
+                                <h5>Построение в рассеивающей линзе</h5>
+                                <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                                    <style>.ray {stroke: orange; stroke-width: 1.5; stroke-dasharray: 4;} .solid-ray {stroke: orange; stroke-width: 1.5;}</style>
+                                    
+                                    <!-- Оптическая ось -->
+                                    <line x1="0" y1="100" x2="400" y2="100" stroke="#999" stroke-width="1" stroke-dasharray="5"/>
+                                    
+                                    <!-- Линза (Рассеивающая - "вилочки" наружу) -->
+                                    <line x1="200" y1="20" x2="200" y2="180" stroke="#0d6efd" stroke-width="3" />
+                                    <!-- Верхняя вилочка -->
+                                    <path d="M 195 20 L 200 25 L 205 20" stroke="#0d6efd" stroke-width="2" fill="none"/>
+                                    <!-- Нижняя вилочка -->
+                                    <path d="M 195 180 L 200 175 L 205 180" stroke="#0d6efd" stroke-width="2" fill="none"/>
+                                    
+                                    <!-- Фокусы -->
+                                    <circle cx="120" cy="100" r="3" fill="#333"/><text x="115" y="120" font-size="12">F</text>
+                                    <circle cx="280" cy="100" r="3" fill="#333"/><text x="275" y="120" font-size="12">F</text>
+                                    
+                                    <!-- Предмет (Стрелка вверх) -->
+                                    <line x1="60" y1="100" x2="60" y2="40" stroke="#333" stroke-width="3" />
+                                    <polygon points="57,45 63,45 60,40" fill="#333" />
+                                    
+                                    <!-- Луч 1: Параллельно оси -> рассеивается (продолжение через передний фокус) -->
+                                    <line x1="60" y1="40" x2="200" y2="40" class="solid-ray" /> <!-- До линзы -->
+                                    <line x1="200" y1="40" x2="360" y2="8" class="solid-ray" /> <!-- После линзы (вверх) -->
+                                    <line x1="200" y1="40" x2="120" y2="100" class="ray" stroke="gray" /> <!-- Мнимое продолжение в F -->
+                                    
+                                    <!-- Луч 2: Через центр (без преломления) -->
+                                    <line x1="60" y1="40" x2="280" y2="135" class="solid-ray" />
+                                    
+                                    <!-- Изображение (Мнимое, маленькое) -->
+                                    <!-- Пересечение луча через центр и мнимого продолжения луча 1 -->
+                                    <line x1="148" y1="100" x2="148" y2="78" stroke="#dc3545" stroke-width="3" stroke-dasharray="2,2" />
+                                    <polygon points="145,82 151,82 148,78" fill="#dc3545" />
+                                    <text x="135" y="70" fill="#dc3545" font-size="12">Изображение</text>
+                                </svg>
+                                <div class="small text-start mt-2">
+                                    <strong>Правила:</strong>
+                                    <ol>
+                                        <li>Луч параллельно оси \(\to\) рассеивается так, будто вышел из переднего Фокуса.</li>
+                                        <li>Изображение всегда находится <strong>между фокусом и линзой</strong>.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+
+            <!-- Задание 16 -->
+            <!-- №16 ЯДЕРНАЯ ФИЗИКА (РАСШИРЕННЫЙ) -->
+<div id="task16" class="content-card card-quant">
+    <h2>№16. Ядерная физика</h2>
+
+    <!-- БЛОК 1: Строение атома (Схема) -->
+    <div class="row align-items-center mb-4">
+        <div class="col-md-5 text-center">
+            <div class="svg-container bg-white p-2">
+                <svg width="280" height="220" viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Орбиты электронов -->
+                    <ellipse cx="140" cy="110" rx="100" ry="30" stroke="#adb5bd" stroke-width="1" fill="none" transform="rotate(20 140 110)"/>
+                    <ellipse cx="140" cy="110" rx="100" ry="30" stroke="#adb5bd" stroke-width="1" fill="none" transform="rotate(-20 140 110)"/>
+                    
+                    <!-- Электроны -->
+                    <circle cx="230" cy="130" r="4" fill="#0d6efd" />
+                    <circle cx="50" cy="90" r="4" fill="#0d6efd" />
+                    
+                    <!-- Ядро (Кластер) -->
+                    <g transform="translate(140, 110)">
+                        <circle cx="-6" cy="-6" r="8" fill="#dc3545" stroke="#333" stroke-width="1"/> <!-- Протон -->
+                        <circle cx="6" cy="-6" r="8" fill="#6c757d" stroke="#333" stroke-width="1"/> <!-- Нейтрон -->
+                        <circle cx="0" cy="6" r="8" fill="#dc3545" stroke="#333" stroke-width="1"/>
+                        <circle cx="-8" cy="4" r="8" fill="#6c757d" stroke="#333" stroke-width="1"/>
+                    </g>
+
+                    <!-- Выноски -->
+                    <line x1="140" y1="110" x2="200" y2="50" stroke="#333" stroke-width="1" />
+                    <text x="205" y="50" font-size="12" font-weight="bold">Ядро</text>
+                    <text x="205" y="65" font-size="11" fill="#dc3545">Протоны (Z)</text>
+                    <text x="205" y="80" font-size="11" fill="#6c757d">Нейтроны (N)</text>
+
+                    <line x1="50" y1="90" x2="20" y2="50" stroke="#0d6efd" stroke-width="1" />
+                    <text x="5" y="45" font-size="12" fill="#0d6efd" font-weight="bold">Электрон</text>
+                </svg>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <h4>Обозначение элемента</h4>
+            <div class="display-5 fw-bold font-monospace mb-3 text-center border rounded py-2 bg-light">
+                $${}_{Z}^{A}X$$
+            </div>
+            <ul class="list-group list-group-flush small">
+                <li class="list-group-item">
+                    <strong class="text-primary" style="font-size: 1.2em;">A</strong> — <strong>Массовое число</strong> (Нуклоны)<br>
+                    \( A = Z + N \) (Протоны + Нейтроны)
+                </li>
+                <li class="list-group-item">
+                    <strong class="text-danger" style="font-size: 1.2em;">Z</strong> — <strong>Зарядовое число</strong> (Заряд)<br>
+                    \( Z = \) Число протонов \( = \) Число электронов (в нейтр. атоме)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: Радиоактивные распады -->
+    <h3 class="mt-4">Типы радиоактивного распада</h3>
+    <div class="row g-3">
+        <!-- Альфа -->
+        <div class="col-md-4">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark fw-bold">1. \(\alpha\)-распад</div>
+                <div class="card-body">
+                    <p class="small text-muted mb-2">Вылетает ядро Гелия (альфа-частица).</p>
+                    <div class="alert alert-light border text-center py-2 mb-2">
+                        $${}_{2}^{4}He$$
+                    </div>
+                    <p class="mb-0 fw-bold small">Правило:</p>
+                    <ul class="small ps-3 mb-0">
+                        <li>Масса: <strong>-4</strong></li>
+                        <li>Заряд: <strong>-2</strong></li>
+                    </ul>
+                    <div class="mt-2 text-center small fst-italic">
+                        $${}_{Z}^{A}X \to {}_{Z-2}^{A-4}Y + {}_{2}^{4}He$$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Бета -->
+        <div class="col-md-4">
+            <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white fw-bold">2. \(\beta^{-}\)-распад</div>
+                <div class="card-body">
+                    <p class="small text-muted mb-2">Вылетает электрон. Нейтрон превращается в протон.</p>
+                    <div class="alert alert-light border text-center py-2 mb-2">
+                        $${}_{-1}^{0}e$$
+                    </div>
+                    <p class="mb-0 fw-bold small">Правило:</p>
+                    <ul class="small ps-3 mb-0">
+                        <li>Масса: <strong>не меняется</strong></li>
+                        <li>Заряд: <strong>+1</strong> (сдвиг вправо)</li>
+                    </ul>
+                    <div class="mt-2 text-center small fst-italic">
+                        $${}_{Z}^{A}X \to {}_{Z+1}^{A}Y + {}_{-1}^{0}e$$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Гамма -->
+        <div class="col-md-4">
+            <div class="card h-100 border-secondary">
+                <div class="card-header bg-secondary text-white fw-bold">3. \(\gamma\)-излучение</div>
+                <div class="card-body">
+                    <p class="small text-muted mb-2">Вылетает фотон (энергия). Ядро переходит в стационарное состояние.</p>
+                    <div class="alert alert-light border text-center py-2 mb-2">
+                        $${}_{0}^{0}\gamma$$
+                    </div>
+                    <p class="mb-0 fw-bold small">Правило:</p>
+                    <ul class="small ps-3 mb-0">
+                        <li>Масса: <strong>0</strong></li>
+                        <li>Заряд: <strong>0</strong></li>
+                    </ul>
+                    <div class="mt-2 text-center small fst-italic">Ничего не меняется, только энергия.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 3: Частицы и Законы -->
+    <div class="mt-4">
+        <div class="formula-box">
+            <h5 class="h6 fw-bold">Законы сохранения (для реакций)</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    1. Сумма <strong>верхних</strong> индексов (A) слева равна сумме справа.
+                </div>
+                <div class="col-md-6">
+                    2. Сумма <strong>нижних</strong> индексов (Z) слева равна сумме справа.
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-sm table-bordered text-center small mt-2">
+            <thead class="table-light">
+                <tr>
+                    <th>Частица</th>
+                    <th>Обозначение</th>
+                    <th>Заряд (Z)</th>
+                    <th>Масса (A)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Протон</td><td>\({}_{1}^{1}p\) или \({}_{1}^{1}H\)</td><td>+1</td><td>1</td></tr>
+                <tr><td>Нейтрон</td><td>\({}_{0}^{1}n\)</td><td>0</td><td>1</td></tr>
+                <tr><td>Электрон</td><td>\({}_{-1}^{0}e\) или \(\beta\)</td><td>-1</td><td>0</td></tr>
+                <tr><td>Позитрон</td><td>\({}_{+1}^{0}e\)</td><td>+1</td><td>0</td></tr>
+                <tr><td>Альфа-частица</td><td>\({}_{2}^{4}He\) или \(\alpha\)</td><td>+2</td><td>4</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Формула распада -->
+        <div class="formula-box mt-3">
+            <div class="formula-row"><span class="formula-num">1.</span> $$ N = N_0 \cdot 2^{-t/T} $$ (Закон радиоактивного распада)</div>
+            <div class="formula-row"><span class="formula-num">2.</span> $$ m = m_0 \cdot 2^{-t/T} $$ (То же самое для массы)</div>
+            <div class="formula-row"><span class="formula-num">3.</span> $$ E = \Delta m \cdot c^2 $$ (Энергия связи / Дефект масс)</div>
+            <div class="small text-muted mt-1">
+                Где \( N \) — осталось ядер, \( N_0 \) — было ядер, \( T \) — период полураспада.<br>
+                Если прошло время \( t = T \), остается ровно половина. Если \( t = 2T \), остается четверть.
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- ЭКСПЕРИМЕНТ И КАЧЕСТВЕННЫЕ ЗАДАЧИ -->
+<div id="task-exp" class="content-card border-top border-secondary">
+    <h2>Эксперимент и Анализ</h2>
+    
+    <div class="row">
+        <!-- Блок: Погрешность (Запись ответа) -->
+        <div class="col-md-6">
+            <h4 class="text-primary mt-3">Снятие показаний (Погрешность)</h4>
+            <div class="formula-box">
+                <p class="mb-2"><strong>Правило записи в бланк:</strong></p>
+                Количество знаков после запятой в <u>измерении</u> должно быть <strong>таким же</strong>, как в <u>погрешности</u>.
+            </div>
+            
+            <div class="alert alert-warning py-2 small">
+                <strong>Пример:</strong><br>
+                Прибор показывает: \( 4,5 \)<br>
+                Погрешность: \( \pm 0,25 \)<br>
+                <span class="text-danger">Неверно:</span> 4,50,25<br>
+                <span class="text-success fw-bold">Верно:</span> <strong>4,500,25</strong> (дописали ноль, чтобы сравнять знаки)
+            </div>
+        </div>
+
+        <!-- Блок: Выбор оборудования -->
+        <div class="col-md-6">
+            <h4 class="text-primary mt-3">Выбор оборудования</h4>
+            <div class="formula-box">
+                <p class="mb-2"><strong>Метод "Одной переменной":</strong></p>
+                Чтобы проверить зависимость \( Y \) от \( X \), нужно выбрать два опыта, где:
+                <ul class="mb-0 mt-2">
+                    <li>Параметр \( X \) — <strong>разный</strong>.</li>
+                    <li>Все остальные параметры — <strong>одинаковые</strong>.</li>
+                </ul>
+            </div>
+            <div class="small text-muted fst-italic">
+                Например: Проверяем зависимость периода от длины нити. Ищем два маятника с <b>разной длиной</b>, но <b>одинаковой массой</b> груза.
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Блок: Работа с графиками и утверждениями -->
+    <h3>Задачи без формул (Графики и Утверждения)</h3>
+    <p>Как анализировать процессы, не вспоминая сложные формулы:</p>
+    
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="p-3 border rounded bg-light h-100">
+                <h5 class="fw-bold">1. Наклон касательной</h5>
+                <p class="small mb-0">
+                    Угол наклона графика (производная) показывает <strong>скорость изменения</strong> величины.
+                    <br>График \( x(t) \) круче \(\to\) скорость \( v \) больше.
+                    <br>График \( v(t) \) круче \(\to\) ускорение \( a \) больше.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 border rounded bg-light h-100">
+                <h5 class="fw-bold">2. Площадь под графиком</h5>
+                <p class="small mb-0">
+                    Площадь фигуры под линией графика часто имеет физический смысл:
+                    <br>\( v(t) \) \(\to\) Путь \( S \)
+                    <br>\( p(V) \) \(\to\) Работа газа \( A \)
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 border rounded bg-light h-100">
+                <h5 class="fw-bold">3. Логика "Крайних случаев"</h5>
+                <p class="small mb-0">
+                    Если не знаете ответ, представьте экстремальную ситуацию.
+                    <br><em>Пример:</em> "Что будет, если массу сделать бесконечной?" или "Если угол станет 0?". Ответ должен соответствовать здравому смыслу.
+                </p>
+            </div>
+        </div>
+    </div>
+    <h2>Задания на анализ (№5, 6, 15, 17)</h2>
+    <div class="alert alert-primary py-2 small">
+        <strong>Типы вопросов:</strong>
+        <ul class="mb-0">
+            <li><strong>Изменение:</strong> 1 (Увеличится), 2 (Уменьшится), 3 (Не изменится).</li>
+            <li><strong>Соответствие:</strong> Подобрать формулу или график к физической величине.</li>
+        </ul>
+    </div>
+
+    <!-- БЛОК 1: МЕХАНИКА (№5, №6) -->
+    <h4 class="text-primary mt-4">1. Механика: Анализ изменений</h4>
+    <div class="row g-3">
+        <!-- Колебания (Маятники) -->
+        <div class="col-md-6">
+            <div class="p-3 bg-light border rounded h-100">
+                <h6 class="fw-bold">Маятники (Груз на пружине / нити)</h6>
+                <p class="small mb-2"><em>Вопрос: "Как изменятся период T и энергия E, если массу увеличить?"</em></p>
+                
+                <table class="table table-sm table-bordered bg-white small mb-0">
+                    <thead>
+                        <tr>
+                            <th>Величина</th>
+                            <th>Пружинный (\( \sqrt{m/k} \))</th>
+                            <th>Нитяной (\( \sqrt{l/g} \))</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Период (T)</strong></td>
+                            <td>Зависит от \( m \) <span class="text-danger">(\(\uparrow\))</span></td>
+                            <td>Не зависит от \( m \) <span class="text-muted">(Const)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Макс. Скорость</strong></td>
+                            <td>\( v_{max} = A\omega = A\sqrt{k/m} \)</td>
+                            <td>\( v_{max} = \sqrt{2gh} \)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-2 small text-muted fst-italic">
+                    <strong>Ловушка:</strong> Если меняем массу, жесткость \( k \) и длина \( l \) <strong>не меняются</strong>. Но частота \( \nu = 1/T \) всегда ведет себя <em>наоборот</em> периоду.
+                </div>
+            </div>
+        </div>
+
+        <!-- Спутники и Орбиты -->
+        <div class="col-md-6">
+            <div class="p-3 bg-light border rounded h-100">
+                <h6 class="fw-bold">Движение спутников</h6>
+                <p class="small mb-2"><em>Вопрос: "Спутник перешел на более высокую орбиту (R увеличился). Что с v, T, a?"</em></p>
+                
+                <ul class="list-unstyled small mb-0">
+                    <li class="mb-2">
+                        <strong>Скорость \( v = \sqrt{GM/R} \):</strong> <span class="badge bg-danger">Уменьшится (2)</span>. Чем дальше, тем медленнее.
+                    </li>
+                    <li class="mb-2">
+                        <strong>Ускорение \( a = GM/R^2 \):</strong> <span class="badge bg-danger">Уменьшится (2)</span>. Притяжение слабее.
+                    </li>
+                    <li class="mb-2">
+                        <strong>Период \( T = 2\pi R / v \):</strong> <span class="badge bg-success">Увеличится (1)</span>. Путь больше, скорость меньше \(\to\) лететь дольше.
+                    </li>
+                    <li>
+                        <strong>Полная энергия \( E = E_k + E_p \):</strong> <span class="badge bg-success">Увеличится (1)</span>. Мы совершили работу, чтобы поднять его выше.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 2: ЭЛЕКТРОДИНАМИКА И КВАНТЫ (№15, №17) -->
+    <h4 class="text-warning text-dark mt-4">2. Электродинамика и Кванты</h4>
+    
+    <!-- Колебательный контур -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-12">
+            <div class="d-flex align-items-center bg-white border rounded p-3">
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold">Колебательный контур (LC)</h6>
+                    <p class="small mb-2"><em>"Раздвинули пластины конденсатора (d увеличили). Как изменится частота и период?"</em></p>
+                    <div class="formula-box py-2 mb-0 d-inline-block pe-4">
+                        1. \( C = \frac{\varepsilon S}{d} \downarrow \) (Емкость падает)
+                    </div>
+                    <div class="formula-box py-2 mb-0 d-inline-block">
+                        2. \( T = 2\pi\sqrt{LC} \downarrow \) (Период падает)
+                    </div>
+                </div>
+                <div class="text-end ps-3 border-start">
+                    <span class="d-block small text-muted">Частота \(\nu\)</span>
+                    <strong class="text-success">Увеличится (1)</strong>
+                    <span class="d-block small text-muted mt-2">Длина волны \(\lambda = cT\)</span>
+                    <strong class="text-danger">Уменьшится (2)</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фотоэффект и Частицы -->
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="p-3 bg-light border rounded h-100">
+                <h6 class="fw-bold">Фотоэффект: Меняем свет</h6>
+                <table class="table table-sm table-striped small mb-0">
+                    <tr>
+                        <td><strong>Увеличили частоту (\(\nu \uparrow\))</strong><br>(Цвет стал "синее/фиолетовее")</td>
+                        <td>
+                            \( E_{фот} \uparrow \) (Энергия фотона)<br>
+                            \( v_{max} \uparrow \) (Скорость электронов)<br>
+                            \( U_{зап} \uparrow \) (Запирающее напр.)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Увеличили интенсивность</strong><br>(Свет стал ярче, но цвет тот же)</td>
+                        <td>
+                            \( N_{фот} \uparrow \) (Число фотонов)<br>
+                            \( I_{нас} \uparrow \) (Ток насыщения)<br>
+                            <span class="text-muted">Скорость v и Uзап НЕ меняются!</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="p-3 bg-light border rounded h-100">
+                <h6 class="fw-bold">Частица в магнитном поле</h6>
+                <p class="small mb-1"><em>"Влетела с большей скоростью (\( v \uparrow \)). Что с радиусом и периодом?"</em></p>
+                <div class="formula-box py-1 mb-2">
+                    $$ R = \frac{mv}{qB} \quad T = \frac{2\pi m}{qB} $$
+                </div>
+                <ul class="list-unstyled small mb-0">
+                    <li><strong>Радиус R:</strong> <span class="badge bg-success">Увеличится (1)</span> (Прямая зависимость от \( v \)).</li>
+                    <li><strong>Период T:</strong> <span class="badge bg-secondary">Не изменится (3)</span>! (В формуле нет \( v \)).</li>
+                    <li class="mt-1 text-muted fst-italic">"Быстрее летит, но и круг больше — время то же".</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 3: ГРАФИКИ (№6, №17) -->
+    <h4 class="text-success mt-4">3. Узнай график по виду</h4>
+    <div class="row row-cols-2 row-cols-md-4 g-2 text-center small">
+        <div class="col">
+            <div class="border rounded p-2 h-100">
+                <svg width="80" height="60" viewBox="0 0 80 60"><line x1="5" y1="55" x2="75" y2="5" stroke="#0d6efd" stroke-width="2"/><line x1="5" y1="55" x2="75" y2="55" stroke="black"/><line x1="5" y1="55" x2="5" y2="5" stroke="black"/></svg>
+                <div class="fw-bold mt-1">Прямая из 0</div>
+                <div class="text-muted">\( y = kx \)</div>
+                <div>Закон Ома, \( F_{упр}(x) \)</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="border rounded p-2 h-100">
+                <svg width="80" height="60" viewBox="0 0 80 60"><path d="M 5 5 Q 15 55 75 55" stroke="#dc3545" stroke-width="2" fill="none"/><line x1="5" y1="55" x2="75" y2="55" stroke="black"/><line x1="5" y1="55" x2="5" y2="5" stroke="black"/></svg>
+                <div class="fw-bold mt-1">Гипербола</div>
+                <div class="text-muted">\( y = k/x \)</div>
+                <div>Изотерма \( p(V) \), \( \lambda(\nu) \)</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="border rounded p-2 h-100">
+                <svg width="80" height="60" viewBox="0 0 80 60"><path d="M 5 55 Q 40 55 75 5" stroke="#198754" stroke-width="2" fill="none"/><line x1="5" y1="55" x2="75" y2="55" stroke="black"/><line x1="5" y1="55" x2="5" y2="5" stroke="black"/></svg>
+                <div class="fw-bold mt-1">Парабола</div>
+                <div class="text-muted">\( y = ax^2 \)</div>
+                <div>\( S(t) \), \( E_k(v) \), \( W(I) \)</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="border rounded p-2 h-100">
+                <svg width="80" height="60" viewBox="0 0 80 60"><path d="M 5 30 Q 20 5 40 30 T 75 30" stroke="#6f42c1" stroke-width="2" fill="none"/><line x1="5" y1="30" x2="75" y2="30" stroke="black"/><line x1="5" y1="55" x2="5" y2="5" stroke="black"/></svg>
+                <div class="fw-bold mt-1">Синусоида</div>
+                <div class="text-muted">\( \sin, \cos \)</div>
+                <div>Колебания \( x(t), q(t), i(t) \)</div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
