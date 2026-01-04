@@ -14,6 +14,14 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* --- АДАПТИВНОСТЬ (Добавить в <style>) --- */
+/* МОБИЛЬНЫЙ SIDEBAR */
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: static !important;
+        height: auto !important;
+        margin-bottom: 20px;
+    }
+}
 
 /* 1. Графика сжимается под экран */
 svg, img {
@@ -252,6 +260,14 @@ svg, img {
     </style>
 </head>
 <body>
+<!-- МОБИЛЬНЫЙ ХЕДЕР -->
+<div class="d-md-none bg-white border-bottom p-3 d-flex justify-content-between align-items-center shadow-sm">
+    <h5 class="mb-0 fw-bold text-dark">Теория</h5>
+    <button id="theme-toggle-mobile" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-moon-stars-fill"></i>
+    </button>
+</div>
+
 <!-- КНОПКИ УПРАВЛЕНИЯ -->
 <div class="top-controls">
     <!-- Переключатель темы -->
@@ -267,7 +283,8 @@ svg, img {
 <div class="container-fluid py-4">
     <div class="row g-4">
         <!-- Навигация -->
-        <div class="col-md-3 col-lg-2 d-none d-md-block">
+        <div class="col-md-3 col-lg-2 d-block d-md-sticky"> <!-- Виден всегда -->
+
             <div class="sidebar">
                 <h5 class="mb-4 fw-bold text-dark">ЕГЭ Физика</h5>
                 <nav class="nav flex-column">
@@ -2400,57 +2417,53 @@ svg, img {
     
 </div>
 <script>
-    // Логика темной темы + MathJax
-    const toggleBtn = document.getElementById('theme-toggle');
-    const themeIcon = toggleBtn.querySelector('i');
+    // Поддержка обеих кнопок
+    const toggleBtns = [
+        document.getElementById('theme-toggle'),
+        document.getElementById('theme-toggle-mobile')
+    ];
+    const themeIcon = toggleBtn => toggleBtn.querySelector('i');
     const body = document.body;
 
-    // 1. Проверяем сохраненную тему
-    if (localStorage.getItem('theme') === 'dark') {
-        enableDarkMode();
-    }
+    // Загрузка темы
+    if (localStorage.getItem('theme') === 'dark') enableDarkMode();
 
     function enableDarkMode() {
         body.classList.add('dark-mode');
-        themeIcon.classList.remove('bi-moon-stars');
-        themeIcon.classList.add('bi-sun-fill');
+        toggleBtns.forEach(btn => {
+            if (btn) {
+                themeIcon(btn).classList.remove('bi-moon-stars-fill');
+                themeIcon(btn).classList.add('bi-sun-fill');
+            }
+        });
         localStorage.setItem('theme', 'dark');
-        reRenderMathJax(); // ← ПЕРЕРЕНДЕРИВАЕМ формулы!
     }
 
     function disableDarkMode() {
         body.classList.remove('dark-mode');
-        themeIcon.classList.remove('bi-sun-fill');
-        themeIcon.classList.add('bi-moon-stars');
+        toggleBtns.forEach(btn => {
+            if (btn) {
+                themeIcon(btn).classList.remove('bi-sun-fill');
+                themeIcon(btn).classList.add('bi-moon-stars-fill');
+            }
+        });
         localStorage.setItem('theme', 'light');
-        reRenderMathJax(); // ← ПЕРЕРЕНДЕРИВАЕМ формулы!
     }
 
-    // 2. ФУНКЦИЯ ПЕРЕРЕНДЕРА MathJax (КРИТИЧЕСКИ ВАЖНО!)
-    function reRenderMathJax() {
-        if (typeof MathJax !== 'undefined') {
-            setTimeout(() => {
-                MathJax.typesetPromise(); // Перерисовывает ВСЕ формулы с новыми стилями
-            }, 100); // Небольшая задержка для применения CSS
-        }
-    }
-
-    // 3. Обработчик клика
-    toggleBtn.addEventListener('click', () => {
-        if (body.classList.contains('dark-mode')) {
-            disableDarkMode();
-        } else {
-            enableDarkMode();
-        }
-    });
-
-    // 4. Перерендер при загрузке страницы (если MathJax готов)
-    window.addEventListener('load', () => {
-        if (body.classList.contains('dark-mode')) {
-            reRenderMathJax();
+    // Обработчики для обеих кнопок
+    toggleBtns.forEach(btn => {
+        if (btn) {
+            btn.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    disableDarkMode();
+                } else {
+                    enableDarkMode();
+                }
+            });
         }
     });
 </script>
+
 
 
 </body>
