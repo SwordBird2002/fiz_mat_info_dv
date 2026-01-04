@@ -30,6 +30,21 @@
         .dark ::-webkit-scrollbar-track { background: #1e293b; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
         .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        /* --- ПЕРЕКРАСКА БЛОКА КОДА (bg-slate-100) --- */
+
+/* Используем ваш класс .dark */
+        .dark pre.bg-slate-100 {
+            background-color: #1e293b !important; /* Slate-800 (темно-синий, в стиль скроллбара) */
+            color: #f1f5f9 !important;           /* Slate-100 (светлый текст) */
+            border: 1px solid #334155 !important; /* Slate-700 (рамка) */
+        }
+        
+        /* Красим текст внутри */
+        .dark pre.bg-slate-100 code {
+            color: inherit !important;           /* Наследует цвет от pre */
+            background-color: transparent !important;
+        }
+
     </style>
 </head>
 <body class="bg-gray-50 text-slate-900 font-sans min-h-screen flex flex-col dark:bg-slate-900 dark:text-slate-100">
@@ -242,4 +257,5 @@
     </script>
 </body>
 </html>
+
 
