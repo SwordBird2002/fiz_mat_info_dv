@@ -255,8 +255,213 @@ svg, img {
         body.dark-mode .content-card div {
             color: #e0e0e0 !important;
         }
+        body.dark-mode h3,
+        body.dark-mode .h3 {
+            color: #e0e0e0 !important; /* Светло-серый (почти белый) */
+        }
+        body.dark-mode .alert {
+            background-color: #2c2c2c !important; /* Темный фон вместо белого */
+            border-color: #5b1919 !important;       /* Темная рамка */
+            color: #e0e0e0 !important;           /* Светлый текст */
+        }
+        /* --- ТАБЛИЦА СРАВНЕНИЯ (COMPARE TABLE) --- */
+
+/* 1. Основной фон и текст таблицы */
+        /* Перекрашиваем .table-light в темной теме */
+        body.dark-mode .table-responsive .table-light,
+        body.dark-mode .table-responsive .table-light th,
+        body.dark-mode .table-responsive .table-light td {
+            background-color: #383838 !important; /* Темно-серый фон (чуть светлее основного) */
+            color: #e0e0e0 !important;           /* Светлый текст */
+            border-color: #444 !important;       /* Темная граница */
+        }
+
+        /* Если внутри есть заголовки (thead с table-light) */
+        body.dark-mode .table-responsive thead.table-light th {
+            background-color: #444 !important;    /* Выделяем шапку */
+            color: #fff !important;               /* Белый текст заголовков */
+            border-bottom-color: #555 !important;
+        }
+
+        
+        /* 2. Заголовок таблицы (th) */
+        /* В светлой теме у вас там серый фон (#e9ecef), в темной сделаем его чуть темнее ячеек */
+        body.dark-mode .compare-table th {
+            background-color: #383838 !important; 
+        }
+
+        /* 3. Убираем "полосатость" Bootstrap, если она мешает (table-striped), 
+        или настраиваем её для темной темы */
+        body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
+            background-color: #333333 !important; /* Чередующийся цвет */
+            color: #e0e0e0 !important;
+        }
+
+        /* 4. Исправляем текст внутри (strong, b, span) */
+        body.dark-mode .compare-table strong,
+        body.dark-mode .compare-table b {
+            color: #ffffff !important; /* Ярко-белый для акцентов */
+        }
+        /* ИСПРАВЛЕНИЕ ТАБЛИЦЫ ЭЛЕКТРИЧЕСТВА (Задание 10) */
+
+/* 1. Перебиваем bg-white у самой таблицы */
+        body.dark-mode .table-responsive table.bg-white {
+            background-color: #2c2c2c !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        /* 2. Шапка (thead) */
+        body.dark-mode .table-responsive .table-light th {
+            background-color: #383838 !important;
+            color: #fff !important;
+            border-color: #555 !important;
+        }
+        /* КРАСИМ ВЕСЬ ТЕКСТ В ТАБЛИЦЕ */
+        body.dark-mode .table-responsive table.bg-white * {
+            color: #e0e0e0 !important;
+        }
+
+        /* Исключение: Текст внутри badge (плашек) должен оставаться белым на цветном фоне */
+        body.dark-mode .table-responsive .badge {
+            color: #fff !important;
+        }
+
+        /* Исключение 2: "text-muted" (серый текст) делаем чуть темнее основного, но читаемым */
+        body.dark-mode .table-responsive .text-muted {
+            color: #a0a0a0 !important;
+        }
+
+        /* Исключение 3: Классы цветов (text-success, text-danger) - делаем их ярче */
+        body.dark-mode .table-responsive .text-success {
+            color: #75b798 !important; /* Ярко-зеленый */
+        }
+        body.dark-mode .table-responsive .text-danger {
+            color: #ea868f !important; /* Ярко-красный */
+        }
 
 
+        /* 3. Ячейки (td) и границы */
+        body.dark-mode .table-responsive table.bg-white td,
+        body.dark-mode .table-responsive table.bg-white th {
+            background-color: #2c2c2c !important; /* Фон ячеек */
+            border-color: #444 !important;       /* Цвет сетки */
+            color: #e0e0e0 !important;           /* Текст */
+        }
+
+        /* 4. Исправляем SVG схемы внутри (линии и резисторы) */
+        /* Линии становятся белыми */
+        body.dark-mode .table-responsive line {
+            stroke: #e0e0e0 !important;
+        }
+        /* Коробочки резисторов (прямоугольники) */
+        body.dark-mode .table-responsive rect[fill="#fff"] {
+            fill: #2c2c2c !important; /* Фон резистора темный */
+            stroke: #e0e0e0 !important; /* Контур белый */
+        }
+        /* Текст внутри SVG (R1, R2) */
+        body.dark-mode .table-responsive text {
+            fill: #e0e0e0 !important;
+        }
+        /* --- ТАБЛИЦА ЧАСТИЦ (Ядерная физика) --- */
+
+/* 1. Сама таблица (фон и текст) */
+        body.dark-mode .table-bordered {
+            border-color: #444 !important; /* Цвет внешней рамки */
+        }
+
+        /* 2. Ячейки тела (td) */
+        body.dark-mode .table-bordered td {
+            background-color: #2c2c2c !important; /* Темный фон */
+            color: #e0e0e0 !important;           /* Светлый текст */
+            border-color: #444 !important;       /* Цвет внутренних рамок */
+        }
+
+        /* 3. Шапка таблицы (thead с классом table-light) */
+        body.dark-mode .table-light th {
+            background-color: #383838 !important; /* Чуть светлее фона ячеек */
+            color: #fff !important;               /* Белый текст заголовков */
+            border-color: #444 !important;
+        }
+
+        /* 4. Формулы MathJax внутри таблицы */
+        body.dark-mode .table-bordered mjx-container {
+            color: #e0e0e0 !important; /* Чтобы формулы частиц были белыми */
+        }
+        /* --- ТАБЛИЦА МАЯТНИКОВ (bg-white) --- */
+
+/* 1. Перебиваем белый фон таблицы */
+        body.dark-mode table.bg-white {
+            background-color: #2c2c2c !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        /* 2. Красим ячейки (td) и заголовки (th) */
+        body.dark-mode table.bg-white th,
+        body.dark-mode table.bg-white td {
+            background-color: #2c2c2c !important; /* Фон ячеек */
+            color: #e0e0e0 !important;           /* Текст */
+            border-color: #444 !important;       /* Рамки */
+        }
+
+        /* 3. Шапка таблицы (thead) */
+        /* В этой таблице у thead нет класса table-light, поэтому красим th напрямую */
+        body.dark-mode table.bg-white thead th {
+            background-color: #383838 !important; /* Выделяем шапку чуть светлее */
+            color: #fff !important;
+            border-bottom: 2px solid #555 !important;
+        }
+
+        /* 4. Формулы в заголовках (корень из m/k) */
+        body.dark-mode table.bg-white mjx-container {
+            color: #e0e0e0 !important;
+        }
+        /* --- ИСПРАВЛЕНИЕ ТАБЛИЦ ВНУТРИ СВЕТЛЫХ БЛОКОВ (bg-light) --- */
+
+/* 1. Перекрашиваем родительский блок bg-light */
+        body.dark-mode .bg-light {
+            background-color: #2c2c2c !important; /* Делаем фон блока темным */
+            color: #e0e0e0 !important;           /* Текст светлым */
+            border-color: #444 !important;       /* Границы темными */
+        }
+
+        /* 2. Сама таблица внутри */
+        body.dark-mode .table-striped {
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        /* 3. Ячейки (td) и Заголовки (th) - прозрачный фон, чтобы видеть темный фон родителя */
+        body.dark-mode .table-striped th,
+        body.dark-mode .table-striped td {
+            background-color: transparent !important; /* Прозрачный фон */
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        /* 4. Полосатость (Striped rows) - делаем чуть светлее для контраста */
+        body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
+            background-color: rgba(255, 255, 255, 0.05) !important; /* Еле заметная подсветка */
+            color: #e0e0e0 !important;
+            box-shadow: none !important; /* Убираем тени Bootstrap */
+        }
+
+        /* 5. Убираем белый фон, если он где-то остался на ячейках */
+        body.dark-mode .table-sm td, 
+        body.dark-mode .table-sm th {
+            background-color: transparent !important;
+        }
+
+
+        body.dark-mode .col-md-4 .card-body  {
+            background-color: #2c2c2c !important; /* Фон ячеек */
+            border-color: #444 !important;
+        }
+        body.dark-mode .col-md-7 .list-group-item {
+            background-color: #2c2c2c !important; /* Фон ячеек */
+            border-color: #444 !important;
+            color: #e0e0e0 !important;}
     </style>
 </head>
 <body>
@@ -2480,6 +2685,5 @@ svg, img {
 
 </body>
 </html>
-
 
 
