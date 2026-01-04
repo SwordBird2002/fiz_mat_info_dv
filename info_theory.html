@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информатика - В разработке</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        /* ОСНОВНЫЕ СТИЛИ */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* ТЕМНАЯ ТЕМА */
+        body.dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .terminal-window {
+            background-color: #1e1e1e;
+            border-color: #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode .terminal-header {
+            background-color: #2c2c2c;
+            border-bottom-color: #333;
+        }
+        
+        body.dark-mode .text-muted {
+            color: #a0a0a0 !important;
+        }
+
+        /* ОКНО ТЕРМИНАЛА */
+        .terminal-window {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .terminal-header {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .terminal-body {
+            padding: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+
+        /* АНИМАЦИИ */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Иконка шестеренки */
+        .spin-icon {
+            display: inline-block;
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin { 
+            100% { transform: rotate(360deg); } 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кнопка переключения темы (абсолютное позиционирование) -->
+    <div class="position-absolute top-0 end-0 m-4">
+        <button id="theme-toggle" class="btn btn-outline-secondary rounded-circle p-2">
+            <i class="bi bi-moon-stars-fill"></i>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                
+                <!-- Заголовок -->
+                <div class="mb-4">
+                    <i class="bi bi-cpu display-1 text-primary spin-icon mb-3"></i>
+                    <h1 class="fw-bold display-5">ЕГЭ: Информатика</h1>
+                    <p class="lead text-muted">Модуль находится в процессе разработки...</p>
+                </div>
+
+                <!-- Терминал -->
+                <div class="terminal-window mx-auto text-start">
+                    <div class="terminal-header">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                        <span class="ms-2 small text-muted">build_process.sh — bash</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="mb-2">
+                            <span class="text-primary fw-bold">user@dev:~$</span> start_coding.exe
+                        </div>
+                        <div class="mb-2 text-muted small">
+                            [INFO] Loading Python libraries... <span class="text-success">Done</span><br>
+                            [INFO] Connecting to neural network... <span class="text-success">Done</span><br>
+                            [WARN] Coffee levels critically low... <br>
+                            [INFO] Writing algorithms...
+                        </div>
+                        <div class="mt-3">
+                            <span class="text-success">></span> <span id="typewriter"></span><span class="cursor-blink">_</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Кнопка Назад -->
+                <div class="mt-5">
+                    <a href="theory_landing.html" class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm">
+                        <i class="bi bi-arrow-left me-2"></i>Вернуться к теории
+                    </a>
+                    <div class="mt-3 small text-muted">
+                        Ожидаемое время релиза: <span class="font-monospace">∞</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРИПТЫ -->
+    <script>
+        // 1. ПЕЧАТНАЯ МАШИНКА
+        const textToType = "Rendering educational content...";
+        const typeWriterElement = document.getElementById('typewriter');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                typeWriterElement.innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100); // Скорость печати
+            }
+        }
+        
+        // Запуск через секунду после загрузки
+        setTimeout(typeWriter, 1000);
+
+
+        // 2. ТЕМНАЯ ТЕМА (Ваш стандартный скрипт)
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = toggleBtn.querySelector('i');
+        const body = document.body;
+
+        if (localStorage.getItem('theme') === 'dark') enableDarkMode();
+
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            themeIcon.classList.remove('bi-moon-stars-fill');
+            themeIcon.classList.add('bi-sun-fill');
+            localStorage.setItem('theme', 'dark');
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            themeIcon.classList.remove('bi-sun-fill');
+            themeIcon.classList.add('bi-moon-stars-fill');
+            localStorage.setItem('theme', 'light');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        });
+    </script>
+</body>
+</html>
