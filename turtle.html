@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Turtle (Pro)</title>
+    
+    <!-- Подсветка синтаксиса (Prism) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" id="prism-theme" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    
+    <!-- Редактор (CodeJar) -->
+    <script type="module">
+        import {CodeJar} from 'https://cdn.jsdelivr.net/npm/codejar@3.7.0/codejar.js';
+        window.CodeJar = CodeJar;
+    </script>
+    
+    <!-- Иконки (Bootstrap Icons) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; background: #f4f4f4; transition: background 0.3s; }
+        
+        /* ШАПКА */
+        header { 
+            background: #2c3e50; color: white; padding: 0 15px; height: 50px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .nav-btn {
+            color: white; text-decoration: none; font-size: 18px; 
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer;
+            transition: 0.2s; background: rgba(255,255,255,0.1);
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+
+        .title { font-weight: 600; font-size: 16px; margin-left: 10px; display: flex; align-items: center; gap: 8px; }
+        
+        .btn-run { 
+            background: #27ae60; color: white; border: none; padding: 6px 20px; 
+            border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px;
+            display: flex; align-items: center; gap: 6px; transition: 0.2s;
+        }
+        .btn-run:hover { background: #219150; box-shadow: 0 2px 8px rgba(39, 174, 96, 0.4); }
+
+        .main { display: flex; flex: 1; height: calc(100% - 50px); overflow: hidden; }
+        
+        /* РЕДАКТОР */
+        .editor-container { 
+            width: 40%; display: flex; flex-direction: column; 
+            border-right: 1px solid #ccc; background: white; 
+            position: relative; transition: background 0.3s, border-color 0.3s;
+        }
+        
+        #editor { 
+            flex: 1; padding: 15px; font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 14px; line-height: 1.5; outline: none; 
+            background: #fdfdfd; color: #333; overflow: auto; tab-size: 4;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        /* ХОЛСТ */
+        .canvas-container { 
+            width: 60%; position: relative; background: #e0e0e0; overflow: hidden; 
+            cursor: grab;
+            background-image: radial-gradient(#aaa 1px, transparent 1px);
+            background-size: 20px 20px;
+            transition: background 0.3s;
+        }
+        .canvas-container:active { cursor: grabbing; }
+        
+        canvas { background: white; display: block; box-shadow: 0 0 20px rgba(0,0,0,0.1); transition: background 0.3s; }
+        
+        /* КАМЕРА */
+        .camera-controls {
+            position: absolute; bottom: 20px; right: 20px;
+            background: rgba(255,255,255,0.95); padding: 5px; border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15); display: flex; gap: 5px;
+            transition: background 0.3s;
+        }
+        .cam-btn {
+            width: 32px; height: 32px; border: 1px solid #ddd; background: white; 
+            cursor: pointer; border-radius: 4px; font-weight: bold; color: #555;
+            display: flex; justify-content: center; align-items: center; font-size: 16px;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .cam-btn:hover { background: #f5f5f5; color: #000; }
+
+        #error { 
+            position: absolute; bottom: 10px; left: 10px; right: 10px; 
+            background: rgba(220, 53, 69, 0.95); color: white; padding: 12px; 
+            border-radius: 6px; font-family: monospace; display: none; z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); font-size: 13px;
+        }
+
+        /* --- ТЕМНАЯ ТЕМА --- */
+        body.dark-mode { background: #1e1e1e; }
+        body.dark-mode .editor-container { background: #1e1e1e; border-color: #333; }
+        body.dark-mode #editor { background: #1e1e1e; color: #d4d4d4; }
+        
+        body.dark-mode .canvas-container { 
+            background-color: #2d2d2d; 
+            background-image: radial-gradient(#444 1px, transparent 1px);
+        }
+        body.dark-mode canvas { background: #1a1a1a; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        
+        body.dark-mode .camera-controls { background: #333; border: 1px solid #444; }
+        body.dark-mode .cam-btn { background: #444; border-color: #555; color: #ccc; }
+        body.dark-mode .cam-btn:hover { background: #555; color: white; }
+        
+        /* Цвета Prism для темной темы (переопределение) */
+        body.dark-mode .token.comment { color: #6a9955; }
+        body.dark-mode .token.keyword { color: #569cd6; } /* Синий VS Code */
+        body.dark-mode .token.number { color: #b5cea8; }
+        body.dark-mode .token.string { color: #ce9178; }
+        body.dark-mode .token.function { color: #dcdcaa; }
+        body.dark-mode .token.operator { color: #d4d4d4; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <!-- ГРУППА КНОПОК -->
+        <a href="python_sandbox.html" class="nav-btn" title="Вернуться назад">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <button class="nav-btn" onclick="toggleTheme()" title="Сменить тему">
+            <i class="bi bi-moon-stars" id="theme-icon"></i>
+        </button>
+        
+        <div class="title">🐢 Turtle ЕГЭ</div>
+    </div>
+    
+    <button class="btn-run" onclick="run()">
+        <i class="bi bi-play-fill"></i> ЗАПУСТИТЬ
+    </button>
+</header>
+
+<div class="main">
+    <div class="editor-container">
+        <div id="editor" class="language-python">from turtle import *
+
+# Масштаб
+k = 20
+
+left(90)
+pendown()
+
+# Рисуем прямоугольник
+for i in range(2):
+    forward(10 * k)
+    right(90)
+    forward(15 * k)
+    right(90)
+
+penup()
+
+# Сетка точек
+for x in range(-5, 15):
+    for y in range(-5, 20):
+        goto(x * k, y * k)
+        dot(4, "red")</div>
+    </div>
+    
+    <div class="canvas-container" id="canvasBox">
+        <canvas id="cv"></canvas>
+        <div id="error"></div>
+        
+        <div class="camera-controls">
+            <button class="cam-btn" onclick="resetCamera()" title="Сброс вида">⟲</button>
+            <button class="cam-btn" onclick="zoom(0.1)" title="Приблизить">+</button>
+            <button class="cam-btn" onclick="zoom(-0.1)" title="Отдалить">-</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- ИНИЦИАЛИЗАЦИЯ ---
+    let jar;
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Проверка сохраненной темы
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeIcon.className = 'bi bi-sun';
+    }
+
+    window.onload = function() {
+        resize();
+        run();
+        if (window.CodeJar) {
+            const highlight = (editor) => {
+                if (window.Prism) {
+                    editor.innerHTML = Prism.highlight(editor.textContent, Prism.languages.python, 'python');
+                }
+            };
+            jar = window.CodeJar(document.querySelector('#editor'), highlight);
+        }
+    };
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeIcon.className = isDark ? 'bi bi-sun' : 'bi bi-moon-stars';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        
+        // Перерисовка черепахи (чтобы сетка обновилась, если бы она была динамической)
+        redraw();
+    }
+
+    // --- ГРАФИКА И КАМЕРА ---
+    const canvas = document.getElementById('cv');
+    const ctx = canvas.getContext('2d');
+    const box = document.getElementById('canvasBox');
+    const errBox = document.getElementById('error');
+
+    let cam = { x: 0, y: 0, zoom: 1 };
+    let isDragging = false, lastX, lastY;
+    let drawHistory = []; 
+    let T = { x: 0, y: 0, ang: 90, pen: true, col: 'black', wid: 2, visible: true };
+
+    function resize() {
+        canvas.width = box.clientWidth;
+        canvas.height = box.clientHeight;
+        redraw();
+    }
+    window.addEventListener('resize', resize);
+
+    box.addEventListener('wheel', (e) => { e.preventDefault(); zoom(e.deltaY > 0 ? -0.1 : 0.1); });
+    box.addEventListener('mousedown', (e) => { isDragging = true; lastX = e.clientX; lastY = e.clientY; });
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        cam.x += e.clientX - lastX; cam.y += e.clientY - lastY;
+        lastX = e.clientX; lastY = e.clientY; redraw();
+    });
+    window.addEventListener('mouseup', () => isDragging = false);
+
+    function zoom(amount) { cam.zoom = Math.max(0.1, Math.min(5, cam.zoom + amount)); redraw(); }
+    function resetCamera() { cam = { x: 0, y: 0, zoom: 1 }; redraw(); }
+
+    function redraw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.translate(canvas.width/2 + cam.x, canvas.height/2 + cam.y);
+        ctx.scale(cam.zoom, cam.zoom);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+        // Адаптация цвета линий для темы
+        const isDark = document.body.classList.contains('dark-mode');
+        const defaultLineColor = isDark ? '#ddd' : 'black';
+
+        for(let cmd of drawHistory) {
+            if(cmd.type === 'line') {
+                ctx.beginPath(); ctx.lineWidth = cmd.w;
+                // Если цвет черный, меняем его динамически для темной темы
+                ctx.strokeStyle = (cmd.c === 'black') ? defaultLineColor : cmd.c;
+                ctx.moveTo(cmd.x1, -cmd.y1); ctx.lineTo(cmd.x2, -cmd.y2); ctx.stroke();
+            } else if(cmd.type === 'dot') {
+                ctx.fillStyle = cmd.c;
+                ctx.beginPath(); ctx.arc(cmd.x, -cmd.y, cmd.s/2, 0, Math.PI*2); ctx.fill();
+            }
+        }
+        
+        if(T.visible && drawHistory.length > 0) {
+            ctx.save(); ctx.translate(T.x, -T.y); ctx.rotate(-T.ang * Math.PI / 180);
+            ctx.fillStyle = 'rgba(0,180,0,0.8)';
+            ctx.beginPath(); ctx.moveTo(10, 0); ctx.lineTo(-6, 6); ctx.lineTo(-6, -6); ctx.fill();
+            ctx.restore();
+        }
+        ctx.restore();
+    }
+
+    const API = {
+        forward: (d) => {
+            let r = T.ang * Math.PI / 180;
+            let nx = T.x + d * Math.cos(r); let ny = T.y + d * Math.sin(r);
+            if(T.pen) drawHistory.push({ type: 'line', x1: T.x, y1: T.y, x2: nx, y2: ny, c: T.col, w: T.wid });
+            T.x = nx; T.y = ny;
+        },
+        backward: (d) => API.forward(-d),
+        right: (a) => T.ang -= a, left: (a) => T.ang += a,
+        penup: () => T.pen = false, pendown: () => T.pen = true,
+        goto: (x, y) => { T.x = x; T.y = y; }, setpos: (x, y) => { T.x = x; T.y = y; },
+        dot: (s, c) => drawHistory.push({ type: 'dot', x: T.x, y: T.y, s: s, c: c || T.col }),
+        speed:()=>{}, tracer:()=>{}, done:()=>{}
+    };
+    API.fd = API.forward; API.bk = API.backward; API.rt = API.right; API.lt = API.left;
+    API.pu = API.penup; API.pd = API.pendown;
+
+    function run() {
+        errBox.style.display = 'none';
+        T = { x: 0, y: 0, ang: 90, pen: true, col: 'black', wid: 2, visible: true };
+        drawHistory = [];
+        const code = document.getElementById('editor').textContent;
+        try {
+            const js = transpile(code);
+            new Function('API', 'range', js)(API, range);
+            redraw();
+        } catch (e) {
+            errBox.style.display = 'block'; errBox.innerText = "ОШИБКА: " + e.message;
+        }
+    }
+
+    function* range(start, stop, step) {
+        if (stop === undefined) { stop = start; start = 0; }
+        step = step || 1;
+        if (step > 0) for (let i = start; i < stop; i += step) yield i; else for (let i = start; i > stop; i += step) yield i;
+    }
+
+    function transpile(code) {
+        const lines = code.split('\n');
+        let out = `const {forward, fd, backward, bk, right, rt, left, lt, penup, pu, pendown, pd, goto, setpos, dot, speed, tracer, done} = API; let i, x, y;`;
+        let stack = [0];
+        lines.forEach(line => {
+            let clean = line.split('#')[0].trimEnd(); if(!clean.trim()) return;
+            let indent = clean.search(/\S/); if(indent === -1) indent = 0;
+            while(indent < stack[stack.length-1]) { stack.pop(); out += '}\n'; }
+            let s = clean.trim();
+            if(s.startsWith('from ') || s.startsWith('import ')) return;
+            let forMatch = s.match(/^for\s+([a-zA-Z0-9_]+)\s+in\s+(.+):/);
+            if(forMatch) { out += `for (let ${forMatch[1]} of ${forMatch[2]}) {\n`; stack.push(indent + 4); return; }
+            let ifMatch = s.match(/^if\s+(.+):/);
+            if(ifMatch) { out += `if (${ifMatch[1]}) {\n`; stack.push(indent + 4); return; }
+            let assignMatch = s.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=(?!=)\s*(.+)/);
+            if(assignMatch) { out += `var ${assignMatch[1]} = ${assignMatch[2]};\n`; return; }
+            out += s + ';\n';
+        });
+        while(stack.length > 1) { stack.pop(); out += '}\n'; }
+        return out;
+    }
+</script>
+</body>
+</html>
