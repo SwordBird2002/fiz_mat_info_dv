@@ -261,24 +261,33 @@ svg, img {
 </head>
 <body>
 <!-- МОБИЛЬНЫЙ ХЕДЕР -->
-<div class="d-md-none bg-white border-bottom p-3 d-flex justify-content-between align-items-center shadow-sm">
-    <h5 class="mb-0 fw-bold text-dark">Теория</h5>
+<!-- Кнопка ТЕМЫ ТОЛЬКО на мобильных -->
+<div class="d-md-none p-3 bg-white border-bottom shadow-sm d-flex justify-content-end">
     <button id="theme-toggle-mobile" class="btn btn-outline-secondary btn-sm">
         <i class="bi bi-moon-stars-fill"></i>
     </button>
 </div>
 
-<!-- КНОПКИ УПРАВЛЕНИЯ -->
-<div class="top-controls">
-    <!-- Переключатель темы -->
-    <button class="control-btn" id="theme-toggle" title="Переключить тему">
-        <i class="bi bi-moon"></i>
-    </button>
-    <!-- Кнопка "Домой" -->
-    <a href="theory_landing.html" class="control-btn" title="Назад">
-        <i class="bi bi-arrow-left"></i>
-    </a>
+    
 </div>
+<!-- Кнопка ТЕМЫ ТОЛЬКО на мобильных -->
+<!-- Sidebar ТОЛЬКО на ПК -->
+<div class="col-md-3 col-lg-2 d-none d-md-block">
+    <div class="sidebar"><div class="top-controls">
+        <!-- Переключатель темы -->
+        <button class="control-btn" id="theme-toggle" title="Переключить тему">
+            <i class="bi bi-moon"></i>
+        </button>
+        <!-- Кнопка "Домой" -->
+        <a href="theory_landing.html" class="control-btn" title="Назад">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+    </div>
+</div>
+</div>
+
+<!-- КНОПКИ УПРАВЛЕНИЯ -->
+
 
 <div class="container-fluid py-4">
     <div class="row g-4">
