@@ -6,6 +6,9 @@
     <title>Формулы ЕГЭ Физика (по заданиям)</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons (ОБЯЗАТЕЛЬНО!) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -94,9 +97,172 @@ svg, img {
         .nav-link { color: #495057; font-size: 0.9rem; padding: 5px 10px; border-radius: 6px; }
         .nav-link:hover { color: #0d6efd; background-color: #e7f1ff; }
         .section-header { font-size: 0.75rem; text-transform: uppercase; color: #adb5bd; font-weight: 700; margin-top: 15px; margin-bottom: 5px; }
+        /* --- СТИЛИ ДЛЯ НАВИГАЦИИ И ТЕМЫ --- */
+
+        /* Кнопки в углу */
+        .top-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #333;
+            text-decoration: none;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: #f8f9fa;
+            color: #000;
+        }
+
+        /* Темная тема */
+        body.dark-mode {
+            background-color: #121212 !important;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .sidebar {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+        }
+        body.dark-mode .sidebar .nav-link {
+            color: #b0b0b0;
+        }
+        body.dark-mode .sidebar .nav-link:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        body.dark-mode .content-card, 
+        body.dark-mode .bg-white,
+        body.dark-mode .kim-sheet { /* Для таблицы КИМ */
+            background-color: #1e1e1e !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        body.dark-mode .bg-light, 
+        body.dark-mode .formula-box,
+        body.dark-mode .kim-table th {
+            background-color: #2c2c2c !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        body.dark-mode h2, 
+        body.dark-mode h4, 
+        body.dark-mode h5,
+        body.dark-mode h6,
+        body.dark-mode .text-dark {
+            color: #fff !important;
+        }
+
+        body.dark-mode .table,
+        body.dark-mode .kim-table td {
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+
+        /* Инверсия для SVG (чтобы черные линии стали белыми) */
+        body.dark-mode svg {
+            filter: invert(1) hue-rotate(180deg);
+        }
+        /* Исключаем инверсию для кнопок управления, чтобы они оставались белыми/понятными */
+        body.dark-mode .control-btn svg,
+        body.dark-mode .control-btn i {
+            filter: none;
+        }
+        body.dark-mode .control-btn {
+            background: #333;
+            color: #fff;
+        }
+        /* --- MathJax ДЛЯ ТЕМНОЙ ТЕМЫ (ВАЖНО!) --- */
+       /* --- MathJax ДЛЯ ТЕМНОЙ ТЕМЫ (ТОЧНО) --- */
+        body.dark-mode mjx-container,
+        body.dark-mode .MJX-TEX {
+            color: #e0e0e0 !important;
+        }
+
+        body.dark-mode mjx-mi,
+        body.dark-mode mjx-mo,
+        body.dark-mode mjx-mn,
+        body.dark-mode mjx-msup,
+        body.dark-mode mjx-msub {
+            color: #e0e0e0 !important;
+            fill: #e0e0e0 !important; /* Для SVG-части */
+        }
+
+        /* Фон только для блоков формул */
+        body.dark-mode .formula-box {
+            background-color: #2c2c2c !important;
+            color: #e0e0e0 !important;
+        }
+
+        /* НЕ трогаем обычный текст */
+        body.dark-mode .formula-row {
+            color: #e0e0e0 !important;
+        }
+        /* --- ТЕКСТ ПОСЛЕ ФОРМУЛ (ВАЖНО!) --- */
+        body.dark-mode .formula-box *,
+        body.dark-mode .formula-box {
+            color: #e0e0e0 !important;
+        }
+
+        /* Номера формул */
+        body.dark-mode .formula-num {
+            color: #b0b0b0 !important;
+        }
+
+        /* Курсив и выделенный текст */
+        body.dark-mode .formula-box em,
+        body.dark-mode .formula-box strong {
+            color: #ffffff !important;
+        }
+
+        /* Маленький текст */
+        body.dark-mode .formula-box .text-muted,
+        body.dark-mode .formula-box small {
+            color: #a0a0a0 !important;
+        }
+
+        /* Весь текст в карточках */
+        body.dark-mode .content-card p,
+        body.dark-mode .content-card div {
+            color: #e0e0e0 !important;
+        }
+
+
     </style>
 </head>
 <body>
+<!-- КНОПКИ УПРАВЛЕНИЯ -->
+<div class="top-controls">
+    <!-- Переключатель темы -->
+    <button class="control-btn" id="theme-toggle" title="Переключить тему">
+        <i class="bi bi-moon"></i>
+    </button>
+    <!-- Кнопка "Домой" -->
+    <a href="theory_landing.html" class="control-btn" title="Назад">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+</div>
 
 <div class="container-fluid py-4">
     <div class="row g-4">
@@ -124,6 +290,7 @@ svg, img {
                     <a class="nav-link" href="#task13">Задания 13, 17 (Оптика)</a>
                     <a class="nav-link" href="#task16">Задание 16 (Ядерная)</a>
                     <a class="nav-link" href="#task-exp">Эксперимент и Логика</a>
+                    <a class="nav-link" href="#reference-tables">Справочные данные</a>
 
                 </nav>
             </div>
@@ -1925,15 +2092,369 @@ svg, img {
         </div>
     </div>
 </div>
-</div>
+<!-- СПРАВОЧНЫЕ МАТЕРИАЛЫ (СТИЛЬ КИМ ЕГЭ) -->
+<div id="reference-tables" class="content-card" style="border-left: 5px solid #333;">
+    <h2 class="text-dark" style="font-family: 'Times New Roman', serif;">Справочные данные</h2>
+    
+    <style>
+        /* Стили специально для имитации бланка ЕГЭ */
+        .kim-sheet {
+            font-family: 'Times New Roman', serif;
+            color: #000;
+            line-height: 1.2;
+        }
+        .kim-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        .kim-table th, .kim-table td {
+            border: 1px solid #000; /* Черные тонкие рамки */
+            padding: 4px 8px;
+            text-align: center;
+        }
+        .kim-table th {
+            font-weight: bold;
+            background-color: #f0f0f0; /* Легкий серый фон заголовков */
+        }
+        .kim-table td.text-left {
+            text-align: left;
+        }
+        .kim-section-title {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-decoration: underline;
+        }
+    </style>
 
+    <div class="kim-sheet">
+        
+        <!-- 1. ДЕСЯТИЧНЫЕ ПРИСТАВКИ -->
+        <div class="kim-section-title">1. Десятичные приставки</div>
+        <table class="kim-table">
+            <thead>
+                <tr>
+                    <th>Множитель</th>
+                    <th>Приставка</th>
+                    <th>Обозначение</th>
+                    <th>Множитель</th>
+                    <th>Приставка</th>
+                    <th>Обозначение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>\( 10^9 \)</td><td>гига</td><td>Г</td>
+                    <td>\( 10^{-1} \)</td><td>деци</td><td>д</td>
+                </tr>
+                <tr>
+                    <td>\( 10^6 \)</td><td>мега</td><td>М</td>
+                    <td>\( 10^{-2} \)</td><td>санти</td><td>с</td>
+                </tr>
+                <tr>
+                    <td>\( 10^3 \)</td><td>кило</td><td>к</td>
+                    <td>\( 10^{-3} \)</td><td>милли</td><td>м</td>
+                </tr>
+                <tr>
+                    <td>\( 10^2 \)</td><td>гекто</td><td>г</td>
+                    <td>\( 10^{-6} \)</td><td>микро</td><td>мк</td>
+                </tr>
+                <tr>
+                    <td>\( 10^1 \)</td><td>дека</td><td>да</td>
+                    <td>\( 10^{-9} \)</td><td>нано</td><td>н</td>
+                </tr>
+                <tr>
+                    <td>—</td><td>—</td><td>—</td>
+                    <td>\( 10^{-12} \)</td><td>пико</td><td>п</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 2. ФУНДАМЕНТАЛЬНЫЕ КОНСТАНТЫ -->
+        <div class="kim-section-title">2. Константы</div>
+        <table class="kim-table">
+            <tbody>
+                <tr>
+                    <td class="text-left">Число \(\pi\)</td>
+                    <td>\(\pi \approx 3,14\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Ускорение свободного падения (на Земле)</td>
+                    <td>\(g \approx 10 \text{ м/с}^2\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Гравитационная постоянная</td>
+                    <td>\(G \approx 6,7 \cdot 10^{-11} \text{ Н}\cdot\text{м}^2/\text{кг}^2\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Скорость света в вакууме</td>
+                    <td>\(c = 3 \cdot 10^8 \text{ м/с}\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Элементарный электрический заряд</td>
+                    <td>\(e = 1,6 \cdot 10^{-19} \text{ Кл}\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Постоянная Авогадро</td>
+                    <td>\(N_A = 6 \cdot 10^{23} \text{ моль}^{-1}\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Постоянная Больцмана</td>
+                    <td>\(k = 1,38 \cdot 10^{-23} \text{ Дж/К}\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Универсальная газовая постоянная</td>
+                    <td>\(R = 8,31 \text{ Дж}/(\text{моль}\cdot\text{К})\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Постоянная Планка</td>
+                    <td>\(h = 6,6 \cdot 10^{-34} \text{ Дж}\cdot\text{с}\)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 3. МАССЫ ЧАСТИЦ -->
+        <table class="kim-table">
+            <thead>
+                <tr>
+                    <th>Частица</th>
+                    <th>Масса (кг)</th>
+                    <th>Масса (а.е.м.)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-left">Электрон</td>
+                    <td>\(9,1 \cdot 10^{-31}\)</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Протон</td>
+                    <td>\(1,673 \cdot 10^{-27}\)</td>
+                    <td>\(\approx 1,007\)</td>
+                </tr>
+                <tr>
+                    <td class="text-left">Нейтрон</td>
+                    <td>\(1,675 \cdot 10^{-27}\)</td>
+                    <td>\(\approx 1,008\)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 4. ПЛОТНОСТЬ И ТЕПЛОЕМКОСТЬ (СМЕШАННАЯ ТАБЛИЦА) -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="kim-section-title">Плотность \( \rho \) (\( \text{кг/м}^3 \))</div>
+                <table class="kim-table">
+                    <tr><td class="text-left">Вода (чистая)</td><td>1000</td></tr>
+                    <tr><td class="text-left">Масло / Керосин</td><td>800</td></tr>
+                    <tr><td class="text-left">Ртуть</td><td>13600</td></tr>
+                    <tr><td class="text-left">Алюминий</td><td>2700</td></tr>
+                    <tr><td class="text-left">Сталь / Железо</td><td>7800</td></tr>
+                    <tr><td class="text-left">Медь</td><td>8900</td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="kim-section-title">Уд. теплоемкость \( c \) (\( \text{Дж}/(\text{кг}\cdot\text{К}) \))</div>
+                <table class="kim-table">
+                    <tr><td class="text-left">Вода</td><td>4200</td></tr>
+                    <tr><td class="text-left">Лёд</td><td>2100</td></tr>
+                    <tr><td class="text-left">Алюминий</td><td>900</td></tr>
+                    <tr><td class="text-left">Сталь / Железо</td><td>460</td></tr>
+                    <tr><td class="text-left">Медь</td><td>380</td></tr>
+                    <tr><td class="text-left">Свинец</td><td>130</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. МОЛЯРНАЯ МАССА -->
+        <div class="kim-section-title">Молярная масса \( M \) (\( \text{кг/моль} \))</div>
+        <table class="kim-table">
+            <tr>
+                <th>Вещество</th><th>Водород (\(H_2\))</th><th>Гелий (\(He\))</th><th>Азот (\(N_2\))</th><th>Кислород (\(O_2\))</th><th>Воздух</th><th>Вода (\(H_2O\))</th>
+            </tr>
+            <tr>
+                <td>\( M \cdot 10^{-3} \)</td><td>2</td><td>4</td><td>28</td><td>32</td><td>29</td><td>18</td>
+            </tr>
+        </table>
+        
+        <div class="small mt-2">
+            * <strong>Нормальные условия (н.у.):</strong> Давление \( 10^5 \text{ Па} \), Температура \( 0^\circ C \) (\( 273 \text{ К} \)).
+        </div>
+
+    </div>
+</div>
+<!-- АНАЛИЗ ФОРМУЛ И ТИПЫ ЗАДАЧ -->
+<div id="math-in-phys" class="content-card border-top border-dark">
+    <h2>Математика в Физике</h2>
+    
+    <!-- 1. ПРОПОРЦИОНАЛЬНОСТЬ -->
+    <h4 class="text-primary mt-3">Прямая и обратная пропорциональность</h4>
+    <p class="small text-muted"></p>
+    
+    <div class="row g-3">
+        <!-- Прямая -->
+        <div class="col-md-4">
+            <div class="border rounded p-3 h-100 text-center bg-white">
+                <h6 class="fw-bold text-success">Прямая (Линейная)</h6>
+                <div class="d-block mb-4 fs-8">$$a = \frac{F}{m}$$</div>
+                <svg width="120" height="80" viewBox="0 0 120 80">
+                    <line x1="10" y1="70" x2="110" y2="70" stroke="#ccc"/>
+                    <line x1="10" y1="70" x2="10" y2="10" stroke="#ccc"/>
+                    <line x1="10" y1="70" x2="100" y2="10" stroke="#198754" stroke-width="2"/>
+                </svg>
+                <div class="small mt-2 text-start">
+                    Если \( F \) <strong>растет</strong> в 2 раза,<br>
+                    то \( a \) тоже <strong>растет</strong> в 2 раза.
+                </div>
+            </div>
+        </div>
+
+        <!-- Обратная -->
+        <div class="col-md-4">
+            <div class="border rounded p-3 h-100 text-center bg-white">
+                <h6 class="fw-bold text-danger">Обратная</h6>
+                <div class="d-block mb-4 fs-8">$$I = \frac{U}{R}$$</div>
+                <svg width="120" height="80" viewBox="0 0 120 80">
+                    <line x1="10" y1="70" x2="110" y2="70" stroke="#ccc"/>
+                    <line x1="10" y1="70" x2="10" y2="10" stroke="#ccc"/>
+                    <path d="M 10 10 Q 15 60 100 65" stroke="#dc3545" stroke-width="2" fill="none"/>
+                </svg>
+                <div class="small mt-2 text-start">
+                    Если \( R \) <strong>растет</strong> в 2 раза,<br>
+                    то \( I \) <strong>уменьшается</strong> в 2 раза.
+                </div>
+            </div>
+        </div>
+
+        <!-- Квадратичная -->
+        <div class="col-md-4">
+            <div class="border rounded p-3 h-100 text-center bg-white">
+                <h6 class="fw-bold text-warning text-dark">Квадратичная</h6>
+                <div class="d-block mb-4 fs-8">$$E = \frac{mv^2}{2}$$</div>
+                <svg width="120" height="80" viewBox="0 0 120 80">
+                    <line x1="10" y1="70" x2="110" y2="70" stroke="#ccc"/>
+                    <line x1="10" y1="70" x2="10" y2="10" stroke="#ccc"/>
+                    <path d="M 10 70 Q 40 70 100 10" stroke="#fd7e14" stroke-width="2" fill="none"/>
+                </svg>
+                <div class="small mt-2 text-start">
+                    Если \( v \) растет в <strong>2</strong> раза,<br>
+                    то \( E \) растет в <strong>4</strong> раза (\(2^2\)).
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. ТИПЫ ЗАДАЧ -->
+    <h4 class="text-primary mt-4">Типы задач</h4>
+    <div class="row g-3">
+        <!-- Количественные -->
+        <div class="col-md-6">
+            <div class="h-100 p-3 bg-light border rounded border-start border-4 border-primary">
+                <h5 class="fw-bold text-primary">Количественные</h5>
+                <p class="small text-muted mb-2">"Найдите значение...", "Во сколько раз..."</p>
+                
+                <div class="d-flex align-items-start mb-2">
+                    <span class="badge bg-primary me-2">1</span>
+                    <div class="small"><strong>Подстановка:</strong> Есть формула \( F=ma \). Дано \( m=2, a=3 \). Найти \( F \). <br>\( F = 2 \cdot 3 = 6 \).</div>
+                </div>
+                <div class="d-flex align-items-start">
+                    <span class="badge bg-primary me-2">2</span>
+                    <div class="small"><strong>Отношение:</strong> Дано \( p_2 = 2p_1, V_2 = 3V_1 \). Найти \( T_2/T_1 \).<br>
+                    $$ \frac{p_2 V_2}{T_2} = \frac{p_1 V_1}{T_1} \Rightarrow \frac{T_2}{T_1} = \frac{p_2}{p_1} \cdot \frac{V_2}{V_1} = 2 \cdot 3 = 6 $$</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Качественные -->
+        <div class="col-md-6">
+            <div class="h-100 p-3 bg-light border rounded border-start border-4 border-success">
+                <h5 class="fw-bold text-success">Качественные</h5>
+                <p class="small text-muted mb-2">"Как изменится...", "Опишите явление..."</p>
+                
+                <div class="alert alert-white border small mb-2">
+                    <strong>Алгоритм ответа:</strong>
+                    <ol class="mb-0 ps-3">
+                        <li>Назови <strong>физическое явление</strong> (напр. "Электромагнитная индукция").</li>
+                        <li>Напиши <strong>закон/формулу</strong>, связывающую величины.</li>
+                        <li>Сделай <strong>логический вывод</strong> ("Так как ток вырос, то сила Ампера увеличилась...").</li>
+                        <li>Дай <strong>ответ</strong> на вопрос задачи.</li>
+                    </ol>
+                </div>
+                <div class="small fst-italic text-muted">
+                    Пример: "Почему при нагревании давление газа в закрытом сосуде растет?"<br>
+                    Ответ: 1) Изохорный процесс (V=const). 2) Закон Шарля \( p/T = const \). 3) T растет \(\to\) p растет.
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+</div>
+    
+        </div>
+        
+    </div>
+    
+</div>
+<script>
+    // Логика темной темы + MathJax
+    const toggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = toggleBtn.querySelector('i');
+    const body = document.body;
+
+    // 1. Проверяем сохраненную тему
+    if (localStorage.getItem('theme') === 'dark') {
+        enableDarkMode();
+    }
+
+    function enableDarkMode() {
+        body.classList.add('dark-mode');
+        themeIcon.classList.remove('bi-moon-stars');
+        themeIcon.classList.add('bi-sun-fill');
+        localStorage.setItem('theme', 'dark');
+        reRenderMathJax(); // ← ПЕРЕРЕНДЕРИВАЕМ формулы!
+    }
+
+    function disableDarkMode() {
+        body.classList.remove('dark-mode');
+        themeIcon.classList.remove('bi-sun-fill');
+        themeIcon.classList.add('bi-moon-stars');
+        localStorage.setItem('theme', 'light');
+        reRenderMathJax(); // ← ПЕРЕРЕНДЕРИВАЕМ формулы!
+    }
+
+    // 2. ФУНКЦИЯ ПЕРЕРЕНДЕРА MathJax (КРИТИЧЕСКИ ВАЖНО!)
+    function reRenderMathJax() {
+        if (typeof MathJax !== 'undefined') {
+            setTimeout(() => {
+                MathJax.typesetPromise(); // Перерисовывает ВСЕ формулы с новыми стилями
+            }, 100); // Небольшая задержка для применения CSS
+        }
+    }
+
+    // 3. Обработчик клика
+    toggleBtn.addEventListener('click', () => {
+        if (body.classList.contains('dark-mode')) {
+            disableDarkMode();
+        } else {
+            enableDarkMode();
+        }
+    });
+
+    // 4. Перерендер при загрузке страницы (если MathJax готов)
+    window.addEventListener('load', () => {
+        if (body.classList.contains('dark-mode')) {
+            reRenderMathJax();
+        }
+    });
+</script>
+
+
 </body>
 </html>
-
 
 
 
