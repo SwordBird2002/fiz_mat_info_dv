@@ -817,13 +817,13 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">2.</span> $$ \lambda = v \cdot T = \frac{v}{\nu} $$ (Длина волны)</div>
                     <div class="formula-row"><span class="formula-num">3.</span> $$ T = 2\pi \sqrt{\frac{l}{g}} $$ (Нитяной маятник)</div>
                     <div class="formula-row"><span class="formula-num">4.</span> $$ T = 2\pi \sqrt{\frac{m}{k}} $$ (Пружинный маятник)</div>
-                    <div class="formula-row"><span class="formula-num">5.</span> $$ E_{p\text{ пруж}} = \frac{kx^2}{2} $$</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ E_{p\text{ пруж}} = \frac{kx^2}{2} $$ (Потенциальная энергия пружины)</div>
                 </div>
 
                 <h5 class="text-muted mt-3">Статика и Гидростатика</h5>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">6.</span> $$ F_{\text{Арх}} = \rho_{\text{ж}} g V_{\text{погр}} $$ (Архимедова сила)</div>
-                    <div class="formula-row"><span class="formula-num">7.</span> $$ \rho = \frac{m}{V} $$</div>
+                    <div class="formula-row"><span class="formula-num">7.</span> $$ \rho = \frac{m}{V} $$ (Плотность)</div>
                     <div class="formula-row"><span class="formula-num">8.</span> $$ P = \frac{F}{S} $$ (Давление твердого тела)</div>
                     <div class="formula-row"><span class="formula-num">9.</span> $$ \frac{F_1}{F_2} = \frac{l_2}{l_1} \text{ или } M_1 = M_2 $$ (Рычаг)</div>
                     <div class="formula-row"><span class="formula-num">10.</span> $$ a_{\text{ц}} = \frac{V^2}{R} = \omega^2 R $$ (Центростремительное ускорение)</div>
@@ -923,7 +923,7 @@ svg, img {
                 <div class="col-md-6">
                     <div class="formula-box">
                         <div class="formula-row fw-bold">$$ M_1 = M_2 $$</div>
-                        <div class="formula-row">$$ F_1 \cdot L_1 = F_2 \cdot L_2 $$</div>
+                        <div class="formula-row">$$ F_1 \cdot L_1 = F_2 \cdot L_2 $$ (Условие равновесия рычага)</div>
                     </div>
                     <div class="alert alert-warning py-2 small mb-0">
                         <strong>Важно:</strong> Плечо \( L \) — это кратчайшее расстояние от оси вращения до линии действия силы (перпендикуляр).
@@ -950,7 +950,7 @@ svg, img {
                         <text x="65" y="65" fill="#333" font-size="10">S</text>
                     </svg>
                     <div class="fw-bold mt-1">Твердое тело</div>
-                    <code class="text-danger fs-6">p = F / S</code>
+                    <div class="text-danger fs-6">p = F / S</div>
                 </div>
                 <!-- Жидкость -->
                 <div>
@@ -966,7 +966,7 @@ svg, img {
                         <text x="80" y="55" fill="#0d6efd" font-weight="bold">h</text>
                     </svg>
                     <div class="fw-bold mt-1">Гидростатика</div>
-                    <code class="text-primary fs-6">p = ρ g h</code>
+                    <div class="text-primary fs-6">p = ρ g h</div>
                 </div>
             </div>
             <div class="mt-2 small text-muted text-center">
@@ -1108,12 +1108,14 @@ svg, img {
 </div>
 
                 <div class="formula-box">
-                    <div class="formula-row"><span class="formula-num">1.</span> $$ p = nkT $$</div>
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ p = nkT $$ (Давление газа)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ E_k = \frac{3}{2}kT $$ (Средняя кин. энергия)</div>
                     <div class="formula-row"><span class="formula-num">3.</span> $$ p = \frac{2}{3}n E_k $$ (Основное ур-ние МКТ)</div>
                     <div class="formula-row"><span class="formula-num">4.</span> $$ pV = \frac{m}{M}RT = \nu RT $$ (Менделеев-Клапейрон)</div>
                     <div class="formula-row"><span class="formula-num">5.</span> $$ n = \frac{N}{V} $$ (Концентрация)</div>
                     <div class="formula-row"><span class="formula-num">6.</span> $$ \frac{p_1 V_1}{T_1} = \frac{p_2 V_2}{T_2} $$ (Объединенный закон)</div>
+                    <div class="formula-row"><span class="formula-num">7.</span> $$ p=\frac{1}{3}nm_{0}v_{кв}^{2}\ $$ (Основное уравнение молекулярно-кинетической теории (МКТ))</div>
+                    <div class="formula-row"><span class="formula-num">8.</span> $$ v_{кв}=\sqrt{\frac{3p}{nm_{0}}}=\sqrt{\frac{3kT}{m_{0}}} $$ (Среднеквадратичная скорость движения молекул)</div>
                     <div class="row mt-4">
                         <div class="col-md-6 text-center">
                             <div class="p-3 border rounded bg-white">
@@ -1294,8 +1296,8 @@ svg, img {
 </div>
 
                 <div class="formula-box">
-                    <div class="formula-row"><span class="formula-num">1.</span> $$ \eta = \frac{A_{\text{п}}}{Q_1} $$</div>
-                    <div class="formula-row"><span class="formula-num">2.</span> $$ \eta = \frac{Q_1 - Q_2}{Q_1} \cdot 100\% $$</div>
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ \eta = \frac{A_{\text{п}}}{Q_1} $$ (КПД)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ \eta = \frac{Q_1 - Q_2}{Q_1} \cdot 100\% $$ (КПД Тепловой машины)</div>
                     <div class="formula-row"><span class="formula-num">3.</span> $$ \eta_{\text{max}} = \frac{T_1 - T_2}{T_1} $$ (Только для цикла Карно)</div>
                 </div>
                 <div class="text-muted small">\( Q_1 \) — тепло от нагревателя, \( Q_2 \) — тепло холодильнику.</div>
@@ -1719,15 +1721,15 @@ svg, img {
         <h5 class="text-muted mt-3">Электростатика и ток</h5>
         <div class="formula-box">
             <div class="formula-row"><span class="formula-num">1.</span> $$ F_k = k \frac{|q_1|\cdot|q_2|}{r^2} $$ (Закон Кулона)</div>
-            <div class="formula-row"><span class="formula-num">2.</span> $$ I = \frac{q}{t} $$</div>
-            <div class="formula-row"><span class="formula-num">3.</span> $$ U = \frac{A}{q} $$</div>
+            <div class="formula-row"><span class="formula-num">2.</span> $$ I = \frac{q}{t} $$ (Сила тока)</div>
+            <div class="formula-row"><span class="formula-num">3.</span> $$ U = \frac{A}{q} $$ (Напряжение)</div>
             <div class="formula-row"><span class="formula-num">4.</span> $$ R = \frac{U}{I} = \rho \frac{l}{S} $$ (Закон Ома и сопротивление)</div>
             <div class="formula-row"><span class="formula-num">5.</span> $$ I = \frac{\mathcal{E}}{R+r} $$ (Ом для полной цепи)</div>
         </div>
 
         <h5 class="text-muted mt-3">Конденсаторы</h5>
         <div class="formula-box">
-            <div class="formula-row"><span class="formula-num">1.</span> $$ C = \frac{q}{U} $$</div>
+            <div class="formula-row"><span class="formula-num">1.</span> $$ C = \frac{q}{U} $$ (Ёмкость конденсатора)</div>
             <div class="formula-row"><span class="formula-num">2.</span> $$ C_{\text{пар}} = C_1 + C_2 $$ (Параллельное)</div>
             <div class="formula-row"><span class="formula-num">3.</span> $$ \frac{1}{C_{\text{посл}}} = \frac{1}{C_1} + \frac{1}{C_2} $$ (Последовательное)</div>
             <div class="formula-row"><span class="formula-num">4.</span> $$ W = \frac{q^2}{2C} = \frac{CU^2}{2} $$ (Энергия)</div>
