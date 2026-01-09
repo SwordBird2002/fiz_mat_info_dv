@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Math Rush</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0c15;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary: #00f3ff; /* Cyan Neon */
+            --secondary: #ff00ff; /* Magenta Neon */
+            --error: #ff2a6d;
+            --text-main: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 20%);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Container with Glassmorphism */
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Stats Bar */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .stat-item span {
+            color: var(--primary);
+            text-shadow: 0 0 8px var(--primary);
+        }
+
+        /* Timer Bar */
+        .timer-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 10px var(--primary);
+            transition: width 0.1s linear;
+        }
+
+        /* Question & Input */
+        .question-box {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            min-height: 80px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--primary);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        /* Hide number spinner */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Overlay (Start/Game Over) */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 12, 21, 0.95);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background: transparent;
+            border: 2px solid var(--secondary);
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px var(--secondary);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            box-shadow: 0 0 30px var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .high-score-label {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 rgba(0, 255, 100, 0); border-color: var(--glass-border); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 100, 0.5); border-color: #00ff66; }
+            100% { box-shadow: 0 0 0 rgba(0, 255, 100, 0); border-color: var(--glass-border); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: var(--error) !important;
+            box-shadow: 0 0 20px var(--error) !important;
+        }
+
+        .correct-pulse {
+            animation: pulse-green 0.4s ease-out;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="game-container" id="game-card">
+    <h1>Neon Math</h1>
+    
+    <div class="stats">
+        <div class="stat-item">Счет: <span id="score">0</span></div>
+        <div class="stat-item">Рекорд: <span id="high-score">0</span></div>
+    </div>
+
+    <div class="timer-container">
+        <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-box" id="question">Ready?</div>
+    
+    <input type="number" id="answer-input" placeholder="?" disabled autocomplete="off">
+
+    <!-- Start / Game Over Overlay -->
+    <div class="overlay" id="overlay">
+        <h2 id="overlay-title">MATH RUSH</h2>
+        <p class="high-score-label" id="final-score-display"></p>
+        <button class="btn" onclick="startGame()">Старт</button>
+    </div>
+</div>
+
+<script>
+    const state = {
+        score: 0,
+        highScore: localStorage.getItem('mathHighScore') || 0,
+        timeLeft: 100, // percentage
+        isPlaying: false,
+        currentAnswer: 0,
+        difficulty: 1,
+        timerId: null
+    };
+
+    const els = {
+        score: document.getElementById('score'),
+        highScore: document.getElementById('high-score'),
+        timerBar: document.getElementById('timer-bar'),
+        question: document.getElementById('question'),
+        input: document.getElementById('answer-input'),
+        overlay: document.getElementById('overlay'),
+        overlayTitle: document.getElementById('overlay-title'),
+        finalScore: document.getElementById('final-score-display'),
+        gameCard: document.getElementById('game-card')
+    };
+
+    els.highScore.textContent = state.highScore;
+
+    function generateQuestion() {
+        const operators = ['+', '-', '*'];
+        // Increase difficulty based on score
+        const range = 10 + Math.floor(state.score / 5) * 5; 
+        
+        let num1 = Math.floor(Math.random() * range) + 1;
+        let num2 = Math.floor(Math.random() * range) + 1;
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+
+        // Simplify Division/Multiplication logic for speed math
+        if (operator === '*') {
+            num1 = Math.floor(Math.random() * 9) + 2; // 2 to 10
+            num2 = Math.floor(Math.random() * 9) + 2;
+        } else if (operator === '-') {
+            if (num1 < num2) [num1, num2] = [num2, num1]; // No negatives
+        }
+
+        state.currentAnswer = eval(`${num1} ${operator} ${num2}`);
+        els.question.textContent = `${num1} ${operator} ${num2}`;
+    }
+
+    function startGame() {
+        state.score = 0;
+        state.timeLeft = 100;
+        state.isPlaying = true;
+        state.difficulty = 1;
+        
+        els.score.textContent = '0';
+        els.timerBar.style.width = '100%';
+        els.overlay.classList.add('hidden');
+        els.input.disabled = false;
+        els.input.value = '';
+        els.input.focus();
+
+        generateQuestion();
+        
+        if (state.timerId) clearInterval(state.timerId);
+        state.timerId = setInterval(gameLoop, 100);
+    }
+
+    function gameLoop() {
+        if (!state.isPlaying) return;
+
+        // Decrease time faster as score goes up
+        const decay = 0.5 + (state.score * 0.05); 
+        state.timeLeft -= decay;
+
+        if (state.timeLeft <= 0) {
+            gameOver();
+        } else {
+            // Color change on low time
+            if (state.timeLeft < 30) {
+                els.timerBar.style.background = '#ff2a6d';
+            } else {
+                els.timerBar.style.background = 'linear-gradient(90deg, #00f3ff, #ff00ff)';
+            }
+            els.timerBar.style.width = `${state.timeLeft}%`;
+        }
+    }
+
+    function gameOver() {
+        state.isPlaying = false;
+        clearInterval(state.timerId);
+        
+        if (state.score > state.highScore) {
+            state.highScore = state.score;
+            localStorage.setItem('mathHighScore', state.score);
+            els.highScore.textContent = state.highScore;
+        }
+
+        els.overlayTitle.textContent = "GAME OVER";
+        els.finalScore.textContent = `Ваш счет: ${state.score}`;
+        els.overlay.classList.remove('hidden');
+        els.input.disabled = true;
+    }
+
+    els.input.addEventListener('input', (e) => {
+        if (!state.isPlaying) return;
+
+        const val = parseInt(e.target.value);
+        if (val === state.currentAnswer) {
+            // Correct Answer
+            state.score++;
+            els.score.textContent = state.score;
+            
+            // Add time bonus (max 100%)
+            state.timeLeft = Math.min(100, state.timeLeft + 15);
+            
+            // Visual feedback
+            els.input.classList.add('correct-pulse');
+            setTimeout(() => els.input.classList.remove('correct-pulse'), 400);
+
+            els.input.value = '';
+            generateQuestion();
+        } 
+    });
+
+    // Prevent enter key refresh, purely visual check logic handles input
+    els.input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            // Optional: Penalize wrong enter press? 
+            // For now, we just wait for correct input number
+        }
+    });
+
+</script>
+</body>
+</html>
