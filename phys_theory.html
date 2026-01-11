@@ -504,6 +504,11 @@ svg, img {
 
             <div class="sidebar">
                 <h5 class="mb-4 fw-bold text-dark">ЕГЭ Физика</h5>
+                <!-- HTML для строки поиска (вставьте в .sidebar перед <nav>) -->
+                <div class="mb-3">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Найти формулу">
+                </div>
+
                 <nav class="nav flex-column">
                     <div class="section-header">Механика</div>
                     <a class="nav-link" href="#task1">Задание 1 (Кинематика)</a>
@@ -537,9 +542,9 @@ svg, img {
             <div id="task1" class="content-card card-mech">
                 <h2>№1. Кинематика</h2>
                 <div class="formula-box">
-                    <div class="formula-row"><span class="formula-num">1.</span> $$ a = \frac{\Delta V}{\Delta t} $$</div>
-                    <div class="formula-row"><span class="formula-num">2.</span> $$ x(t) = x_0 + v_{0x}t + \frac{a_x t^2}{2} $$</div>
-                    <div class="formula-row"><span class="formula-num">3.</span> $$ S_x = \frac{v_x^2 - v_{0x}^2}{2a_x} $$</div>
+                    <div class="formula-row"><span class="formula-num">1.</span> $$ a = \frac{\Delta V}{\Delta t} $$ (Ускорение)</div>
+                    <div class="formula-row"><span class="formula-num">2.</span> $$ x(t) = x_0 + v_{0x}t + \frac{a_x t^2}{2} $$ (Координата тела)</div>
+                    <div class="formula-row"><span class="formula-num">3.</span> $$ S_x = \frac{v_x^2 - v_{0x}^2}{2a_x} $$ (Расстояние при равноускоренном движении)</div>
                     <div class="text-muted small mt-2">
                         <em>Если дан график \( v(t) \): путь = площадь фигуры под графиком.</em><br>
                         \( S_x \) — перемещение, \( x \) — координата.
@@ -547,7 +552,7 @@ svg, img {
                 </div>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-8">
-                        <div class="bg-white border rounded p-3 text-center">
+                        <div class="bg-white border rounded p-3 text-center"> 
                             <h5>Движение тела, брошенного под углом</h5>
                             <svg width="350" height="200" viewBox="0 0 350 200">
                                 <!-- Оси -->
@@ -922,7 +927,7 @@ svg, img {
                 </div>
                 <div class="col-md-6">
                     <div class="formula-box">
-                        <div class="formula-row fw-bold">$$ M_1 = M_2 $$</div>
+                        <div class="formula-row fw-bold">$$ M_1 = M_2 $$ (Правило моментов)</div>
                         <div class="formula-row">$$ F_1 \cdot L_1 = F_2 \cdot L_2 $$ (Условие равновесия рычага)</div>
                     </div>
                     <div class="alert alert-warning py-2 small mb-0">
@@ -2628,6 +2633,7 @@ svg, img {
     </div>
 </div>
 
+
 </div>
     
         </div>
@@ -2681,6 +2687,122 @@ svg, img {
             });
         }
     });
+</script>
+<script>
+    // ЖИВОЙ ПОИСК
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let cards = document.querySelectorAll('.content-card'); // Все карточки заданий
+
+        cards.forEach(card => {
+            let formulas = card.querySelectorAll('.formula-row');
+            let hasVisibleFormula = false;
+
+            formulas.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                // Если текст формулы совпадает с поиском
+                if (text.includes(filter)) {
+                    row.style.display = ''; // Показываем
+                    row.classList.add('bg-warning', 'bg-opacity-25'); // Подсветка (опционально)
+                    hasVisibleFormula = true;
+                } else {
+                    row.style.display = 'none'; // Скрываем
+                    row.classList.remove('bg-warning', 'bg-opacity-25');
+                }
+            });
+
+            // Если поиск пустой, сбрасываем всё как было
+            if (filter === '') {
+                card.style.display = '';
+                formulas.forEach(r => {
+                    r.style.display = '';
+                    r.classList.remove('bg-warning', 'bg-opacity-25');
+                });
+                return;
+            }
+
+            // Логика отображения карточек:
+            // Показываем карточку, если в ней есть найденная формула ИЛИ если заголовок карточки совпадает
+            let cardTitle = card.querySelector('h2').textContent.toLowerCase();
+            if (hasVisibleFormula || cardTitle.includes(filter)) {
+                card.style.display = '';
+                // Если совпал заголовок карточки, показываем все формулы внутри (или можно оставить скрытыми, по вкусу)
+                if (cardTitle.includes(filter)) {
+                    formulas.forEach(r => r.style.display = ''); 
+                }
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+        // КОНСТРУКТОР ОБОСНОВАНИЯ
+    const checks = document.querySelectorAll('.condition-check');
+    const output = document.getElementById('justificationResult');
+
+    const phrases = {
+        iso: "1. Задачу будем решать в Инерциальной Системе Отсчета (ИСО), связанной с Землей.",
+        
+        material_point: "2. Тела будем считать материальными точками, так как они движутся поступательно (или их размерами можно пренебречь). Применим II закон Ньютона.",
+        
+        rigid_body: "2. Тело будем считать абсолютно твердым. Т.к. оно не деформируется, расстояния между любыми двумя точками остаются неизменными. Применим условия равновесия твердого тела (правило моментов).",
+        
+        rope: "3. Так как нить невесома и нерастяжима, силы натяжения вдоль одной нити одинаковы (T1 = T2), а ускорения связанных тел равны по модулю (a1 = a2).",
+
+        spring: "3. Так как пружина легкая, сила упругости одинакова во всех её витках.",
+        
+        energy: "4. Так как трением и сопротивлением воздуха пренебрегаем (или работа внешних сил равна 0), полную механическую энергию системы считаем постоянной (ЗСЭ).",
+        
+        impulse: "4. Так как сумма внешних сил равна нулю (или время взаимодействия мало), импульс системы сохраняется (ЗСИ)."
+    };
+
+    function updateText() {
+        let text = [];
+        // Всегда добавляем ИСО первым пунктом
+        text.push(phrases.iso);
+
+        // Проходим по всем чекбоксам
+        checks.forEach(chk => {
+            if (chk.checked && chk.value !== 'iso') { // ISO уже добавили
+                text.push(phrases[chk.value]);
+            }
+        });
+        
+        // Пересчитываем нумерацию пунктов (1., 2., 3...)
+        output.innerText = text.map((line, index) => {
+            // Убираем старую цифру и ставим новую
+            return line.replace(/^\d+\./, (index + 1) + ".");
+        }).join('\n');
+    }
+
+    checks.forEach(c => c.addEventListener('change', updateText));
+
+    // Функция копирования
+    function copyJustification() {
+        navigator.clipboard.writeText(output.innerText).then(() => {
+            alert('Текст скопирован!');
+        });
+    }
+// КОНВЕРТЕР
+document.getElementById('val-kmh').addEventListener('input', function(e) {
+    let kmh = parseFloat(e.target.value);
+    if (!isNaN(kmh)) {
+        document.getElementById('val-ms').value = (kmh / 3.6).toFixed(2); // Делим на 3.6
+    } else {
+        document.getElementById('val-ms').value = '';
+    }
+});
+
+document.getElementById('val-ev').addEventListener('input', function(e) {
+    let ev = parseFloat(e.target.value);
+    if (!isNaN(ev)) {
+        // 1 эВ = 1.6 * 10^-19 Дж. Используем экспоненциальную запись для красоты
+        let j = ev * 1.6e-19;
+        document.getElementById('val-j').value = j.toExponential(2);
+    } else {
+        document.getElementById('val-j').value = '';
+    }
+});
+
 </script>
 
 
