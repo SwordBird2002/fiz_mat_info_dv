@@ -12,8 +12,9 @@
     <!-- MathJax -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* --- АДАПТИВНОСТЬ (Добавить в <style>) --- */
+        
 /* МОБИЛЬНЫЙ SIDEBAR */
 @media (max-width: 767.98px) {
     .sidebar {
@@ -541,6 +542,15 @@ svg, img {
             <!-- Задание 1 -->
             <div id="task1" class="content-card card-mech">
                 <h2>№1. Кинематика</h2>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ a = \frac{\Delta V}{\Delta t} $$ (Ускорение)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ x(t) = x_0 + v_{0x}t + \frac{a_x t^2}{2} $$ (Координата тела)</div>
@@ -550,9 +560,18 @@ svg, img {
                         \( S_x \) — перемещение, \( x \) — координата.
                     </div>
                 </div>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-8">
-                        <div class="bg-white border rounded p-3 text-center"> 
+                        <div class="bg-white border rounded p-3 text-center">
+
                             <h5>Движение тела, брошенного под углом</h5>
                             <svg width="350" height="200" viewBox="0 0 350 200">
                                 <!-- Оси -->
@@ -604,6 +623,15 @@ svg, img {
             <!-- Задание 2 -->
             <div id="task2" class="content-card card-mech">
                 <h2>№2. Динамика</h2>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ F_{\text{упр}} = k \cdot |\Delta x| $$   (Закон Гука)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ F_{\text{тяг}} = G \frac{m_1 m_2}{R^2} $$  (Гравитация)</div>
@@ -616,7 +644,14 @@ svg, img {
             <!-- Задание 3 -->
             <div id="task3" class="content-card card-mech">
                 <h2>№3. Энергия, Импульс, Работа</h2>
-                <!-- №3 ЭНЕРГИЯ, ИМПУЛЬС, РАБОТА (ВИЗУАЛИЗАЦИЯ) -->
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
 <div class="row mt-4 g-3">
     
     <!-- 1. Механическая Работа -->
@@ -718,7 +753,15 @@ svg, img {
         </div>
     </div>
 </div>
-
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ E_p = mgh $$ (Потенциальная энергия)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ E_k = \frac{mV^2}{2} = \frac{p^2}{2m} $$ (Кинетическая энергия)</div>
@@ -733,7 +776,14 @@ svg, img {
                 <h2>№4, 5, 6. Колебания и Статика</h2>
                 
                 <h5 class="text-muted mt-3">Колебания и Волны</h5>
-                <!-- №4 КОЛЕБАНИЯ И ВОЛНЫ (ВИЗУАЛИЗАЦИЯ) -->
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
 <div class="row mt-4">
     <!-- Блок 1: Маятники -->
     <div class="col-md-6 mb-3">
@@ -816,7 +866,15 @@ svg, img {
         </div>
     </div>
 </div>
-
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ \nu = \frac{1}{T} $$ (Частота)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ \lambda = v \cdot T = \frac{v}{\nu} $$ (Длина волны)</div>
@@ -832,6 +890,14 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">8.</span> $$ P = \frac{F}{S} $$ (Давление твердого тела)</div>
                     <div class="formula-row"><span class="formula-num">9.</span> $$ \frac{F_1}{F_2} = \frac{l_2}{l_1} \text{ или } M_1 = M_2 $$ (Рычаг)</div>
                     <div class="formula-row"><span class="formula-num">10.</span> $$ a_{\text{ц}} = \frac{V^2}{R} = \omega^2 R $$ (Центростремительное ускорение)</div>
+                </div>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
                 </div>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-8">
@@ -1023,6 +1089,14 @@ svg, img {
             <!-- Задание 7 -->
             <div id="task7" class="content-card card-mkt">
                 <h2>№7. Идеальный газ (МКТ)</h2>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
                 <!-- ВИЗУАЛИЗАЦИЯ: ТЕРМОДИНАМИКА И ГАЗ -->
 <div class="row mt-4 g-3">
     
@@ -1111,7 +1185,15 @@ svg, img {
         </div>
     </div>
 </div>
-
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ p = nkT $$ (Давление газа)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ E_k = \frac{3}{2}kT $$ (Средняя кин. энергия)</div>
@@ -1122,9 +1204,18 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">7.</span> $$ p=\frac{1}{3}nm_{0}v_{кв}^{2}\ $$ (Основное уравнение молекулярно-кинетической теории (МКТ))</div>
                     <div class="formula-row"><span class="formula-num">8.</span> $$ v_{кв}=\sqrt{\frac{3p}{nm_{0}}}=\sqrt{\frac{3kT}{m_{0}}} $$ (Среднеквадратичная скорость движения молекул)</div>
                     <div class="row mt-4">
+                        <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
                         <div class="col-md-6 text-center">
                             <div class="p-3 border rounded bg-white">
                                 <h5 class="mb-3">Графики изопроцессов (в pV)</h5>
+                                
                                 <svg width="250" height="200" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg">
                                     <!-- Оси -->
                                     <line x1="30" y1="180" x2="240" y2="180" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
@@ -1184,7 +1275,14 @@ svg, img {
                 <!-- ФАЗОВЫЕ ПЕРЕХОДЫ И ТЕПЛОТА (ЕДИНЫЙ ГРАФИК) -->
 <div id="thermal-processes" class="content-card border-top border-danger">
     <h2 class="text-danger">Фазовые переходы и Теплота</h2>
-    
+    <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
     <div class="row">
         <!-- ГРАФИК-ЛЕСЕНКА -->
         <div class="col-lg-7 mb-3">
@@ -1299,7 +1397,15 @@ svg, img {
         </div>
     </div>
 </div>
-
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ \eta = \frac{A_{\text{п}}}{Q_1} $$ (КПД)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ \eta = \frac{Q_1 - Q_2}{Q_1} \cdot 100\% $$ (КПД Тепловой машины)</div>
@@ -1311,6 +1417,15 @@ svg, img {
             <!-- Задание 9 -->
             <div id="task9" class="content-card card-mkt">
                 <h2>№9. Термодинамика</h2>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ A = p \Delta V $$ (Работа газа, при p=const)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ U = \frac{3}{2}\frac{m}{M}RT $$ (Внутр. энергия одноатомного)</div>
@@ -1323,6 +1438,14 @@ svg, img {
             <!-- №10-15 ЭЛЕКТРИЧЕСТВО (С ВИЗУАЛИЗАЦИЕЙ) -->
 <div id="task10" class="content-card card-elec">
     <h2>№10, 11, 14, 15. Электродинамика</h2>
+    <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
     <div class="row mt-4 justify-content-center">
         <div class="col-md-10">
             <div class="bg-white border rounded p-3">
@@ -1413,6 +1536,15 @@ svg, img {
         </div>
         <div class="col-md-8">
             <h4>Основные законы</h4>
+            <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+            </div>
             <div class="formula-box">
                 <div class="formula-row"><span class="formula-num">1.</span> $$ I = \frac{U}{R} $$ (Для участка цепи)</div>
                 <div class="formula-row"><span class="formula-num">2.</span> $$ I = \frac{\mathcal{E}}{R + r} $$ (Для полной цепи)</div>
@@ -1724,6 +1856,45 @@ svg, img {
             </div>
         </div>
         <h5 class="text-muted mt-3">Электростатика и ток</h5>
+        <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
+        <svg viewBox="0 0 400 200" class="w-full h-48">
+                    <!-- Два заряда -->
+                    <circle cx="120" cy="100" r="25" fill="#e74c3c" stroke="#333" stroke-width="2"/>
+                    <text x="110" y="108" font-size="24" fill="#fff" font-weight="bold">+</text>
+                    <text x="115" y="145" font-size="14" fill="#333">q₁</text>
+                    <circle cx="280" cy="100" r="25" fill="#3498db" stroke="#333" stroke-width="2"/>
+                    <text x="273" y="110" font-size="28" fill="#fff" font-weight="bold">−</text>
+                    <text x="275" y="145" font-size="14" fill="#333">q₂</text>
+                    <!-- Сила взаимодействия -->
+                    <line x1="145" y1="100" x2="200" y2="100" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
+                    <line x1="255" y1="100" x2="200" y2="100" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
+                    <text x="190" y="85" font-size="14" fill="#27ae60" font-weight="bold">F</text>
+                    <!-- Расстояние -->
+                    <line x1="120" y1="160" x2="280" y2="160" stroke="#666" stroke-width="1" stroke-dasharray="5,5"/>
+                    <line x1="120" y1="155" x2="120" y2="165" stroke="#666" stroke-width="2"/>
+                    <line x1="280" y1="155" x2="280" y2="165" stroke="#666" stroke-width="2"/>
+                    <text x="190" y="180" font-size="14" fill="#666">r</text>
+                    <!-- Силовые линии -->
+                    <path d="M 145,100 Q 180,70 255,100" stroke="#667eea" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 145,100 Q 180,130 255,100" stroke="#667eea" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)"/>
+                    <text x="150" y="30" font-size="13" fill="#666">Силовые линии</text>
+                </svg>
+        <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+        </div>
         <div class="formula-box">
             <div class="formula-row"><span class="formula-num">1.</span> $$ F_k = k \frac{|q_1|\cdot|q_2|}{r^2} $$ (Закон Кулона)</div>
             <div class="formula-row"><span class="formula-num">2.</span> $$ I = \frac{q}{t} $$ (Сила тока)</div>
@@ -1733,6 +1904,15 @@ svg, img {
         </div>
 
         <h5 class="text-muted mt-3">Конденсаторы</h5>
+        <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+        </div>
         <div class="formula-box">
             <div class="formula-row"><span class="formula-num">1.</span> $$ C = \frac{q}{U} $$ (Ёмкость конденсатора)</div>
             <div class="formula-row"><span class="formula-num">2.</span> $$ C_{\text{пар}} = C_1 + C_2 $$ (Параллельное)</div>
@@ -1748,6 +1928,15 @@ svg, img {
             <!-- Задание 12 -->
             <div id="task12" class="content-card card-elec">
                 <h2>№12. Магнетизм</h2>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ W_m = \frac{LI^2}{2} $$ (Энергия магн. поля)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ \Phi = B S \cos\alpha $$ (Магнитный поток)</div>
@@ -1755,6 +1944,14 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">4.</span> $$ F_{\text{А}} = I B l \sin\alpha $$ (Сила Ампера)</div>
                     <div class="formula-row"><span class="formula-num">5.</span> $$ F_{\text{Л}} = q v B \sin\alpha $$ (Сила Лоренца)</div>
                     <div class="formula-row"><span class="formula-num">6.</span> $$ \mathcal{E}_i = - \frac{\Delta \Phi}{\Delta t} $$ (Закон Фарадея)</div>
+                </div>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
                 </div>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-8">
@@ -1813,11 +2010,28 @@ svg, img {
             <!-- Задания 13, 17 -->
             <div id="task13" class="content-card card-opt">
                 <h2>№13, 17. Оптика</h2>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
                 <div class="formula-box">
                     <div class="formula-row"><span class="formula-num">1.</span> $$ \frac{1}{F} = \frac{1}{d} + \frac{1}{f} $$ (Формула линзы)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ D = \frac{1}{F} $$ (Оптическая сила)</div>
                     <div class="formula-row"><span class="formula-num">3.</span> $$ \Gamma = \frac{f}{d} = \frac{H}{h} $$ (Увеличение)</div>
                     <div class="formula-row"><span class="formula-num">4.</span> $$ d \sin \varphi = k \lambda $$ (Дифракционная решетка)</div>
+                </div>
+                <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
                 </div>
                 <div class="row mt-4 justify-content-center">
                     <div class="col-md-10">
@@ -1863,6 +2077,14 @@ svg, img {
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
                     <div class="row mt-4 justify-content-center">
                         <div class="col-md-10">
                             <div class="text-center bg-white border rounded p-3">
@@ -1921,7 +2143,14 @@ svg, img {
             <!-- №16 ЯДЕРНАЯ ФИЗИКА (РАСШИРЕННЫЙ) -->
 <div id="task16" class="content-card card-quant">
     <h2>№16. Ядерная физика</h2>
-
+    <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
     <!-- БЛОК 1: Строение атома (Схема) -->
     <div class="row align-items-center mb-4">
         <div class="col-md-5 text-center">
@@ -2068,7 +2297,15 @@ svg, img {
                 <tr><td>Альфа-частица</td><td>\({}_{2}^{4}He\) или \(\alpha\)</td><td>+2</td><td>4</td></tr>
             </tbody>
         </table>
-
+        <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.968 7.968 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
+                            </svg>
+                            Основные формулы
+                        </span>
+                        
+                </div>
         <!-- Формула распада -->
         <div class="formula-box mt-3">
             <div class="formula-row"><span class="formula-num">1.</span> $$ N = N_0 \cdot 2^{-t/T} $$ (Закон радиоактивного распада)</div>
@@ -2633,6 +2870,536 @@ svg, img {
     </div>
 </div>
 
+<style>
+    .ref-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 14px;
+        margin: 20px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border-radius: 10px
+    }
+    .ref-table thead {
+        background-color: #2c3e50;
+        color: white;
+        border-radius: 20px;
+    }
+    .ref-table th, .ref-table td {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .ref-table th {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: sticky;
+        top: 0;
+    }
+    
+    /* Столбцы */
+    .col-symbol {
+        font-family: "Times New Roman", serif;
+        font-style: italic;
+        font-weight: bold;
+        font-size: 1.2em;
+        width: 15%;
+        text-align: center;
+        color: #d35400;
+        white-space: nowrap;
+    }
+    .col-name {
+        width: 50%;
+        line-height: 1.4;
+    }
+    .col-unit {
+        width: 35%;
+        
+        font-weight: bold;
+        color: #16a085;
+        border-left: 3px solid #1abc9c;
+    }
+    
+</style>
+
+<table class="ref-table">
+    <thead>
+        <tr>
+            <th>Буква</th>
+            <th>Величина</th>
+            <th>Единица (СИ)</th>
+        </tr>
+    </thead>
+   <tbody class="text-center align-middle">
+    <!-- ПРОСТРАНСТВО И ВРЕМЯ -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Пространство и время</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">l, d, s</span></td>
+        <td class="col-name fw-bold">Длина, расстояние, путь, диаметр</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м (метр)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">h</span></td>
+        <td class="col-name fw-bold">Высота, глубина</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м (метр)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">r, R</span></td>
+        <td class="col-name fw-bold">Радиус</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м (метр)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">S, A</span></td>
+        <td class="col-name fw-bold">Площадь</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">V</span></td>
+        <td class="col-name fw-bold">Объем</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м³</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">t, τ</span></td>
+        <td class="col-name fw-bold">Время, длительность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">с (секунда)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">α, β, φ</span></td>
+        <td class="col-name fw-bold">Плоский угол</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">рад (радиан)</span></td>
+    </tr>
+
+    <!-- МЕХАНИКА (КИНЕМАТИКА И ДИНАМИКА) -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Механика: Поступательное движение</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">m</span></td>
+        <td class="col-name fw-bold">Масса</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кг (килограмм)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ρ</span></td>
+        <td class="col-name fw-bold">Плотность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кг/м³</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">v</span></td>
+        <td class="col-name fw-bold">Скорость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м/с</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">a, g</span></td>
+        <td class="col-name fw-bold">Ускорение</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м/с²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">p</span></td>
+        <td class="col-name fw-bold">Импульс (количество движения)</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кг·м/с (или Н·с)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">F, P</span></td>
+        <td class="col-name fw-bold">Сила, Вес</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Н (Ньютон)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">Δl, x</span></td>
+        <td class="col-name fw-bold">Удлинение, деформация</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м (метр)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">k</span></td>
+        <td class="col-name fw-bold">Жесткость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Н/м</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">μ</span></td>
+        <td class="col-name fw-bold">Коэффициент трения</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная (1)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">A, W</span></td>
+        <td class="col-name fw-bold">Работа, Энергия</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж (Джоуль)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">N, P</span></td>
+        <td class="col-name fw-bold">Мощность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Вт (Ватт)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">η</span></td>
+        <td class="col-name fw-bold">Коэффициент полезного действия (КПД)</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная (или %)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">p</span></td>
+        <td class="col-name fw-bold">Давление</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Па (Паскаль)</span></td>
+    </tr>
+
+    <!-- МЕХАНИКА (ВРАЩАТЕЛЬНОЕ ДВИЖЕНИЕ) -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Механика: Вращательное движение</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">φ</span></td>
+        <td class="col-name fw-bold">Угол поворота</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">рад (радиан)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ω</span></td>
+        <td class="col-name fw-bold">Угловая скорость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">рад/с</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ε</span></td>
+        <td class="col-name fw-bold">Угловое ускорение</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">рад/с²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">M</span></td>
+        <td class="col-name fw-bold">Момент силы</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Н·м</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">L</span></td>
+        <td class="col-name fw-bold">Момент импульса</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кг·м²/с (или Дж·с)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">I, J</span></td>
+        <td class="col-name fw-bold">Момент инерции</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кг·м²</span></td>
+    </tr>
+
+    <!-- МЕХАНИКА ЖИДКОСТЕЙ И ТВЕРДОГО ТЕЛА -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Гидродинамика и Деформация</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">σ</span></td>
+        <td class="col-name fw-bold">Механическое напряжение</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Па (Паскаль)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ε</span></td>
+        <td class="col-name fw-bold">Относительная деформация</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">E</span></td>
+        <td class="col-name fw-bold">Модуль Юнга (упругости)</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Па (Паскаль)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">σ</span></td>
+        <td class="col-name fw-bold">Коэффициент поверхностного натяжения</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Н/м (или Дж/м²)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">η</span></td>
+        <td class="col-name fw-bold">Динамическая вязкость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Па·с</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ν</span></td>
+        <td class="col-name fw-bold">Кинематическая вязкость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м²/с</span></td>
+    </tr>
+
+    <!-- КОЛЕБАНИЯ И ВОЛНЫ -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Колебания и Волны (Акустика)</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">T</span></td>
+        <td class="col-name fw-bold">Период</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">с (секунда)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ν, f</span></td>
+        <td class="col-name fw-bold">Частота</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Гц (Герц)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">λ</span></td>
+        <td class="col-name fw-bold">Длина волны</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м (метр)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">k</span></td>
+        <td class="col-name fw-bold">Волновое число</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">рад/м (или м⁻¹)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">L (B)</span></td>
+        <td class="col-name fw-bold">Уровень громкости звука</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Б (Бел) или дБ</span></td>
+    </tr>
+
+    <!-- ТЕРМОДИНАМИКА -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Молекулярная физика и Термодинамика</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">T</span></td>
+        <td class="col-name fw-bold">Температура (термодинамическая)</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">К (Кельвин)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ν</span></td>
+        <td class="col-name fw-bold">Количество вещества</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">моль</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">M</span></td>
+        <td class="col-name fw-bold">Молярная масса</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кг/моль</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">C</span></td>
+        <td class="col-name fw-bold">Теплоемкость тела</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж/К</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">c</span></td>
+        <td class="col-name fw-bold">Удельная теплоемкость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж/(кг·К)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">C<sub>m</sub></span></td>
+        <td class="col-name fw-bold">Молярная теплоемкость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж/(моль·К)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">S</span></td>
+        <td class="col-name fw-bold">Энтропия</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж/К</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">U</span></td>
+        <td class="col-name fw-bold">Внутренняя энергия</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж (Джоуль)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">H</span></td>
+        <td class="col-name fw-bold">Энтальпия</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж (Джоуль)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">φ</span></td>
+        <td class="col-name fw-bold">Относительная влажность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная (или %)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">λ, k</span></td>
+        <td class="col-name fw-bold">Теплопроводность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Вт/(м·К)</span></td>
+    </tr>
+
+    <!-- ЭЛЕКТРИЧЕСТВО -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Электричество</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">q</span></td>
+        <td class="col-name fw-bold">Электрический заряд</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл (Кулон)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ρ</span></td>
+        <td class="col-name fw-bold">Объемная плотность заряда</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл/м³</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">σ</span></td>
+        <td class="col-name fw-bold">Поверхностная плотность заряда</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл/м²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">λ, τ</span></td>
+        <td class="col-name fw-bold">Линейная плотность заряда</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл/м</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">I</span></td>
+        <td class="col-name fw-bold">Сила тока</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">А (Ампер)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">j</span></td>
+        <td class="col-name fw-bold">Плотность тока</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">А/м²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">U, V</span></td>
+        <td class="col-name fw-bold">Напряжение, Разность потенциалов</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">В (Вольт)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">φ</span></td>
+        <td class="col-name fw-bold">Потенциал</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">В (Вольт)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">E</span></td>
+        <td class="col-name fw-bold">Напряженность электрического поля</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">В/м (или Н/Кл)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">D</span></td>
+        <td class="col-name fw-bold">Электрическая индукция (смещение)</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл/м²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">P</span></td>
+        <td class="col-name fw-bold">Поляризованность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл/м²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">p</span></td>
+        <td class="col-name fw-bold">Электрический дипольный момент</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл·м</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">C</span></td>
+        <td class="col-name fw-bold">Электрическая емкость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Ф (Фарад)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">R</span></td>
+        <td class="col-name fw-bold">Электрическое сопротивление</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Ом</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ρ</span></td>
+        <td class="col-name fw-bold">Удельное сопротивление</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Ом·м</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">G</span></td>
+        <td class="col-name fw-bold">Электрическая проводимость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">См (Сименс)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">ε</span></td>
+        <td class="col-name fw-bold">Диэлектрическая проницаемость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная</span></td>
+    </tr>
+
+    <!-- МАГНЕТИЗМ -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Магнетизм</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">B</span></td>
+        <td class="col-name fw-bold">Магнитная индукция</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Тл (Тесла)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">H</span></td>
+        <td class="col-name fw-bold">Напряженность магнитного поля</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">А/м</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">Φ</span></td>
+        <td class="col-name fw-bold">Магнитный поток</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Вб (Вебер)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">L</span></td>
+        <td class="col-name fw-bold">Индуктивность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Гн (Генри)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">μ</span></td>
+        <td class="col-name fw-bold">Магнитная проницаемость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">p<sub>m</sub></span></td>
+        <td class="col-name fw-bold">Магнитный момент</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">А·м² (или Дж/Тл)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">J (M)</span></td>
+        <td class="col-name fw-bold">Намагниченность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">А/м</span></td>
+    </tr>
+
+    <!-- ОПТИКА И ФОТОМЕТРИЯ -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Оптика и Фотометрия</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">D</span></td>
+        <td class="col-name fw-bold">Оптическая сила</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">дптр (м⁻¹)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">F</span></td>
+        <td class="col-name fw-bold">Фокусное расстояние</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">м (метр)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">n</span></td>
+        <td class="col-name fw-bold">Показатель преломления</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">безразмерная</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">I<sub>v</sub></span></td>
+        <td class="col-name fw-bold">Сила света</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кд (кандела)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">Φ<sub>v</sub></span></td>
+        <td class="col-name fw-bold">Световой поток</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">лм (люмен)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">E<sub>v</sub></span></td>
+        <td class="col-name fw-bold">Освещенность</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">лк (люкс)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">L<sub>v</sub></span></td>
+        <td class="col-name fw-bold">Яркость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">кд/м²</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">M<sub>v</sub></span></td>
+        <td class="col-name fw-bold">Светимость</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">лм/м²</span></td>
+    </tr>
+
+    <!-- ЯДЕРНАЯ ФИЗИКА И ДОЗИМЕТРИЯ -->
+    <tr><td colspan="3" class="section-header fs-6 text-dark text-center">Квантовая физика и Дозиметрия</td></tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">A</span></td>
+        <td class="col-name fw-bold">Активность радиоактивного источника</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Бк (Беккерель)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">D</span></td>
+        <td class="col-name fw-bold">Поглощенная доза излучения</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Гр (Грей)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">H</span></td>
+        <td class="col-name fw-bold">Эквивалентная доза</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Зв (Зиверт)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">X</span></td>
+        <td class="col-name fw-bold">Экспозиционная доза</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Кл/кг</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">T<sub>1/2</sub></span></td>
+        <td class="col-name fw-bold">Период полураспада</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">с (секунда)</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">h</span></td>
+        <td class="col-name fw-bold">Постоянная Планка</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж·с</span></td>
+    </tr>
+    <tr>
+        <td class="col-symbol"><span class="badge bg-warning bg-opacity-25 rounded-pill text-dark fs-6">A<sub>вых</sub></span></td>
+        <td class="col-name fw-bold">Работа выхода электрона</td>
+        <td class="col-unit"><span class="badge bg-warning rounded-pill text-dark fs-6">Дж (или эВ)</span></td>
+    </tr>
+</tbody>
+
+</table>
 
 </div>
     
