@@ -1876,35 +1876,70 @@ svg, img {
                             Схема | График
                         </span>    
                 </div>
-<svg width="100" height="25" viewBox="90 15 220 175"  xmlns="http://www.w3.org/2000/svg">
-    <!-- Заряды (Уменьшил радиус r=15, сблизил координаты) -->
-    <!-- Левый заряд -->
-    <circle cx="130" cy="100" r="15" fill="#e74c3c" stroke="#333" stroke-width="2"/>
-    <!-- Плюс внутри (чуть меньше шрифт, чтоб влез в малый шар) -->
-    <text x="124" y="105" font-size="18" fill="#fff" font-weight="bold">+</text>
-    <text x="125" y="130" font-size="14" fill="#333" font-weight="bold">q₁</text>
-    
-    <!-- Правый заряд -->
-    <circle cx="270" cy="100" r="15" fill="#3498db" stroke="#333" stroke-width="2"/>
-    <text x="265" y="105" font-size="20" fill="#fff" font-weight="bold">−</text>
-    <text x="265" y="130" font-size="14" fill="#333" font-weight="bold">q₂</text>
-    
-    <!-- Сила F (Стрелки короче) -->
-    <line x1="145" y1="100" x2="185" y2="100" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)"/>
-    <line x1="255" y1="100" x2="215" y2="100" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)"/>
-    <text x="195" y="90" font-size="14" fill="#27ae60" font-weight="bold">F</text>
-    
-    <!-- Расстояние r (Поднял выше) -->
-    <line x1="130" y1="140" x2="270" y2="140" stroke="#666" stroke-width="1" stroke-dasharray="4,4"/>
-    <line x1="130" y1="135" x2="130" y2="145" stroke="#666" stroke-width="2"/>
-    <line x1="270" y1="135" x2="270" y2="145" stroke="#666" stroke-width="2"/>
-    <text x="195" y="155" font-size="14" fill="#666">r</text>
-    
-    <!-- Силовые линии (Дуги более пологие) -->
-    <path d="M 145,100 Q 200,60 255,100" stroke="#667eea" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
-    <!-- Убрал нижнюю линию для компактности, одной достаточно для смысла -->
-    <text x="150" y="60" font-size="12" fill="#666">Силовые линии</text>
+<style>
+  .charge-wrap {
+    max-width: 360px;   /* аккуратный размер на ПК */
+    margin: 0 auto;
+  }
+
+  .charge-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* На телефоне увеличиваем */
+  @media (max-width: 800px) {
+    .charge-wrap {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="charge-wrap">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="90 15 220 175"
+     width="220"
+     height="175">
+
+  <defs>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#27ae60"/>
+    </marker>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#667eea"/>
+    </marker>
+  </defs>
+
+  <!-- Левый заряд -->
+  <circle cx="130" cy="100" r="15" fill="#e74c3c" stroke="#333" stroke-width="2"/>
+  <text x="124" y="105" font-size="18" fill="#fff" font-weight="bold">+</text>
+  <text x="125" y="130" font-size="14" fill="#333" font-weight="bold">q₁</text>
+
+  <!-- Правый заряд -->
+  <circle cx="270" cy="100" r="15" fill="#3498db" stroke="#333" stroke-width="2"/>
+  <text x="265" y="105" font-size="20" fill="#fff" font-weight="bold">−</text>
+  <text x="265" y="130" font-size="14" fill="#333" font-weight="bold">q₂</text>
+
+  <!-- Силы -->
+  <line x1="145" y1="100" x2="185" y2="100" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <line x1="255" y1="100" x2="215" y2="100" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="195" y="90" font-size="14" fill="#27ae60" font-weight="bold">F</text>
+
+  <!-- Расстояние -->
+  <line x1="130" y1="140" x2="270" y2="140" stroke="#666" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="130" y1="135" x2="130" y2="145" stroke="#666" stroke-width="2"/>
+  <line x1="270" y1="135" x2="270" y2="145" stroke="#666" stroke-width="2"/>
+  <text x="195" y="155" font-size="14" fill="#666">r</text>
+
+  <!-- Силовая линия -->
+  <path d="M145,100 Q200,60 255,100" stroke="#667eea" stroke-width="1" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="150" y="60" font-size="12" fill="#666">Силовые линии</text>
+
 </svg>
+
+</div>
 
 
 
@@ -2162,71 +2197,145 @@ svg, img {
                             Схема | График
                         </span>    
                 </div>
-                <svg width="900" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                <style>
+                .optics-layout {
+                    display: grid;
+                    grid-template-columns: minmax(0, 900px) 1fr;
+                    gap: 16px;
+                    max-width: 1280px;
+                    margin: auto;
+                    padding: 16px;
+                    box-sizing: border-box;
+                    align-items: start;
+                }
+
+                .optics-svg svg,
+                .optics-notes svg {
+                    width: 100%;
+                    height: auto;
+                    display: block;
+                }
+
+                /* Mobile */
+                @media (max-width: 800px) {
+                    .optics-layout {
+                    grid-template-columns: 1fr;
+                    
+                    gap: 16px;
+                    }
+                    .optics-svg svg {
+                        width: 100%;
+                        max-width: 1280px;
+                        margin: 0 auto;
+                    }
+                    
+                }
+                </style>
+
+                <div class="optics-layout">
+
+                <!-- ================== РИСУНОК ================== -->
+                <div class="optics-svg">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 900 500"
+                    width="900"
+                    height="500">
+
+                <style>
+                .mirror { stroke:black; stroke-width:4; }
+                .ray { stroke:#1565c0; stroke-width:3; marker-end:url(#arrow); }
+                .normal { stroke:#c62828; stroke-width:2; stroke-dasharray:6 5; }
+                .angle { fill:none; stroke:#2e7d32; stroke-width:2; }
+                .label { font-family:Arial, sans-serif; font-size:16px; }
+                .box { fill:#f5f5f5; stroke:black; stroke-width:2; }
+                </style>
+
+                <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                    <path d="M0,0 L10,3 L0,6 Z" fill="#1565c0"/>
+                </marker>
+                </defs>
+
+                <line x1="100" y1="320" x2="800" y2="320" class="mirror"/>
+                <text x="810" y="325" class="label">Зеркало</text>
+
+                <line x1="450" y1="80" x2="450" y2="460" class="normal"/>
+                <text x="460" y="120" class="label" fill="#c62828">Нормаль</text>
+
+                <line x1="200" y1="120" x2="450" y2="320" class="ray"/>
+                <text x="150" y="115" class="label">Падающий луч</text>
+
+                <line x1="450" y1="320" x2="700" y2="120" class="ray"/>
+                <text x="640" y="115" class="label">Отражённый луч</text>
+
+                <path d="M450 280 A40 40 0 0 1 410 300" class="angle"/>
+                <text x="395" y="285" class="label">α</text>
+
+                <path d="M450 280 A40 40 0 0 0 490 300" class="angle"/>
+                <text x="500" y="285" class="label">α</text>
+
+                <path d="M410 320 A40 40 0 0 0 450 280" class="angle"/>
+                <text x="390" y="350" class="label">β</text>
+
+                </svg>
+                </div>
+
+                <!-- ================== ПОЯСНЕНИЯ ================== -->
+                
+                </div>
+
+                </div>
+
+                        </div>
+                    </div>
+                
+               
+                <style>
+  .optics-notes {
+    max-width: 620px;      /* нормальный размер на ПК */
+    margin: 0 auto;
+  }
+
+  .optics-notes svg {
+    width: 80%;
+    height: auto;
+    display: block;
+  }
+
+  /* На телефоне — даём растягиваться */
+  @media (max-width: 800px) {
+    .optics-notes {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<div class="optics-notes">
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 140" width="700" height="140">
 
 <style>
-  .mirror { stroke:black; stroke-width:4; }
-  .ray { stroke:#1565c0; stroke-width:3; marker-end:url(#arrow); }
-  .normal { stroke:#c62828; stroke-width:2; stroke-dasharray:6 5; }
-  .angle { fill:none; stroke:#2e7d32; stroke-width:2; }
-  .label { font-family:Arial, sans-serif; font-size:16px; }
+  .label { font-family: Arial, sans-serif; font-size:18px; }
   .box { fill:#f5f5f5; stroke:black; stroke-width:2; }
 </style>
 
-<defs>
-  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-    <path d="M0,0 L10,3 L0,6 Z" fill="#1565c0"/>
-  </marker>
-</defs>
+<rect x="10" y="10" width="600" height="120" rx="15" ry="15" class="box"/>
 
-<!-- Зеркало -->
-<line x1="100" y1="320" x2="800" y2="320" class="mirror"/>
-<text x="810" y="325" class="label">Зеркало</text>
-
-<!-- Нормаль -->
-<line x1="450" y1="80" x2="450" y2="460" class="normal"/>
-<text x="460" y="120" class="label" fill="#c62828">Нормаль</text>
-
-<!-- Падающий луч -->
-<line x1="200" y1="120" x2="450" y2="320" class="ray"/>
-<text x="150" y="115" class="label">Падающий луч</text>
-
-<!-- Отражённый луч -->
-<line x1="450" y1="320" x2="700" y2="120" class="ray"/>
-<text x="640" y="115" class="label">Отражённый луч</text>
-
-<!-- Углы -->
-<!-- Угол падения α -->
-<path d="M450 280 A40 40 0 0 1 410 300" class="angle"/>
-<text x="395" y="285" class="label">α</text>
-
-<!-- Угол отражения α -->
-<path d="M450 280 A40 40 0 0 0 490 300" class="angle"/>
-<text x="500" y="285" class="label">α</text>
-
-<!-- Угол между лучом и поверхностью β -->
-<path d="M410 320 A40 40 0 0 0 450 280" class="angle"/>
-<text x="390" y="350" class="label">β</text>
-
-<!-- Пояснительная рамка -->
-<rect x="60" y="360" width="780" height="120" rx="15" ry="15" class="box"/>
-
-<text x="80" y="395" class="label">
+<text x="30" y="45" class="label">
   Закон отражения: угол падения равен углу отражения.
 </text>
-<text x="80" y="425" class="label">
+<text x="30" y="75" class="label">
   Эти углы (α) измеряются от нормали к поверхности зеркала.
 </text>
-<text x="80" y="455" class="label">
+<text x="30" y="105" class="label">
   Угол между лучом и поверхностью: β = 90° − α.
 </text>
 
 </svg>
 
-                        </div>
-                    </div>
-                    
-                </div>
+</div>
+
                 
             </div>
 
@@ -2664,7 +2773,7 @@ svg, img {
 <h4 class="text-warning text-dark mt-4">Математический маятник | Груз</h4>
 <style>
   .svg-wrap {
-    width: 100%;
+    width: 40%;
     max-width: 1280px;
     margin: 0 auto;
   }
@@ -2681,26 +2790,26 @@ svg, img {
     background: #fafafa;
   }
 
-  .phys-layout {
-    display: grid;
-    grid-template-columns: 420px 1fr;
-    grid-template-rows: auto auto;
-    gap: 16px;
-    max-width: 1280px;
-    margin: auto;
-    padding: 16px;
-    box-sizing: border-box;
-  }
+ .phys-layout {
+  display: grid;
+  grid-template-columns: 420px minmax(0, 760px);
+  grid-template-rows: auto auto;
+  gap: 16px;
+  max-width: 1280px;
+  margin: auto;
+}
+
 
   .phys-left {
     grid-row: 1 / span 2;
   }
 
   .phys-right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+}
+
+
 
   .phys-notes {
     grid-column: 1 / span 2;
@@ -2717,16 +2826,22 @@ svg, img {
       grid-column: 1;
       grid-row: auto;
     }
+    .svg-wrap {
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
   }
-
   .svg-wrap svg {
     width: 100%;
     height: auto;
     display: block;
   }
+  }
+  
+
 </style>
 
-<div class="phys-layout">
+<div class="row row-cols-2 row-cols-md-4 g-2 text-center small">
 
 <!-- ================= MAЯТНИК ================= -->
 <div class="phys-left svg-wrap">
