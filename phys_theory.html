@@ -555,9 +555,14 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">1.</span> $$ a = \frac{\Delta V}{\Delta t} $$ (Ускорение)</div>
                     <div class="formula-row"><span class="formula-num">2.</span> $$ x(t) = x_0 + v_{0x}t + \frac{a_x t^2}{2} $$ (Координата тела)</div>
                     <div class="formula-row"><span class="formula-num">3.</span> $$ S_x = \frac{v_x^2 - v_{0x}^2}{2a_x} $$ (Расстояние при равноускоренном движении)</div>
+                    <div class="formula-row"><span class="formula-num">4.</span> $$ v_{cp} = \frac{\Delta s}{\Delta t} $$ (Средняя скорость)</div>
                     <div class="text-muted small mt-2">
                         <em>Если дан график \( v(t) \): путь = площадь фигуры под графиком.</em><br>
                         \( S_x \) — перемещение, \( x \) — координата.
+                    </div>
+                    <div class="text-muted small mt-2">
+                        <em>Для задач на нахождение площади под графиком:</em><br>
+                        \( S_\Delta = \frac{1}{2}к_1\times к_1 \) — площадь прямоугольного треугольника, где \( к_1, к_2 \) — катеты.
                     </div>
                 </div>
                 <div>
@@ -638,6 +643,7 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">3.</span> $$ F_{\text{тр}} = \mu N $$  (Трение скольжения)</div>
                     <div class="formula-row"><span class="formula-num">4.</span> $$ \vec{F} = m\vec{a} $$  (II закон Ньютона)</div>
                     <div class="formula-row"><span class="formula-num">5.</span> $$ p = \rho g h $$  (Гидростатическое давление)</div>
+                    
                 </div>
             </div>
 
@@ -767,7 +773,7 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">2.</span> $$ E_k = \frac{mV^2}{2} = \frac{p^2}{2m} $$ (Кинетическая энергия)</div>
                     <div class="formula-row"><span class="formula-num">3.</span> $$ A = F \cdot S \cdot \cos\alpha $$ (Работа силы)</div>
                     <div class="formula-row"><span class="formula-num">4.</span> $$ N = \frac{A}{t} = F \cdot V $$ (Мощность)</div>
-                    <div class="formula-row"><span class="formula-num">5.</span> $$ \vec{p} = m\vec{V} $$ (Импульс тела)</div>
+                    <div class="formula-row"><span class="formula-num">5.</span> $$ \vec{p} = m\vec{v} $$ (Импульс тела)</div>
                 </div>
             </div>
 
@@ -889,7 +895,8 @@ svg, img {
                     <div class="formula-row"><span class="formula-num">7.</span> $$ \rho = \frac{m}{V} $$ (Плотность)</div>
                     <div class="formula-row"><span class="formula-num">8.</span> $$ P = \frac{F}{S} $$ (Давление твердого тела)</div>
                     <div class="formula-row"><span class="formula-num">9.</span> $$ \frac{F_1}{F_2} = \frac{l_2}{l_1} \text{ или } M_1 = M_2 $$ (Рычаг)</div>
-                    <div class="formula-row"><span class="formula-num">10.</span> $$ a_{\text{ц}} = \frac{V^2}{R} = \omega^2 R $$ (Центростремительное ускорение)</div>
+                    <div class="formula-row"><span class="formula-num">10.</span> $$ d={l_1}+{l_2}  $$ (Длина рычага)</div>
+                    <div class="formula-row"><span class="formula-num">11.</span> $$ a_{\text{ц}} = \frac{V^2}{R} = \omega^2 R $$ (Центростремительное ускорение)</div>
                 </div>
                 <div>
                         <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
@@ -2147,6 +2154,75 @@ svg, img {
                                     </ol>
                                 </div>
                             </div>
+                            <div>
+                        <span class="text-base font-semibold text-gray-500 mb-6 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                            </svg>
+                            Схема | График
+                        </span>    
+                </div>
+                <svg width="900" height="500" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  .mirror { stroke:black; stroke-width:4; }
+  .ray { stroke:#1565c0; stroke-width:3; marker-end:url(#arrow); }
+  .normal { stroke:#c62828; stroke-width:2; stroke-dasharray:6 5; }
+  .angle { fill:none; stroke:#2e7d32; stroke-width:2; }
+  .label { font-family:Arial, sans-serif; font-size:16px; }
+  .box { fill:#f5f5f5; stroke:black; stroke-width:2; }
+</style>
+
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+    <path d="M0,0 L10,3 L0,6 Z" fill="#1565c0"/>
+  </marker>
+</defs>
+
+<!-- Зеркало -->
+<line x1="100" y1="320" x2="800" y2="320" class="mirror"/>
+<text x="810" y="325" class="label">Зеркало</text>
+
+<!-- Нормаль -->
+<line x1="450" y1="80" x2="450" y2="460" class="normal"/>
+<text x="460" y="120" class="label" fill="#c62828">Нормаль</text>
+
+<!-- Падающий луч -->
+<line x1="200" y1="120" x2="450" y2="320" class="ray"/>
+<text x="150" y="115" class="label">Падающий луч</text>
+
+<!-- Отражённый луч -->
+<line x1="450" y1="320" x2="700" y2="120" class="ray"/>
+<text x="640" y="115" class="label">Отражённый луч</text>
+
+<!-- Углы -->
+<!-- Угол падения α -->
+<path d="M450 280 A40 40 0 0 1 410 300" class="angle"/>
+<text x="395" y="285" class="label">α</text>
+
+<!-- Угол отражения α -->
+<path d="M450 280 A40 40 0 0 0 490 300" class="angle"/>
+<text x="500" y="285" class="label">α</text>
+
+<!-- Угол между лучом и поверхностью β -->
+<path d="M410 320 A40 40 0 0 0 450 280" class="angle"/>
+<text x="390" y="350" class="label">β</text>
+
+<!-- Пояснительная рамка -->
+<rect x="60" y="360" width="780" height="120" rx="15" ry="15" class="box"/>
+
+<text x="80" y="395" class="label">
+  Закон отражения: угол падения равен углу отражения.
+</text>
+<text x="80" y="425" class="label">
+  Эти углы (α) измеряются от нормали к поверхности зеркала.
+</text>
+<text x="80" y="455" class="label">
+  Угол между лучом и поверхностью: β = 90° − α.
+</text>
+
+</svg>
+
                         </div>
                     </div>
                     
@@ -2584,7 +2660,240 @@ svg, img {
             </div>
         </div>
     </div>
+    <?xml version="1.0" encoding="UTF-8"?>
+<h4 class="text-warning text-dark mt-4">Математический маятник | Груз</h4>
+<style>
+  .svg-wrap {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .svg-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+
+<style>
+  body {
+    margin: 0;
+    background: #fafafa;
+  }
+
+  .phys-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+    max-width: 1280px;
+    margin: auto;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .phys-left {
+    grid-row: 1 / span 2;
+  }
+
+  .phys-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .phys-notes {
+    grid-column: 1 / span 2;
+  }
+
+  @media (max-width: 900px) {
+    .phys-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+    }
+    .phys-left,
+    .phys-right,
+    .phys-notes {
+      grid-column: 1;
+      grid-row: auto;
+    }
+  }
+
+  .svg-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+
+<div class="phys-layout">
+
+<!-- ================= MAЯТНИК ================= -->
+<div class="phys-left svg-wrap">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360">
+  <style>
+    .font { font-family: Arial; }
+    .axis { stroke:#111; stroke-width:2; }
+    .dash { stroke-dasharray:6 6; }
+    .c1 { fill:#3f73b9; }
+    .c2 { fill:#d88a3c; }
+    .c3 { fill:#6aa83f; }
+  </style>
+
+  <g transform="translate(40,20)">
+    <line x1="40" y1="10" x2="240" y2="10" stroke="#111" stroke-width="3"/>
+    <line x1="140" y1="10" x2="140" y2="260" stroke="#111" class="dash"/>
+    <line x1="140" y1="10" x2="80" y2="200" stroke="#111" stroke-width="4"/>
+    <rect x="60" y="200" width="40" height="40" fill="#111"/>
+
+    <line x1="20" y1="260" x2="260" y2="260" class="axis"/>
+
+    <circle cx="40" cy="310" r="20" class="c1"/><text x="40" y="316" fill="#fff" text-anchor="middle">3</text>
+    <circle cx="140" cy="320" r="20" class="c2"/><text x="140" y="326" fill="#fff" text-anchor="middle">2</text>
+    <circle cx="240" cy="310" r="20" class="c3"/><text x="240" y="316" fill="#fff" text-anchor="middle">1</text>
+  </g>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 520">
+
+<style>
+  .font { font-family: Arial, Helvetica, sans-serif; }
+  .axis { stroke:#111; stroke-width:2; fill:none; }
+  .axisThin { stroke:#111; stroke-width:1.6; fill:none; stroke-dasharray:6 6; }
+
+  .potAxis { stroke:#d2a022; stroke-width:2; fill:none; }
+  .xAxis   { stroke:#4c8f3d; stroke-width:2; fill:none; }
+  .vAxis   { stroke:#2f73bd; stroke-width:2; fill:none; }
+
+  .gPot { stroke:#d2a022; stroke-width:3; fill:none; }
+  .gX   { stroke:#4c8f3d; stroke-width:3; fill:none; }
+  .gA   { stroke:#111; stroke-width:3; fill:none; }
+  .gV   { stroke:#2f73bd; stroke-width:3; fill:none; }
+
+  .label { font-size:20px; fill:#111; }
+  .tickText { font-size:16px; fill:#111; }
+  .italic { font-style: italic; }
+</style>
+
+<!-- ===== Потенциальная энергия U ===== -->
+<g transform="translate(60,60)" class="font">
+  <line x1="0" y1="100" x2="240" y2="100" class="potAxis"/>
+  <line x1="0" y1="120" x2="0" y2="0" class="potAxis"/>
+  <text x="-10" y="118" class="tickText" fill="#d2a022">0</text>
+
+  <line x1="180" y1="0" x2="180" y2="100" class="axisThin"/>
+  <text x="172" y="118" class="tickText italic">T</text>
+  <text x="220" y="118" class="tickText italic">t</text>
+
+  <!-- cos² -->
+  <path class="gPot"
+        d="M0,24
+           C30,24 45,100 90,100
+           C135,100 150,24 180,24
+           C210,24 225,100 240,100"/>
+
+  <text x="120" y="155" class="label" text-anchor="middle">
+    Потенциальная энергия
+  </text>
+</g>
+
+<!-- ===== Координата x ===== -->
+<g transform="translate(400,60)" class="font">
+  <line x1="0" y1="60" x2="240" y2="60" class="xAxis"/>
+  <line x1="0" y1="120" x2="0" y2="0" class="xAxis"/>
+  <text x="-10" y="68" class="tickText" fill="#4c8f3d">0</text>
+
+  <line x1="180" y1="0" x2="180" y2="120" class="axisThin"/>
+  <text x="172" y="78" class="tickText italic">T</text>
+  <text x="220" y="78" class="tickText italic">t</text>
+
+  <!-- -cos -->
+  <path class="gX"
+        d="M0,96
+           C45,96 45,24 90,24
+           C135,24 135,96 180,96
+           C210,96 225,60 240,60"/>
+
+  <text x="120" y="155" class="label" text-anchor="middle">
+    Координата <tspan class="italic">x</tspan>
+  </text>
+</g>
+
+<!-- ===== Ускорение a ===== -->
+<g transform="translate(60,300)" class="font">
+  <line x1="0" y1="60" x2="240" y2="60" class="axis"/>
+  <line x1="0" y1="120" x2="0" y2="0" class="axis"/>
+  <text x="-10" y="68" class="tickText">0</text>
+
+  <line x1="180" y1="0" x2="180" y2="120" class="axisThin"/>
+  <text x="172" y="78" class="tickText italic">T</text>
+  <text x="220" y="78" class="tickText italic">t</text>
+
+  <!-- cos -->
+  <path class="gA"
+        d="M0,24
+           C45,24 45,96 90,96
+           C135,96 135,24 180,24
+           C210,24 225,60 240,60"/>
+
+  <text x="120" y="155" class="label" text-anchor="middle">
+    Проекция ускорения
+  </text>
+</g>
+
+<!-- ===== Скорость v ===== -->
+<g transform="translate(400,300)" class="font">
+  <line x1="0" y1="60" x2="240" y2="60" class="vAxis"/>
+  <line x1="0" y1="120" x2="0" y2="0" class="vAxis"/>
+  <text x="-10" y="68" class="tickText" fill="#2f73bd">0</text>
+
+  <line x1="180" y1="0" x2="180" y2="120" class="axisThin"/>
+  <text x="172" y="78" class="tickText italic">T</text>
+  <text x="220" y="78" class="tickText italic">t</text>
+
+  <!-- sin -->
+  <path class="gV"
+        d="M0,60
+           C45,24 45,24 90,60
+           C135,96 135,96 180,60
+           C210,24 225,24 240,60"/>
+
+  <text x="120" y="155" class="label" text-anchor="middle">
+    Проекция скорости
+  </text>
+</g>
+
+</svg>
+
 </div>
+
+
+<!-- ================= ПОЯСНЕНИЯ ================= -->
+<div class="phys-notes svg-wrap">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <style>
+    .font{font-family:Arial;}
+    .box{fill:#fff;stroke:#b7c3d8;stroke-width:2;}
+  </style>
+
+  <rect x="10" y="10" width="580" height="280" rx="20" class="box"/>
+
+  <text x="30" y="60" class="font" font-size="22">В положении 2 — кинетическая энергия максимальна</text>
+  <text x="30" y="110" class="font" font-size="22">В положении 3 — модуль ускорения максимален</text>
+  <text x="30" y="170" class="font" font-size="22">При 3→2 и 1→2 сила натяжения увеличивается</text>
+  <text x="30" y="210" class="font" font-size="22">При 2→3 и 2→1 полная энергия сохраняется</text>
+
+</svg>
+</div>
+
+</div>
+
+
+
+
+
+
+</div>
+
 <!-- СПРАВОЧНЫЕ МАТЕРИАЛЫ (СТИЛЬ КИМ ЕГЭ) -->
 <div id="reference-tables" class="content-card" style="border-left: 5px solid #333;">
     <h2 class="text-dark" style="font-family: 'Times New Roman', serif;">Справочные данные</h2>
