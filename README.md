@@ -1,6 +1,7 @@
 # 🪐 ФизМатИнфо (FizMatInfo)
 
 Образовательный портал для школьников с лентой полезных материалов, разборами задач и системой персонализированных домашних заданий.
+https://swordbird2002.github.io/fiz_mat_info_dv/index.html
 
 ![Status](https://img.shields.io/badge/status-active-success) ![License](https://img.shields.io/badge/license-MIT-blue)
 
