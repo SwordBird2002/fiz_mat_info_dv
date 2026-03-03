@@ -17,6 +17,9 @@
         --navbar-bg: rgba(33, 37, 41, 0.95);
         --glass-border: 1px solid rgba(255, 255, 255, 0.3);
         --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        --red:        #e8272a;
+        --red-d:      #c41f22;
+        --red-bg:     #fff5f5;
     }
 
     [data-theme="dark"] {
@@ -84,6 +87,33 @@
         animation: moveWild 14s infinite ease-in-out; /* Своя уникальная анимация */
         opacity: 0.5; /* Чуть прозрачнее остальных, чтобы не резал глаз */
     }
+    .logo {
+        font-size: 19px; font-weight: 900; letter-spacing: -.5px;
+        color: #fff; text-decoration: none; flex-shrink: 0;
+        display: flex; align-items: center; gap: 0;
+        display: block;
+        width: max-content;
+        margin: 0 auto;
+        margin-top: 15px;
+        padding: 10px 20px;
+        padding: 0 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px); /* Эффект матового стекла */
+        -webkit-backdrop-filter: blur(10px); /* Для Safari */
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+        transition: all 0.3s ease;
+        
+        /* важно для transform */
+        transition: transform 0.3s ease;
+
+    }
+    .logo:hover {
+        transform: scale(1.1);      /* увеличение на 10% */
+    }
+    .logo em { color: var(--red); font-style: italic; }
+    .logo-dot { color: var(--red); margin: 0 1px; }
 
     /* --- АНИМАЦИИ --- */
     @keyframes moveDiagonal {
@@ -312,6 +342,9 @@
             <h1 class="display-4 fw-bold">Понятная математика, физика и информатика</h1>
             <p class="lead mb-4">Персональный сайт преподавателя ⚛️</p>
             <a href="materials.html" class="btn btn-light btn-lg px-4 fw-bold text-primary">Открытые Материалы</a>
+            <a href="redsquare_fmi.html" class="logo">
+                <em>RED</em>²<span class="logo-dot">·</span>ФМИ
+            </a>
         </div>
     </header>
 
@@ -612,8 +645,8 @@
         }
     }
 
-    // Запускаем снег
-    document.addEventListener('DOMContentLoaded', createSnow);
+    // Запускаем снег (ДЛЯ ЗИМЫ)
+    //document.addEventListener('DOMContentLoaded', createSnow);
     </script>
 </body>
 </html>
