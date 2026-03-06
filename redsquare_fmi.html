@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Новости и статьи — REDSQUARE — ЕГЭ·ФМИ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+
+:root {
+  --red:        #e8272a;
+  --hdr:        #161618;
+  --hdr-border: rgba(255,255,255,.07);
+  --bg:         #f2f2f2;
+  --card:       #ffffff;
+  --text:       #1a1a1a;
+  --text-2:     #3d3d3d;
+  --muted:      #767676;
+  --border:     #e8e8e8;
+  
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --max: 1180px;
+  --r: 12px;
+  --shadow: 0 2px 20px rgba(0,0,0,.07);
+}
+
+[data-theme="dark"] {
+  --bg:         #0f0f0f;
+  --card:       #1a1a1a;
+  --text:       #f0f0f0;
+  --text-2:     #c0c0c0;
+  --muted:      #888;
+  --border:     #2a2a2a;
+  --shadow:     0 2px 20px rgba(0,0,0,.35);
+}
+
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  transition: background .25s, color .25s;
+}
+a { color: var(--red); text-decoration: none; }
+img { display: block; max-width: 100%; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #bbb; border-radius: 3px; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #444; }
+
+
+.hdr {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--hdr);
+  border-bottom: 1px solid var(--hdr-border);
+  backdrop-filter: saturate(180%) blur(10px);
+}
+.hdr-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center;
+  height: 54px; padding: 0 20px; gap: 28px;
+}
+.logo {
+  font-size: 19px; font-weight: 900; letter-spacing: -.5px;
+  color: #fff; text-decoration: none; flex-shrink: 0;
+  display: flex; align-items: center; gap: 0;
+}
+.logo em { color: var(--red); font-style: italic; }
+.logo-dot { color: var(--red); margin: 0 1px; }
+
+.hdr-nav {
+  display: flex; align-items: center; gap: 2px;
+  flex: 1; overflow: hidden;
+}
+.hdr-nav a {
+  color: rgba(255,255,255,.55); font-size: 13.5px; font-weight: 500;
+  padding: 6px 11px; border-radius: 7px; white-space: nowrap;
+  transition: .15s;
+}
+.hdr-nav a:hover { color: #fff; background: rgba(255,255,255,.08); }
+.hdr-nav a.cur { color: #fff; }
+
+.hdr-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+.theme-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.7); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: .2s;
+}
+.theme-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+.page-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+}
+.page-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900; letter-spacing: -.6px;
+  color: var(--text);
+}
+
+.filters {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 4px;
+}
+.filter-btn {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text-2); font-family: var(--font); font-size: 13.5px; font-weight: 600;
+  padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: .2s;
+  white-space: nowrap;
+}
+.filter-btn:hover { border-color: var(--muted); color: var(--text); }
+.filter-btn.active {
+  background: var(--red); border-color: var(--red); color: #fff;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  text-decoration: none; transition: transform .25s, box-shadow .25s;
+  animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.12);
+}
+
+
+.card-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px; position: relative; overflow: hidden;
+}
+.card-thumb.math { background: linear-gradient(135deg, #2b1055, #7597de); }
+.card-thumb.phys { background: linear-gradient(135deg, #0f3460, #16a085); }
+
+
+.card-img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; 
+  z-index: 1;
+}
+
+.card-body {
+  padding: 20px; display: flex; flex-direction: column; flex: 1;
+}
+.card-cat {
+  font-size: 11px; font-weight: 800; letter-spacing: .6px;
+  text-transform: uppercase; color: var(--red); margin-bottom: 8px;
+}
+.card-title {
+  font-size: 18px; font-weight: 800; line-height: 1.35;
+  color: var(--text); margin-bottom: 10px; letter-spacing: -.2px;
+}
+.card-desc {
+  font-size: 14.5px; color: var(--muted); line-height: 1.6;
+  margin-bottom: 16px; flex: 1;
+}
+.card-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; color: var(--muted); font-weight: 500;
+  padding-top: 16px; border-top: 1px solid var(--border);
+}
+
+
+.load-more {
+  display: none;
+  width: 100%; max-width: 240px; margin: 40px auto 0;
+  padding: 14px 24px; background: var(--card); border: 1px solid var(--border);
+  color: var(--text); font-weight: 600; font-family: var(--font); font-size: 15px;
+  border-radius: 8px; cursor: pointer; transition: .2s; text-align: center;
+}
+.load-more.visible { display: block; }
+.load-more:hover { border-color: var(--red); color: var(--red); }
+
+.state-msg {
+  grid-column: 1 / -1; text-align: center;
+  padding: 40px 0; color: var(--muted); font-weight: 500;
+}
+
+@media(max-width: 600px) {
+  .hdr-nav { display: none; }
+  .news-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="#" class="logo"><em>RED</em>²<span class="logo-dot">·</span>ФМИ</a>
+    <nav class="hdr-nav">
+      <a href="#" class="cur">Главная</a>
+      <a href="#">Математика</a>
+      <a href="#">Информатика</a>
+      <a href="#">Физика</a>
+      <a href="#">Все статьи</a>
+    </nav>
+    <div class="hdr-right">
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- TITLE & FILTERS -->
+  <div class="page-head">
+    <h1 class="page-title">Последние материалы</h1>
+    <div class="filters" id="filterContainer">
+      <button class="filter-btn active" data-filter="all">Все предметы</button>
+      <button class="filter-btn" data-filter="inf">Информатика</button>
+      <button class="filter-btn" data-filter="math">Математика</button>
+      <button class="filter-btn" data-filter="phys">Физика</button>
+    </div>
+  </div>
+
+  <!-- DYNAMIC NEWS GRID -->
+  <div class="news-grid" id="newsGrid">
+    <div class="state-msg">Загрузка статей...</div>
+  </div>
+
+  <!-- LOAD MORE -->
+  <button class="load-more" id="loadMoreBtn">Показать ещё</button>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+
+const THEME_KEY = 'ege-theme';
+const themeBtn = document.getElementById('themeBtn');
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem(THEME_KEY, t);
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+}
+
+(function() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved) applyTheme(saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+})();
+
+
+
+// ВСТАВЬ СЮДА ССЫЛКУ НА СВОЙ JSON В S3
+const DATA_URL = 'https://s3.ru1.storage.beget.cloud/e737331b0629-mysitedv/art_tree.json';
+const ITEMS_PER_PAGE = 6;
+
+let allArticles = [];
+let filteredArticles = [];
+let currentIndex = 0;
+
+const newsGrid = document.getElementById('newsGrid');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+async function fetchArticles() {
+  try {
+    const response = await fetch(DATA_URL);
+    if (!response.ok) throw new Error('Ошибка загрузки данных');
+    
+    allArticles = await response.json();
+    filteredArticles = [...allArticles];
+    renderCards(true);
+
+  } catch (error) {
+    console.error(error);
+    newsGrid.innerHTML = `<div class="state-msg">Не удалось загрузить статьи.</div>`;
+  }
+}
+
+function renderCards(reset = false) {
+  if (reset) {
+    newsGrid.innerHTML = '';
+    currentIndex = 0;
+  }
+
+  if (filteredArticles.length === 0) {
+    newsGrid.innerHTML = `<div class="state-msg">В этой категории пока нет статей.</div>`;
+    loadMoreBtn.classList.remove('visible');
+    return;
+  }
+
+  const nextBatch = filteredArticles.slice(currentIndex, currentIndex + ITEMS_PER_PAGE);
+  
+  nextBatch.forEach(article => {
+    const thumbClass = article.cat_code === 'inf' ? '' : article.cat_code;
+    
+    // ЛОГИКА ОБЛОЖКИ: если есть картинка, ставим тег <img>, иначе оставляем эмодзи
+    let thumbContent = '';
+    if (article.image && article.image.trim() !== '') {
+      thumbContent = `<img src="${article.image}" alt="${article.title}" class="card-img" loading="lazy">`;
+    } else {
+      thumbContent = article.emoji || '';
+    }
+
+    const cardHTML = `
+      <a href="${article.url}" class="card">
+        <div class="card-thumb ${thumbClass}">
+          ${thumbContent}
+        </div>
+        <div class="card-body">
+          <div class="card-cat">${article.cat_name}</div>
+          <h2 class="card-title">${article.title}</h2>
+          <p class="card-desc">${article.desc}</p>
+          <div class="card-meta">
+            <span>${article.date}</span>
+            <span>${article.read_time}</span>
+          </div>
+        </div>
+      </a>
+    `;
+    
+    newsGrid.insertAdjacentHTML('beforeend', cardHTML);
+  });
+
+  currentIndex += nextBatch.length;
+
+  if (currentIndex >= filteredArticles.length) {
+    loadMoreBtn.classList.remove('visible');
+  } else {
+    loadMoreBtn.classList.add('visible');
+  }
+}
+
+loadMoreBtn.addEventListener('click', () => {
+  renderCards(false);
+});
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    
+    const filter = e.target.getAttribute('data-filter');
+    
+    if (filter === 'all') {
+      filteredArticles = [...allArticles];
+    } else {
+      filteredArticles = allArticles.filter(item => item.cat_code === filter);
+    }
+    
+    renderCards(true);
+  });
+});
+
+document.addEventListener('DOMContentLoaded', fetchArticles);
+
+</script>
+</body>
+</html>
