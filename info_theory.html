@@ -131,23 +131,29 @@
         /* Контейнер для кода с деревом */
         .code-tree-container {
             position: relative;
-            background: #1e1e1e; /* Темный фон для кода */
+            background: #1e1e1e;
             border-radius: 12px;
-            padding: 20px 20px 20px 10px;
+            padding: 65px 20px 20px 10px; /* Увеличен отступ сверху для кнопок */
             overflow: hidden;
             font-family: 'Consolas', 'Monaco', monospace;
         }
 
         body.dark-theme .code-tree-container {
-            background: #0d1117; /* Более глубокий темный для темной темы */
+            background: #0d1117;
             border: 1px solid #30363d;
         }
 
-        /* Кнопка копирования кода */
-        .copy-btn {
+        /* Кнопки действий над кодом */
+        .code-actions {
             position: absolute;
             top: 15px;
             right: 15px;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
             background: rgba(255, 255, 255, 0.1);
             color: #d4d4d4;
             border: none;
@@ -156,18 +162,30 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
-        .copy-btn:hover {
+        .action-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
         }
 
-        /* Сетка: Линии кода | Связи | Объяснения */
+        /* Скрытие объяснений */
+        .hide-explanations .expl-node,
+        .hide-explanations .branch-line {
+            opacity: 0 !important;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        /* Сетка: Линии кода | Связи | Объяснения (ИДЕАЛЬНАЯ ВЕРТИКАЛЬНАЯ ЛИНИЯ) */
         .tree-row {
             display: grid;
-            grid-template-columns: 40px minmax(auto, max-content) 40px 1fr;
+            /* 1. Номера (40px) | 2. Код (по длине текста) | 3. Линия (растягивается) | 4. Пояснение (ровно 35%) */
+            grid-template-columns: 40px max-content 1fr 35%;
+            column-gap: 15px;
             min-height: 32px;
             align-items: center;
             margin-bottom: 4px;
@@ -184,7 +202,7 @@
         .line-num {
             color: #6e7681;
             text-align: right;
-            padding-right: 15px;
+            padding-right: 10px;
             font-size: 0.85rem;
             user-select: none;
         }
@@ -196,27 +214,28 @@
             font-size: 0.95rem;
         }
         
-        /* Красивая подсветка (One Dark / Modern IDE style) */
-        .kwd { color: #c678dd; font-weight: bold; } /* Ключевые слова */
-        .func { color: #61afef; } /* Функции */
-        .str { color: #98c379; } /* Строки */
-        .num { color: #d19a66; } /* Числа */
-        .comment { color: #5c6370; font-style: italic; } /* Комментарии */
+        /* Красивая подсветка (One Dark) */
+        .kwd { color: #c678dd; font-weight: bold; }
+        .func { color: #61afef; }
+        .str { color: #98c379; }
+        .num { color: #d19a66; }
+        .comment { color: #5c6370; font-style: italic; }
 
-        /* Линии связи */
+        /* Линии связи (растягиваются от кода до объяснения) */
         .branch-line {
+            width: 100%;
             height: 2px;
             background: #4ec9b0;
             opacity: 0.3;
-            margin-top: 2px;
             position: relative;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         
         .branch-line::after {
             content: '';
             position: absolute;
             right: 0;
-            top: -3px;
+            top: -3px; /* Центрируем точку (8px высота) на линии (2px) */
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -228,28 +247,37 @@
             background: rgba(78, 201, 176, 0.1);
             border-left: 3px solid #4ec9b0;
             color: #b4cdcd;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 0 6px 6px 0;
             font-size: 0.85rem;
             font-family: 'Segoe UI', sans-serif;
             opacity: 0.85;
-            transition: all 0.3s;
+            transition: all 0.3s ease, visibility 0.3s ease;
+            width: 100%;
         }
 
         .tree-row:hover .expl-node {
             opacity: 1;
             background: rgba(78, 201, 176, 0.2);
-            transform: translateX(5px);
+            transform: translateX(3px);
         }
 
         /* Адаптивность для мобильных */
         @media (max-width: 992px) {
+            .code-actions {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 15px;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+            }
             .code-tree-container {
-                padding-top: 50px; /* Место для кнопки копирования */
+                padding-top: 20px; /* Возвращаем стандартный отступ, так как кнопки стали в поток */
             }
             .tree-row {
                 grid-template-columns: 30px 1fr;
-                grid-template-rows: auto auto; /* 2 строки: код сверху, объяснение снизу */
+                grid-template-rows: auto auto;
                 margin-bottom: 12px;
                 padding-bottom: 8px;
                 border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -263,20 +291,25 @@
             .code-text {
                 grid-column: 2;
                 grid-row: 1;
-                overflow-x: auto; /* Позволяет скроллить длинные строки */
+                overflow-x: auto;
                 padding-bottom: 4px;
             }
             .branch-line {
-                display: none; /* Убираем соединительную линию на мобилках */
+                display: none !important;
             }
             .expl-node {
                 grid-column: 2;
                 grid-row: 2;
                 margin-top: 4px;
-                opacity: 1; /* Всегда видим */
+                opacity: 1;
                 border-left: 2px solid #4ec9b0;
                 border-radius: 4px;
-                transform: none !important; /* Убираем анимацию сдвига */
+                transform: none !important;
+            }
+            
+            /* На мобильных скрываем дисплей, а не opacity, чтобы не занимало место */
+            .hide-explanations .expl-node {
+                display: none !important;
             }
         }
     </style>
@@ -290,7 +323,6 @@
                 <i></i>Информатика ЕГЭ
             </a>
             
-            <!-- ДВЕ КРУГЛЫЕ КНОПКИ СПРАВА -->
             <div class="navbar-nav ms-auto d-flex gap-2">
                 <button id="soundToggle" class="theme-btn" title="Назад">
                     <i class="bi bi-arrow-left"></i>
@@ -367,11 +399,17 @@
                     </h4>
                     <p class="mb-3">Задача: Найти количество пар, сумма которых делится на 3, и максимальную из таких сумм.</p>
                     
-                    <div class="code-tree-container shadow-lg">
-                        <!-- Кнопка Копирования -->
-                        <button class="copy-btn" id="copyCodeBtn" title="Копировать код">
-                            <i class="bi bi-clipboard"></i> Копировать
-                        </button>
+                    <div class="code-tree-container shadow-lg" id="codeContainer">
+                        
+                        <!-- Панель кнопок (Копировать / Скрыть) -->
+                        <div class="code-actions">
+                            <button class="action-btn" id="toggleExplBtn" title="Скрыть/показать объяснения">
+                                <i class="bi bi-eye-slash"></i> <span>Скрыть пояснения</span>
+                            </button>
+                            <button class="action-btn" id="copyCodeBtn" title="Копировать код">
+                                <i class="bi bi-clipboard"></i> <span>Копировать</span>
+                            </button>
+                        </div>
 
                         <!-- Line 1 -->
                         <div class="tree-row">
@@ -455,8 +493,6 @@
                     </div>
                 </div>
 
-                <!-- Footer -->
-                
             </div>
         </div>
     </div>
@@ -495,7 +531,23 @@
             }
         });
 
-        // Функция копирования кода (только чистый текст без номеров и пояснений)
+        // Функция показа/скрытия пояснений
+        const toggleExplBtn = document.getElementById('toggleExplBtn');
+        const codeContainer = document.getElementById('codeContainer');
+        let isExplHidden = false;
+
+        toggleExplBtn.addEventListener('click', () => {
+            isExplHidden = !isExplHidden;
+            codeContainer.classList.toggle('hide-explanations', isExplHidden);
+            
+            if (isExplHidden) {
+                toggleExplBtn.innerHTML = '<i class="bi bi-eye"></i> <span>Показать пояснения</span>';
+            } else {
+                toggleExplBtn.innerHTML = '<i class="bi bi-eye-slash"></i> <span>Скрыть пояснения</span>';
+            }
+        });
+
+        // Функция копирования кода
         const copyBtn = document.getElementById('copyCodeBtn');
         copyBtn.addEventListener('click', () => {
             const codeLines = Array.from(document.querySelectorAll('.code-text'))
@@ -504,7 +556,7 @@
             
             navigator.clipboard.writeText(pureCode).then(() => {
                 const originalContent = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i class="bi bi-check2"></i> Скопировано';
+                copyBtn.innerHTML = '<i class="bi bi-check2"></i> <span>Скопировано</span>';
                 copyBtn.classList.replace('text-light', 'text-success');
                 setTimeout(() => {
                     copyBtn.innerHTML = originalContent;
