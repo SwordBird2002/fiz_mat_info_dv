@@ -104,7 +104,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             font-size: 1.2rem;
             cursor: pointer;
-        }
+        } 
 
         .theme-btn:hover {
             transform: scale(1.05) translateY(-2px);
@@ -539,10 +539,11 @@
         });
 
         // звук (заглушка)
+       // Переход на другую страницу при нажатии на кнопку "Назад"
         soundToggles.forEach(btn => {
             if(btn) {
                 btn.addEventListener('click', () => {
-                    btn.classList.toggle('border-primary');
+                    window.location.href = 'theory_landing.html';
                 });
             }
         });
