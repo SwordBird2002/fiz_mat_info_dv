@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЕГЭ Информатика: Задание 17 (Обработка последовательностей)</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <style>
+        /* === СОХРАНЕНИЕ СТИЛИСТИКИ СЕРИИ === */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #333;
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
+        }
+
+        /* ТЁМНАЯ ТЕМА */
+        body.dark-theme {
+            background-color: #0f172a;
+            color: #e5e7eb;
+        }
+
+        body.dark-theme .content-card,
+        body.dark-theme .sidebar,
+        body.dark-theme .p-3.bg-light,
+        body.dark-theme .p-3.border.rounded.bg-light.h-100 {
+            background-color: #020617 !important;
+            color: #e5e7eb;
+            border-color: #1f2937 !important;
+        }
+
+        body.dark-theme .nav-link.text-dark {
+            color: #e5e7eb !important;
+        }
+
+        body.dark-theme .nav-link.active.bg-primary.bg-opacity-10.text-primary {
+            background-color: rgba(59,130,246,0.2) !important;
+        }
+
+        body.dark-theme .bg-light {
+            background-color: #020617 !important;
+        }
+
+        body.dark-theme .text-muted {
+            color: #9ca3af !important;
+        }
+
+        body.dark-theme .navbar-custom {
+            background-color: #020617 !important;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        body.dark-theme .theme-btn {
+            background-color: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #e5e7eb !important;
+        }
+
+        body.dark-theme .theme-btn:hover {
+            background-color: #374151 !important;
+            border-color: #4b5563 !important;
+        }
+
+        /* Navbar стили */
+        .navbar-custom {
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.4s ease;
+        }
+
+        /* КРУГЛЫЕ КНОПКИ ТЕМЫ */
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #e5e7eb;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-color: #3b82f6;
+        }
+
+        .theme-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Сайдбар */
+        .sidebar {
+            position: sticky;
+            top: 80px;
+            height: calc(95vh - 80px);
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+
+        /* Карточки контента */
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.4s ease;
+        }
+
+        /* === ИННОВАЦИОННЫЙ ДИЗАЙН (CODE TREEVIEW) === */
+        
+        /* Контейнер для кода с деревом */
+        .code-tree-container {
+            position: relative;
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            overflow: hidden;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        body.dark-theme .code-tree-container {
+            background: #020617;
+        }
+
+        /* Сетка: Линии кода | Связи | Объяснения */
+        .tree-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 40px 1fr;
+            min-height: 32px;
+            align-items: center;
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .tree-row:hover {
+            background: rgba(255,255,255, 0.05);
+        }
+
+        /* Номера строк */
+        .line-num {
+            color: #858585;
+            text-align: right;
+            padding-right: 10px;
+            font-size: 0.85rem;
+            user-select: none;
+        }
+
+        /* Сам код */
+        .code-text {
+            color: #d4d4d4;
+            white-space: pre;
+            font-size: 0.95rem;
+        }
+        
+        /* Синтаксис Python */
+        .kwd { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .str { color: #ce9178; }
+        .num { color: #b5cea8; }
+        .comment { color: #6a9955; }
+
+        /* Линии связи */
+        .branch-line {
+            height: 2px;
+            background: #4ec9b0;
+            opacity: 0.3;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .branch-line::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ec9b0;
+        }
+
+        /* Блоки объяснений */
+        .expl-node {
+            background: rgba(78, 201, 176, 0.1);
+            border-left: 3px solid #4ec9b0;
+            color: #b4cdcd;
+            padding: 4px 10px;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', sans-serif;
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+
+        .tree-row:hover .expl-node {
+            opacity: 1;
+            background: rgba(78, 201, 176, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .tree-row {
+                grid-template-columns: 30px 1fr;
+            }
+            .branch-line, .expl-node {
+                display: none;
+            }
+            .code-tree-container::after {
+                content: 'Поверните экран для объяснений';
+                position: absolute;
+                bottom: 5px;
+                right: 10px;
+                color: #666;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- НАВБАР С ДВУМЯ КРУГЛЫМИ КНОПКАМИ -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i></i>Информатика ЕГЭ
+            </a>
+            
+            <!-- ДВЕ КРУГЛЫЕ КНОПКИ СПРАВА -->
+            <div class="navbar-nav ms-auto d-flex gap-2">
+                <button id="soundToggle" class="theme-btn" title="Назад">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button id="themeToggle" class="theme-btn" title="Переключить тему (Tab)">
+                    <i class="bi bi-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            
+            <!-- SIDEBAR -->
+            <div class="col-md-3 d-none d-md-block">
+                <div class="sidebar">
+                    <h5 class="fw-bold mb-4 text-primary">
+                        <i class="bi bi-code-square"></i> Задание 17
+                    </h5>
+                    <div class="nav flex-column nav-pills">
+                        <a href="#" class="nav-link active bg-primary bg-opacity-10 text-primary fw-bold mb-2">
+                            <i class="bi bi-code-square me-2"></i>Задание 17
+                        </a>
+                        <a href="#" class="nav-link text-dark mb-2"><i class="bi bi-calculator me-2"></i>Задание 5 (Алгоритмы)</a>
+                        <a href="#" class="nav-link text-dark mb-2"><i class="bi bi-diagram-3 me-2"></i>Задание 13 (Графы)</a>
+                        <a href="#" class="nav-link text-dark mb-2"><i class="bi bi-table me-2"></i>Задание 26 (Сортировка)</a>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="col-md-9">
+                <!-- Header Card -->
+                <div class="content-card border-start border-5 border-primary">
+                    <h2 class="fw-bold mb-3">Задание 17: Обработка целочисленных данных</h2>
+                    <p class="text-muted fs-5">
+                        Чтение из файла, проход по списку, проверка делимости.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <span class="badge bg-primary">Python</span>
+                        <span class="badge bg-success">Файлы</span>
+                        <span class="badge bg-warning text-dark">Списки</span>
+                    </div>
+                </div>
+
+                <!-- Theory Block -->
+                <div class="content-card">
+                    <h4 class="mb-4 fw-bold"><i class="bi bi-book me-2"></i>Краткая теория</h4>
+                    <p>Для решения задачи 17 обычно используется следующий шаблон:</p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <h6 class="fw-bold">1. Чтение файла</h6>
+                                <p class="small mb-0">Используем генератор списков для быстрого чтения:</p>
+                                <code class="d-block mt-2 bg-white p-2 rounded">data = [int(x) for x in open('17.txt')]</code>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <h6 class="fw-bold">2. Проход парами</h6>
+                                <p class="small mb-0">Используем <code>zip</code> или цикл по индексу:</p>
+                                <code class="d-block mt-2 bg-white p-2 rounded">for i in range(len(data) - 1):</code>
+                                <small class="text-muted">Пара: <code>data[i]</code> и <code>data[i+1]</code></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISUAL CODE TREEVIEW -->
+                <div class="content-card">
+                    <h4 class="mb-4 fw-bold text-success">
+                        <i class="bi bi-tree me-2"></i>Разбор решения
+                    </h4>
+                    <p class="mb-3">Задача: Найти количество пар, сумма которых делится на 3, и максимальную из таких сумм.</p>
+                    
+                    <div class="code-tree-container shadow-lg">
+                        <!-- Line 1 -->
+                        <div class="tree-row">
+                            <div class="line-num">1</div>
+                            <div class="code-text"><span class="kwd">with</span> <span class="func">open</span>(<span class="str">'17.txt'</span>) <span class="kwd">as</span> f:</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Безопасное открытие файла (сам закроется)</div>
+                        </div>
+
+                        <!-- Line 2 -->
+                        <div class="tree-row">
+                            <div class="line-num">2</div>
+                            <div class="code-text">    nums = [<span class="func">int</span>(x) <span class="kwd">for</span> x <span class="kwd">in</span> f]</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Считываем ВСЕ числа в список сразу</div>
+                        </div>
+
+                        <!-- Line 3 (Empty) -->
+                        <div class="tree-row">
+                            <div class="line-num">3</div>
+                            <div class="code-text"></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+
+                        <!-- Line 4 -->
+                        <div class="tree-row">
+                            <div class="line-num">4</div>
+                            <div class="code-text">ans = []</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Список для хранения подходящих сумм</div>
+                        </div>
+
+                        <!-- Line 5 -->
+                        <div class="tree-row">
+                            <div class="line-num">5</div>
+                            <div class="code-text"><span class="kwd">for</span> i <span class="kwd">in</span> <span class="func">range</span>(<span class="func">len</span>(nums) - <span class="num">1</span>):</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Цикл до предпоследнего элемента</div>
+                        </div>
+
+                        <!-- Line 6 -->
+                        <div class="tree-row">
+                            <div class="line-num">6</div>
+                            <div class="code-text">    a, b = nums[i], nums[i+<span class="num">1</span>]</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Берем текущий элемент и следующий (ПАРУ)</div>
+                        </div>
+
+                        <!-- Line 7 -->
+                        <div class="tree-row">
+                            <div class="line-num">7</div>
+                            <div class="code-text">    <span class="kwd">if</span> (a + b) % <span class="num">3</span> == <span class="num">0</span>:</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Проверяем условие задачи (кратность 3)</div>
+                        </div>
+
+                        <!-- Line 8 -->
+                        <div class="tree-row">
+                            <div class="line-num">8</div>
+                            <div class="code-text">        ans.append(a + b)</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Если подошло — запоминаем сумму</div>
+                        </div>
+
+                        <!-- Line 9 (Spacing) -->
+                        <div class="tree-row">
+                            <div class="line-num">9</div>
+                            <div class="code-text"></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+
+                        <!-- Line 10 -->
+                        <div class="tree-row">
+                            <div class="line-num">10</div>
+                            <div class="code-text"><span class="func">print</span>(<span class="func">len</span>(ans), <span class="func">max</span>(ans))</div>
+                            <div class="branch-line"></div>
+                            <div class="expl-node">Выводим ответ: кол-во и максимум</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const soundToggle = document.getElementById('soundToggle');
+        const bodyEl = document.body;
+
+        // восстановление темы
+        if (localStorage.getItem('theme') === 'dark') {
+            bodyEl.classList.add('dark-theme');
+            themeToggle.innerHTML = '<i class="bi bi-sun"></i>';
+        }
+
+        // переключение темы
+        themeToggle.addEventListener('click', () => {
+            const isDark = bodyEl.classList.toggle('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeToggle.innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon-stars"></i>';
+        });
+
+        // звук (заглушка)
+        soundToggle.addEventListener('click', () => {
+            soundToggle.classList.toggle('border-primary');
+        });
+
+        // горячая клавиша Tab
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                themeToggle.click();
+            }
+        });
+    </script>
+</body>
+</html>
