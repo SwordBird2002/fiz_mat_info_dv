@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Задание 27 ЕГЭ по информатике — полный разбор — ЕГЭ·ГИД</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --red:        #e8272a;
+  --red-d:      #c41f22;
+  --red-bg:     #fff5f5;
+
+  --hdr:        #161618;
+  --hdr-border: rgba(255,255,255,.07);
+
+  --bg:         #f2f2f2;
+  --card:       #ffffff;
+  --text:       #1a1a1a;
+  --text-2:     #3d3d3d;
+  --muted:      #767676;
+  --border:     #e8e8e8;
+  --code-bg:    #f6f6f6;
+  --code-border:#e0e0e0;
+  --quote-bg:   #fafafa;
+  --info-bg:    #fffbf0;
+  --info-b:     #f59e0b;
+  --info-text:  #78350f;
+  --tag-bg:     #efefef;
+  --tag-text:   #555;
+  --related-bg: #ffffff;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --max: 720px;
+  --r: 12px;
+  --shadow: 0 2px 20px rgba(0,0,0,.07);
+}
+
+[data-theme="dark"] {
+  --bg:         #0f0f0f;
+  --card:       #1a1a1a;
+  --text:       #f0f0f0;
+  --text-2:     #c0c0c0;
+  --muted:      #888;
+  --border:     #2a2a2a;
+  --code-bg:    #242424;
+  --code-border:#333;
+  --quote-bg:   #1f1f1f;
+  --info-bg:    #1e1a0e;
+  --info-b:     #ca8a04;
+  --info-text:  #fde68a;
+  --tag-bg:     #252525;
+  --tag-text:   #aaa;
+  --related-bg: #1a1a1a;
+  --red-bg:     #2a0a0a;
+  --shadow:     0 2px 20px rgba(0,0,0,.35);
+}
+
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  transition: background .25s, color .25s;
+}
+a { color: var(--red); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { display: block; max-width: 100%; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #bbb; border-radius: 3px; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #444; }
+
+/* ══════════════════════════════════════
+   PROGRESS BAR
+══════════════════════════════════════ */
+#prog {
+  position: fixed; top: 0; left: 0; z-index: 200;
+  height: 3px; width: 0;
+  background: var(--red);
+  transition: width .1s linear;
+  border-radius: 0 3px 3px 0;
+}
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+.hdr {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--hdr);
+  border-bottom: 1px solid var(--hdr-border);
+  backdrop-filter: saturate(180%) blur(10px);
+}
+.hdr-inner {
+  max-width: 1180px; margin: 0 auto;
+  display: flex; align-items: center;
+  height: 54px; padding: 0 20px; gap: 28px;
+}
+.logo {
+  font-size: 19px; font-weight: 900; letter-spacing: -.5px;
+  color: #fff; text-decoration: none; flex-shrink: 0;
+  display: flex; align-items: center; gap: 0;
+}
+.logo em { color: var(--red); font-style: italic; }
+.logo-dot { color: var(--red); margin: 0 1px; }
+
+.hdr-nav {
+  display: flex; align-items: center; gap: 2px;
+  flex: 1; overflow: hidden;
+}
+.hdr-nav a {
+  color: rgba(255,255,255,.55); font-size: 13.5px; font-weight: 500;
+  padding: 6px 11px; border-radius: 7px; white-space: nowrap;
+  text-decoration: none; transition: .15s;
+}
+.hdr-nav a:hover { color: #fff; background: rgba(255,255,255,.08); text-decoration: none; }
+.hdr-nav a.cur { color: #fff; }
+
+.hdr-right { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
+
+/* theme toggle */
+.theme-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.7); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: .2s;
+}
+.theme-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+.hdr-cta {
+  background: var(--red); color: #fff;
+  border: none; font-family: var(--font); font-size: 13px; font-weight: 600;
+  padding: 7px 16px; border-radius: 8px; cursor: pointer; transition: .15s;
+  white-space: nowrap;
+}
+.hdr-cta:hover { background: var(--red-d); }
+
+/* ══════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════ */
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 16px 80px;
+}
+
+/* ══════════════════════════════════════
+   COVER
+══════════════════════════════════════ */
+.cover {
+  width: calc(100% + 32px); margin: 0 -16px;
+  aspect-ratio: 16/9; overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  position: relative;
+}
+@media(min-width: 752px){
+  .cover {
+    width: 100%; margin: 28px 0 0;
+    border-radius: var(--r); overflow: hidden;
+  }
+}
+.cover img { width: 100%; height: 100%; object-fit: cover; }
+.cover-fallback {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  color: rgba(255,255,255,.4); font-size: 14px; font-weight: 500;
+}
+.cover-fallback-icon { font-size: 64px; opacity: .5; }
+.cover-label {
+  position: absolute; bottom: 18px; left: 18px;
+  background: rgba(0,0,0,.55); color: #fff; backdrop-filter: blur(6px);
+  font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 6px;
+}
+
+/* ══════════════════════════════════════
+   ARTICLE TOP
+══════════════════════════════════════ */
+.art-top { margin-top: 26px; }
+
+.cat-pill {
+  display: inline-flex; align-items: center;
+  background: var(--red); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
+  padding: 4px 11px; border-radius: 6px; margin-bottom: 16px;
+  text-decoration: none;
+}
+.cat-pill:hover { background: var(--red-d); text-decoration: none; }
+
+.art-title {
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 900; line-height: 1.13; letter-spacing: -.6px;
+  color: var(--text); margin-bottom: 14px;
+}
+
+.art-lead {
+  font-size: 18px; line-height: 1.65; color: var(--muted);
+  font-weight: 400; margin-bottom: 22px;
+}
+
+/* ══════════════════════════════════════
+   AUTHOR ROW
+══════════════════════════════════════ */
+.author-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  gap: 12px; flex-wrap: wrap;
+}
+.author-left { display: flex; align-items: center; gap: 10px; }
+.ava {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: var(--red); color: #fff; font-weight: 800; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none;
+}
+.ava-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.ava-meta {
+  font-size: 12.5px; color: var(--muted);
+  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+}
+.ava-meta span + span::before { content: '·'; margin: 0 6px; color: var(--border); }
+
+.actions { display: flex; align-items: center; gap: 6px; }
+.act-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: 1px solid var(--border);
+  padding: 6px 13px; border-radius: 8px; cursor: pointer;
+  font-family: var(--font); font-size: 13px; color: var(--muted);
+  transition: .15s; font-weight: 500;
+}
+.act-btn:hover { border-color: #bbb; color: var(--text); }
+.act-btn.liked { border-color: var(--red); color: var(--red); background: var(--red-bg); }
+.act-share {
+  background: var(--red); border-color: var(--red); color: #fff;
+}
+.act-share:hover { background: var(--red-d); border-color: var(--red-d); color: #fff; }
+
+/* ══════════════════════════════════════
+   TAGS STRIP
+══════════════════════════════════════ */
+.tags {
+  display: flex; flex-wrap: wrap; gap: 7px; padding: 16px 0 0;
+}
+.tag-chip {
+  font-size: 12.5px; font-weight: 600; color: var(--tag-text);
+  background: var(--tag-bg); padding: 5px 13px; border-radius: 20px;
+  text-decoration: none; transition: .15s;
+}
+.tag-chip:hover { color: var(--red); background: var(--red-bg); text-decoration: none; }
+
+/* ══════════════════════════════════════
+   ARTICLE BODY TYPOGRAPHY
+══════════════════════════════════════ */
+.art-body {
+  padding-top: 34px;
+  font-size: 17px; line-height: 1.78; color: var(--text-2);
+}
+
+.art-body h2 {
+  font-size: 25px; font-weight: 800; letter-spacing: -.35px;
+  color: var(--text); line-height: 1.25;
+  margin: 44px 0 14px;
+}
+.art-body h3 {
+  font-size: 20px; font-weight: 700; letter-spacing: -.2px;
+  color: var(--text); line-height: 1.3;
+  margin: 34px 0 10px;
+}
+.art-body p { margin: 0 0 18px; }
+.art-body strong { font-weight: 700; color: var(--text); }
+.art-body em { font-style: italic; }
+.art-body a { color: var(--red); }
+
+.art-body ul, .art-body ol {
+  padding-left: 26px; margin: 0 0 18px;
+}
+.art-body li { margin-bottom: 8px; }
+.art-body ul li::marker { color: var(--red); }
+.art-body ol li::marker { color: var(--red); font-weight: 700; }
+
+/* blockquote */
+.art-body blockquote {
+  margin: 30px 0; padding: 16px 22px;
+  border-left: 3px solid var(--red);
+  background: var(--quote-bg); border-radius: 0 10px 10px 0;
+  font-size: 18px; line-height: 1.65; color: var(--text);
+  font-style: italic;
+}
+.art-body blockquote cite {
+  display: block; margin-top: 10px;
+  font-size: 13px; font-style: normal; color: var(--muted); font-weight: 600;
+}
+
+/* info / tip box */
+.tip-box {
+  background: var(--info-bg);
+  border-left: 4px solid var(--info-b);
+  border-radius: 0 10px 10px 0;
+  padding: 15px 20px; margin: 28px 0;
+  font-size: 15.5px; color: var(--info-text); line-height: 1.65;
+}
+.tip-box-head {
+  font-weight: 700; font-size: 13px; letter-spacing: .3px;
+  text-transform: uppercase; margin-bottom: 6px; opacity: .8;
+}
+
+/* code / formula */
+.code-block {
+  background: var(--code-bg); border: 1px solid var(--code-border);
+  border-radius: 10px; padding: 18px 20px; margin: 24px 0;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 14.5px; line-height: 1.7; color: var(--text);
+  overflow-x: auto; white-space: pre;
+}
+.code-block .kw  { color: #d4006a; font-weight: 700; }
+.code-block .fn  { color: #0066cc; }
+.code-block .nm  { color: #007a5c; }
+.code-block .cm  { color: var(--muted); font-style: italic; }
+[data-theme="dark"] .code-block .kw { color: #ff79c6; }
+[data-theme="dark"] .code-block .fn { color: #8be9fd; }
+[data-theme="dark"] .code-block .nm { color: #50fa7b; }
+
+.code-label {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: -12px;
+}
+.code-lang {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .5px;
+  text-transform: uppercase; color: var(--muted); padding: 6px 0 0;
+}
+.copy-btn {
+  font-size: 12px; font-weight: 600; color: var(--muted);
+  background: none; border: 1px solid var(--border);
+  padding: 4px 10px; border-radius: 6px; cursor: pointer;
+  font-family: var(--font); transition: .15s; margin-top: 6px;
+}
+.copy-btn:hover { color: var(--text); border-color: #bbb; }
+
+/* inline code */
+.art-body code {
+  font-family: 'Courier New', monospace; font-size: 14px;
+  background: var(--code-bg); border: 1px solid var(--code-border);
+  padding: 2px 6px; border-radius: 5px; color: var(--red);
+}
+
+/* image block */
+.img-block { margin: 36px 0; }
+.img-block img { width: 100%; border-radius: 10px; }
+.img-caption {
+  text-align: center; font-size: 13px; color: var(--muted);
+  margin-top: 10px; font-style: italic; line-height: 1.5;
+}
+
+/* wide image (выходит за края текстового блока) */
+.img-wide {
+  margin: 36px -40px;
+  width: calc(100% + 80px);
+}
+@media(max-width:760px){ .img-wide { margin: 30px -16px; width: calc(100% + 32px); } }
+.img-wide img { border-radius: 0; width: 100%; }
+@media(min-width:760px){ .img-wide img { border-radius: 10px; } }
+
+/* highlight mark */
+.mark { background: #fff3b0; border-radius: 3px; padding: 1px 3px; }
+[data-theme="dark"] .mark { background: #4a3c00; color: #fde68a; }
+
+/* step badge */
+.step {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--red); color: #fff; font-size: 13px; font-weight: 800;
+  margin-right: 8px; flex-shrink: 0; vertical-align: middle;
+}
+
+/* result badge */
+.badge {
+  display: inline-block; background: #dcfce7; color: #166534;
+  font-size: 13px; font-weight: 700; padding: 4px 12px;
+  border-radius: 20px; border: 1px solid #bbf7d0;
+}
+[data-theme="dark"] .badge { background: #052e16; color: #86efac; border-color: #14532d; }
+
+/* divider */
+.art-body hr {
+  border: none; border-top: 1px solid var(--border);
+  margin: 40px 0;
+}
+
+/* ══════════════════════════════════════
+   FOOTER STATS
+══════════════════════════════════════ */
+.art-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0; border-top: 1px solid var(--border);
+  margin-top: 10px; flex-wrap: wrap; gap: 12px;
+}
+.art-footer-left { font-size: 13.5px; color: var(--muted); }
+.art-footer-actions { display: flex; gap: 8px; }
+
+/* ══════════════════════════════════════
+   RELATED
+══════════════════════════════════════ */
+.related { margin-top: 56px; }
+.related-head {
+  font-size: 20px; font-weight: 900; letter-spacing: -.3px;
+  margin-bottom: 18px; color: var(--text);
+  padding-bottom: 16px; border-bottom: 2px solid var(--text);
+}
+.related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:500px){ .related-grid { grid-template-columns: 1fr; } }
+
+.rel-card {
+  border-radius: 12px; overflow: hidden;
+  background: var(--related-bg);
+  border: 1px solid var(--border);
+  cursor: pointer; transition: .2s; display: block;
+  text-decoration: none; color: var(--text);
+  box-shadow: var(--shadow);
+}
+.rel-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+  text-decoration: none; color: var(--text);
+}
+.rel-thumb {
+  width: 100%; aspect-ratio: 16/9; overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.rel-body { padding: 13px 15px 16px; }
+.rel-tag {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--red); margin-bottom: 5px;
+}
+.rel-title { font-size: 14px; font-weight: 700; line-height: 1.35; color: var(--text); }
+.rel-meta { font-size: 12px; color: var(--muted); margin-top: 7px; }
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  z-index: 999; background: var(--text); color: var(--card);
+  font-size: 13.5px; font-weight: 500; padding: 11px 22px;
+  border-radius: 10px; box-shadow: 0 6px 24px rgba(0,0,0,.22);
+  opacity: 0; pointer-events: none; transition: .25s; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ══════════════════════════════════════
+   BACK TO TOP
+══════════════════════════════════════ */
+.back-top {
+  position: fixed; bottom: 28px; right: 24px; z-index: 90;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--card); border: 1px solid var(--border);
+  box-shadow: var(--shadow); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--muted);
+  opacity: 0; pointer-events: none; transition: .25s;
+}
+.back-top.vis { opacity: 1; pointer-events: auto; }
+.back-top:hover { color: var(--red); border-color: var(--red); }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:600px){
+  .hdr-nav { display: none; }
+  .actions .act-share span { display: none; }
+  .art-body h2 { font-size: 21px; }
+  .art-title { font-size: 26px; }
+  .art-lead { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="#" class="logo"><em>RED</em>²<span class="logo-dot">·</span>ФМИ</a>
+    <nav class="hdr-nav">
+      <a href="#" class="cur">Главная</a>
+      <a href="#">Математика</a>
+      <a href="#">Информатика</a>
+      <a href="#">Физика</a>
+      <a href="#">Все статьи</a>
+    </nav>
+    <div class="hdr-right">
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+      <button class="hdr-cta">На Главную</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════════ ARTICLE ══════════════════ -->
+<div class="wrap">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-fallback">
+      <div class="cover-fallback-icon">💻</div>
+      <span>Задание 27 · ЕГЭ Информатика 2026</span>
+    </div>
+    <div class="cover-label">Информатика</div>
+  </div>
+
+  <!-- META -->
+  <div class="art-top">
+    <a href="#" class="cat-pill">Информатика</a>
+
+    <h1 class="art-title">Задание 27 ЕГЭ по информатике: полный разбор с примерами на Python</h1>
+    <p class="art-lead">
+      Самое страшное задание профильной части — больше не страшное.
+      Разбираем все типовые формулировки, показываем алгоритмы решения и разбираем
+      реальные задачи из открытого банка ФИПИ.
+    </p>
+
+    <!-- AUTHOR -->
+    <div class="author-row">
+      <div class="author-left">
+        <div class="ava">Д</div>
+        <div>
+          <div class="ava-name">Дмитрий Анашкин</div>
+          <div class="ava-meta">
+            <span>20 февраля 2026</span>
+            <span>12 мин чтения</span>
+            <span id="viewCount">5 841 просмотр</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="act-btn" id="likeBtn" onclick="toggleLike()">
+          <span id="likeIco">♡</span>
+          <span id="likeCnt">284</span>
+        </button>
+        <button class="act-btn" onclick="copyLink()">🔗</button>
+        <button class="act-btn act-share" onclick="copyLink()">
+          <span>↑</span> <span>Поделиться</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="tags">
+      <a href="#" class="tag-chip">ЕГЭ 2026</a>
+      <a href="#" class="tag-chip">Информатика</a>
+      <a href="#" class="tag-chip">Программирование</a>
+      <a href="#" class="tag-chip">Python</a>
+      <a href="#" class="tag-chip">Задание 27</a>
+      <a href="#" class="tag-chip">Алгоритмы</a>
+    </div>
+  </div>
+
+  <!-- ══════════ ARTICLE BODY ══════════ -->
+  <div class="art-body">
+
+    <p>Задание 27 — это задание с развёрнутым ответом, в котором нужно написать программу. Оно стоит <strong>максимум 4 балла</strong> и является последним и самым сложным заданием на экзамене. Многие сдают ЕГЭ по информатике, вообще не трогая эту задачу. Но с правильной подготовкой её можно решить стабильно и быстро.</p>
+
+    <div class="tip-box">
+      <div class="tip-box-head">📌 Важно знать</div>
+      Задание 27 проверяется вручную экспертами. Частичный ответ тоже оценивается — можно получить 1–3 балла за неполное, но рабочее решение. Не оставляйте задание пустым.
+    </div>
+
+    <h2>Что проверяет задание</h2>
+
+    <p>В задании 27 всегда нужно написать программу, которая читает данные, обрабатывает их по заданному условию и выводит результат. Ключевые умения, которые здесь проверяются:</p>
+
+    <ul>
+      <li>Чтение входных данных из файла или стандартного ввода</li>
+      <li>Работа с последовательностями, строками, массивами</li>
+      <li>Реализация перебора, поиска, сортировки</li>
+      <li>Корректная обработка граничных случаев</li>
+      <li>Вывод результата в точном соответствии с условием</li>
+    </ul>
+
+    <p>Язык программирования — на ваш выбор: Pascal, Python, C++, Java, C#. На практике абсолютное большинство сдающих выбирают <strong>Python</strong> — он короче, читаемее и прощает больше ошибок.</p>
+
+    <h2>Структура типичной задачи</h2>
+
+    <p>Все задачи задания 27 делятся на несколько устойчивых типов. Разберём каждый из них.</p>
+
+    <h3>Тип 1 — Перебор и подсчёт</h3>
+
+    <p>Дана последовательность чисел. Нужно найти все элементы, удовлетворяющие условию, и что-то с ними сделать — посчитать, найти максимум, сумму и т.д.</p>
+
+    <blockquote>
+      Дан файл с целыми числами. Найдите количество пар соседних элементов, у которых оба числа являются чётными, и выведите максимум среди таких пар.
+      <cite>— Типовое задание ФИПИ, вариант 2026</cite>
+    </blockquote>
+
+    <p>Шаблон решения для этого типа:</p>
+
+    <div class="code-label">
+      <span class="code-lang">Python</span>
+      <button class="copy-btn" onclick="copyCode(this)">Скопировать</button>
+    </div>
+    <div class="code-block"><span class="kw">with</span> <span class="fn">open</span>(<span class="nm">'input.txt'</span>) <span class="kw">as</span> f:
+    data = <span class="fn">list</span>(<span class="fn">map</span>(<span class="fn">int</span>, f.read().<span class="fn">split</span>()))
+
+count = <span class="nm">0</span>
+max_val = <span class="kw">None</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(data) - <span class="nm">1</span>):
+    a, b = data[i], data[i + <span class="nm">1</span>]
+    <span class="kw">if</span> a % <span class="nm">2</span> == <span class="nm">0</span> <span class="kw">and</span> b % <span class="nm">2</span> == <span class="nm">0</span>:
+        count += <span class="nm">1</span>
+        pair_max = <span class="fn">max</span>(a, b)
+        <span class="kw">if</span> max_val <span class="kw">is</span> <span class="kw">None</span> <span class="kw">or</span> pair_max > max_val:
+            max_val = pair_max
+
+<span class="fn">print</span>(count, max_val)  <span class="cm"># оба значения в одну строку</span></div>
+
+    <div class="tip-box">
+      <div class="tip-box-head">⚡ Лайфхак</div>
+      Всегда добавляйте обработку случая, когда подходящих пар нет. Эксперт обязательно проверяет граничные входные данные — именно на них чаще всего «сыплются» решения.
+    </div>
+
+    <h3>Тип 2 — Работа со строками</h3>
+
+    <p>Дана строка или набор строк. Нужно найти подстроки по условию, посчитать символы, найти самое длинное/короткое слово и т.д. В Python это решается особенно элегантно:</p>
+
+    <div class="code-label">
+      <span class="code-lang">Python</span>
+      <button class="copy-btn" onclick="copyCode(this)">Скопировать</button>
+    </div>
+    <div class="code-block"><span class="kw">with</span> <span class="fn">open</span>(<span class="nm">'input.txt'</span>, encoding=<span class="nm">'utf-8'</span>) <span class="kw">as</span> f:
+    lines = f.<span class="fn">readlines</span>()
+
+result = []
+<span class="kw">for</span> line <span class="kw">in</span> lines:
+    words = line.<span class="fn">split</span>()
+    <span class="kw">for</span> word <span class="kw">in</span> words:
+        <span class="cm"># пример: слова, начинающиеся на гласную</span>
+        <span class="kw">if</span> word[<span class="nm">0</span>].<span class="fn">lower</span>() <span class="kw">in</span> <span class="nm">'аеёиоуыэюя'</span>:
+            result.<span class="fn">append</span>(word)
+
+<span class="fn">print</span>(<span class="fn">len</span>(result))
+<span class="fn">print</span>(<span class="fn">max</span>(result, key=<span class="fn">len</span>))</div>
+
+    <h3>Тип 3 — Рекурсия и динамика</h3>
+
+    <p>Самый сложный подтип. Встречается реже, но именно он отделяет 3 балла от 4. Здесь нужно уметь строить <strong>рекуррентное соотношение</strong> и либо реализовать рекурсию с мемоизацией, либо динамическое программирование снизу вверх.</p>
+
+    <div class="img-block">
+      <div style="background: linear-gradient(135deg, #1e293b, #334155); border-radius: 10px; aspect-ratio: 16/6; display:flex; align-items:center; justify-content:center; font-size: 14px; color: rgba(255,255,255,.4); font-weight: 600; letter-spacing: .5px;">
+        Дерево рекурсивных вызовов — схема
+      </div>
+      <div class="img-caption">Дерево вызовов при поиске числа Фибоначчи без мемоизации — экспоненциальный рост</div>
+    </div>
+
+    <div class="code-label">
+      <span class="code-lang">Python — динамика</span>
+      <button class="copy-btn" onclick="copyCode(this)">Скопировать</button>
+    </div>
+    <div class="code-block"><span class="kw">from</span> functools <span class="kw">import</span> lru_cache
+
+<span class="cm"># Рекурсия + автоматическая мемоизация</span>
+@<span class="fn">lru_cache</span>(maxsize=<span class="kw">None</span>)
+<span class="kw">def</span> <span class="fn">f</span>(n):
+    <span class="kw">if</span> n <= <span class="nm">1</span>:
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn">f</span>(n - <span class="nm">1</span>) + <span class="fn">f</span>(n - <span class="nm">2</span>)
+
+<span class="cm"># sys.setrecursionlimit нужен для глубокой рекурсии</span>
+<span class="kw">import</span> sys
+sys.<span class="fn">setrecursionlimit</span>(<span class="nm">100000</span>)
+
+n = <span class="fn">int</span>(<span class="fn">input</span>())
+<span class="fn">print</span>(<span class="fn">f</span>(n))</div>
+
+    <hr/>
+
+    <h2>Как писать программу на экзамене</h2>
+
+    <p>Главная ошибка — сразу лезть в код. Сначала нужно понять задачу. Вот проверенный алгоритм из четырёх шагов:</p>
+
+    <p>
+      <span class="step">1</span> <strong>Прочитайте условие дважды</strong> — выделите: что дано, что найти, формат ввода/вывода.
+    </p>
+    <p>
+      <span class="step">2</span> <strong>Придумайте алгоритм на русском</strong> — запишите шаги в черновик без единой строчки кода.
+    </p>
+    <p>
+      <span class="step">3</span> <strong>Реализуйте и проверьте на примере из условия</strong> — если ответ совпал, переходите дальше.
+    </p>
+    <p>
+      <span class="step">4</span> <strong>Придумайте граничный случай</strong> — пустой файл, один элемент, все элементы одинаковые.
+    </p>
+
+    <blockquote>
+      За правильно работающую программу с верным выводом на всех тестах дают 4 балла. За программу с правильной идеей, но ошибкой в выводе — 3 балла. Это всё равно хорошо.
+    </blockquote>
+
+    <h2>Разбор реальной задачи ФИПИ</h2>
+
+    <p>Возьмём задание из открытого банка ФИПИ 2025 года и разберём его пошагово.</p>
+
+    <div class="tip-box">
+      <div class="tip-box-head">📋 Условие задачи</div>
+      Дан файл <code>input.txt</code>, содержащий натуральные числа, не превышающие 10&thinsp;000. Количество чисел не превышает 10&thinsp;000. Найдите два числа из файла, разность которых минимальна. Выведите эти два числа в порядке возрастания.
+    </div>
+
+    <p>Наивное решение — перебрать все пары за O(n²) — может не уложиться во время. Оптимальное решение: <strong>отсортировать</strong> массив, тогда минимальная разность всегда у соседних элементов — O(n·log n).</p>
+
+    <div class="code-label">
+      <span class="code-lang">Python — оптимальное решение</span>
+      <button class="copy-btn" onclick="copyCode(this)">Скопировать</button>
+    </div>
+    <div class="code-block"><span class="kw">with</span> <span class="fn">open</span>(<span class="nm">'input.txt'</span>) <span class="kw">as</span> f:
+    nums = <span class="fn">sorted</span>(<span class="fn">map</span>(<span class="fn">int</span>, f.read().<span class="fn">split</span>()))
+
+min_diff = <span class="fn">float</span>(<span class="nm">'inf'</span>)
+ans = (<span class="nm">0</span>, <span class="nm">0</span>)
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(nums) - <span class="nm">1</span>):
+    diff = nums[i + <span class="nm">1</span>] - nums[i]
+    <span class="kw">if</span> diff < min_diff:
+        min_diff = diff
+        ans = (nums[i], nums[i + <span class="nm">1</span>])
+
+<span class="fn">print</span>(ans[<span class="nm">0</span>], ans[<span class="nm">1</span>])</div>
+
+    <p>Результат: <span class="badge">✓ 4 балла</span> — программа читает данные, применяет оптимальный алгоритм и выводит ответ в нужном формате.</p>
+
+    <hr/>
+
+    <h2>Чек-лист перед сдачей</h2>
+
+    <ul>
+      <li>Программа читает данные из <code>input.txt</code>, а не из консоли (если требуется файл)</li>
+      <li>Вывод соответствует условию: пробелы, переносы строк, порядок чисел</li>
+      <li>Обработан случай, когда подходящих элементов нет</li>
+      <li>Нет лишних <code>print()</code> и отладочного вывода</li>
+      <li>Программа завершается без ошибок на всех тестах</li>
+    </ul>
+
+  </div><!-- /art-body -->
+
+  <!-- FOOTER ACTIONS -->
+  <div class="art-footer">
+    <div class="art-footer-left">Если статья была полезна — поставьте лайк 👇</div>
+    <div class="art-footer-actions">
+      <button class="act-btn" id="likeBtnBot" onclick="toggleLike()">
+        <span id="likeIcoBot">♡</span> <span id="likeCntBot">284</span>
+      </button>
+      <button class="act-btn" onclick="copyLink()">🔗 Поделиться</button>
+    </div>
+  </div>
+
+  <!-- RELATED -->
+  <div class="related">
+    <div class="related-head">Читайте также</div>
+    <div class="related-grid">
+      <a class="rel-card" href="#">
+        <div class="rel-thumb">📐</div>
+        <div class="rel-body">
+          <div class="rel-tag">Математика</div>
+          <div class="rel-title">Производная и её применение: полный разбор заданий части 2</div>
+          <div class="rel-meta">8 мин · 7 200 просмотров</div>
+        </div>
+      </a>
+      <a class="rel-card" href="#">
+        <div class="rel-thumb">💾</div>
+        <div class="rel-body">
+          <div class="rel-tag">Информатика</div>
+          <div class="rel-title">Системы счисления на ЕГЭ: переводим числа за 30 секунд</div>
+          <div class="rel-meta">5 мин · 11 400 просмотров</div>
+        </div>
+      </a>
+      <a class="rel-card" href="#">
+        <div class="rel-thumb">📝</div>
+        <div class="rel-body">
+          <div class="rel-tag">Русский язык</div>
+          <div class="rel-title">Сочинение ЕГЭ 2026: структура, клише и критерии К1–К12</div>
+          <div class="rel-meta">10 мин · 18 900 просмотров</div>
+        </div>
+      </a>
+      <a class="rel-card" href="#">
+        <div class="rel-thumb">🔢</div>
+        <div class="rel-body">
+          <div class="rel-tag">Информатика</div>
+          <div class="rel-title">Логические выражения и схемы: задания 15–17 без ошибок</div>
+          <div class="rel-meta">7 мин · 6 300 просмотров</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════ JS ══════════════════ -->
+<script>
+/* ── PROGRESS ── */
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  const pct = d.scrollTop / (d.scrollHeight - d.clientHeight) * 100;
+  document.getElementById('prog').style.width = Math.min(pct, 100) + '%';
+  document.getElementById('backTop').classList.toggle('vis', d.scrollTop > 400);
+});
+
+/* ── THEME ── */
+const THEME_KEY = 'ege-theme';
+const btn = document.getElementById('themeBtn');
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  btn.textContent = t === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem(THEME_KEY, t);
+}
+
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+}
+
+// restore saved theme
+(function() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved) applyTheme(saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) applyTheme('dark');
+})();
+
+/* ── LIKE ── */
+let liked = false, likes = 284;
+function toggleLike() {
+  liked = !liked;
+  likes += liked ? 1 : -1;
+  const ico  = liked ? '♥' : '♡';
+  ['likeIco','likeIcoBot'].forEach(id => document.getElementById(id).textContent = ico);
+  ['likeCnt','likeCntBot'].forEach(id => document.getElementById(id).textContent = likes);
+  ['likeBtn','likeBtnBot'].forEach(id => document.getElementById(id).classList.toggle('liked', liked));
+  if (liked) showToast('❤️ Спасибо за лайк!');
+}
+
+/* ── COPY LINK ── */
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).catch(() => {});
+  showToast('🔗 Ссылка скопирована в буфер');
+}
+
+/* ── COPY CODE ── */
+function copyCode(btn) {
+  const block = btn.closest('.code-label').nextElementSibling;
+  navigator.clipboard.writeText(block.innerText).catch(() => {});
+  btn.textContent = 'Скопировано ✓';
+  setTimeout(() => btn.textContent = 'Скопировать', 2000);
+}
+
+/* ── FAKE VIEWS COUNT ── */
+(function() {
+  const base = 5841;
+  const delta = Math.floor(Math.random() * 50);
+  document.getElementById('viewCount').textContent =
+    (base + delta).toLocaleString('ru-RU') + ' просмотров';
+})();
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
