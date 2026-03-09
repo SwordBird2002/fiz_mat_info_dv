@@ -147,7 +147,7 @@
         75% { transform: translate(-50px, 150px) scale(1.1); }
         100% { transform: translate(0, 0) scale(1); }
     }
-
+    #fmilogo {color: rgba(96, 87, 87, 0.648);}
     /* --- СТЕКЛЯННЫЕ КАРТОЧКИ --- */
     .glass-card {
         background: var(--card-bg);
@@ -224,6 +224,7 @@
     
     /* Исправление цветов для темной темы */
     [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
+    [data-theme="dark"] #fmilogo {color: white;}
     [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color: #f1f5f9; }
     .widget-badge {
     width: 100%; max-width: 680px;
@@ -356,7 +357,7 @@
             <h1 class="display-4 fw-bold">Понятная математика, физика и информатика</h1>
             <p class="lead mb-4">Персональный сайт преподавателя ⚛️</p>
             <a href="materials.html" class="btn btn-light btn-lg px-4 fw-bold text-primary logo">Открытые Материалы</a>
-            <a href="redsquare_fmi.html" class="logo">
+            <a href="redsquare_fmi.html" id="fmilogo" class="logo">
                 <em>RED</em>²<span class="logo-dot ">·</span>ФМИ
             </a>
         </div>
@@ -377,8 +378,8 @@
                     </ul>
                 </div>
                 <div class="col-md-6 text-center">
-                    <!-- Замените ссылку ниже на ваше фото -->
-                    <img src="https://raw.githubusercontent.com/SwordBird2002/fiz_mat_info_dv/refs/heads/main/author.png" class="img-fluid rounded shadow" alt="Фото репетитора">
+                    
+                    <img class="box-shadow" src="https://raw.githubusercontent.com/SwordBird2002/fiz_mat_info_dv/refs/heads/main/author.png" class="img-fluid rounded shadow" alt="Фото репетитора">
                 </div>
             </div>
         </div>
