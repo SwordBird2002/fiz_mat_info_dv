@@ -80,7 +80,10 @@
             background-color: #374151 !important;
             border-color: #4b5563 !important;
         }
-
+        #th code {
+            background: white;
+            color: rgb(65, 71, 65);
+        }
         /* ПЛАВАЮЩИЕ КНОПКИ ДЛЯ ПК */
         .top-controls {
             position: fixed;
@@ -140,6 +143,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             transition: all 0.4s ease;
         }
+        
 
         
         .code-tree-container {
@@ -154,6 +158,10 @@
         body.dark-theme .code-tree-container {
             background: #0d1117;
             border: 1px solid #30363d;
+        }
+        body.dark-theme #th code {
+            background: #111;
+            color: #0f0;
         }
 
         .code-actions {
@@ -221,7 +229,7 @@
             white-space: pre;
             font-size: 0.95rem;
         }
-        
+
         .kwd { color: #c678dd; font-weight: bold; }
         .func { color: #61afef; }
         .str { color: #98c379; }
@@ -367,9 +375,9 @@
             </div>
 
             <!-- MAIN CONTENT -->
-        <div class="col-md-9">
+        <div class="col-md-9"> 
                 <!-- Header Card -->
-                <div class="content-card border-start border-2 border-opacity-15 border-primary">
+                <div class="content-card border-top border-success red border-2 border-opacity-15 border-primary">
                     <h2 class="fw-bold mb-3">Задание 17: Обработка целочисленных данных</h2>
                     <p class="text-muted fs-5">
                         Чтение из файла, проход по списку, проверка делимости.
@@ -387,17 +395,17 @@
                     <p>Для решения задачи 17 обычно используется следующий шаблон:</p>
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <div class="p-3 border rounded bg-light h-100">
+                            <div class="p-3 border rounded bg-light h-100" id="th">
                                 <h6 class="fw-bold">1. Чтение файла</h6>
                                 <p class="small mb-0">Используем генератор списков для быстрого чтения:</p>
-                                <code class="d-block mt-2 bg-white p-2 rounded">data = [int(x) for x in open('17.txt')]</code>
+                                <code class="d-block mt-2  p-2 rounded">data = [int(x) for x in open('17.txt')]</code>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 border rounded bg-light h-100">
                                 <h6 class="fw-bold">2. Проход парами</h6>
                                 <p class="small mb-0">Используем <code>zip</code> или цикл по индексу:</p>
-                                <code class="d-block mt-2 bg-white p-2 rounded">for i in range(len(data) - 1):</code>
+                                <code class="d-block mt-2 p-2 rounded">for i in range(len(data) - 1):</code>
                                 <small class="text-muted">Пара: <code>data[i]</code> и <code>data[i+1]</code></small>
                             </div>
                         </div>
