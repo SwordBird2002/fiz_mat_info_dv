@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>404 — страница не найдена</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- СКОПИРУЙ СЮДА ИЗ index.html ВСЁ: <link>, <style>, шрифты, CSS-переменные -->
+  <!-- пример структуры, реальный код возьми из index.html -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --accent: #ffaf40;
+      --accent-soft: rgba(255, 175, 64, 0.16);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.25);
+      --radius-lg: 18px;
+      --radius-full: 999px;
+      --shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.8);
+      --blur: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0b1120 0, #020617 42%, #000 100%);
+      color: var(--text-main);
+    }
+
+    body {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1500px;
+      border-radius: 28px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background:
+        radial-gradient(circle at top left, rgba(96, 165, 250, 0.12), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.12), transparent 55%),
+        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
+      backdrop-filter: blur(26px);
+      box-shadow:
+        0 22px 80px rgba(15, 23, 42, 0.95),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(135deg, rgba(148, 163, 184, 0.16), transparent 40%),
+        radial-gradient(circle at 10% 0%, rgba(59, 130, 246, 0.24), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(245, 158, 11, 0.18), transparent 55%);
+      mix-blend-mode: soft-light;
+      opacity: 0.7;
+      z-index: -1;
+    }
+
+    .page-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr);
+      gap: 26px;
+      padding: 22px 24px 24px;
+    }
+
+    .left-column{
+      align-items: center;   
+      display: flex;
+      flex-direction: column;
+      align-items: center;    /* центрирует всё внутри по горизонтали */
+      gap: 14px; /* центрирует всё внутри по горизонтали */
+    },
+    
+    .card {
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.96));
+      border-radius: 22px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top, rgba(148, 163, 184, 0.24), transparent 55%),
+        linear-gradient(145deg, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.95));
+      mix-blend-mode: soft-light;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, rgba(59, 130, 246, 0.12), rgba(15, 23, 42, 0.92));
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.9);
+      font-size: 11px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: rgba(209, 213, 219, 0.92);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at center, #c54e22, #a32d16);
+      box-shadow: 0 0 0 6px rgba(197, 148, 34, 0.16);
+    }
+
+    .headline {
+      font-size: 32px;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin: 14px 0 8px;
+      color: #f9fafb;
+    }
+
+    .headline span {
+      color: var(--accent);
+      text-shadow: 0 0 22px rgba(251, 191, 36, 0.65);
+    }
+
+    .subheadline {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(209, 213, 219, 0.85);
+      max-width: 420px;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 9px 18px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(251, 191, 36, 0.55);
+      background:
+        radial-gradient(circle at top left, rgba(251, 191, 36, 0.26), rgba(245, 158, 11, 0.85)),
+        linear-gradient(135deg, rgba(21, 24, 40, 0.8), rgba(15, 23, 42, 0.98));
+      color: #111827;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow:
+        0 14px 45px rgba(245, 158, 11, 0.7),
+        0 0 0 1px rgba(161, 98, 7, 0.7);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, background 0.12s ease-out;
+      cursor: pointer;
+    }
+
+    .primary-button span {
+      color: #111827;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 22px 60px rgba(245, 158, 11, 0.8),
+        0 0 0 1px rgba(180, 83, 9, 0.9);
+    }
+
+    .primary-button-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 22px 14px;
+      border-top: 1px solid rgba(15, 23, 42, 0.92);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 1));
+    }
+
+    .footer-text {
+      font-size: 11px;
+      color: rgba(148, 163, 184, 0.9);
+    }
+    .box-shadow {
+      display: block;
+      margin: 10px auto 0;    /* центр по горизонтали */
+    }
+    @media (max-width: 900px) {
+      body {
+        padding: 12px;
+      }
+      .page-inner {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 16px 14px 18px;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="page-inner">
+      <div class="left-column">
+        <div class="card">
+          <div class="card-inner">
+            <div class="badge">
+              <div class="badge-dot"></div>
+              <span>Ошибка 404</span>
+            </div>
+            <h1 class="headline">
+              Страница <span>не найдена</span>
+            </h1>
+            <p class="subheadline">
+              Похоже, вы перешли по неверной ссылке или страница была удалена. 
+             
+            </p>
+            <a href="" class="primary-button">
+              <span>На главную</span>
+              
+              <span class="primary-button-icon">↩</span>
+              
+            </a>
+            
+          </div>
+        </div>
+        <img class="box-shadow" width="300" src="https://raw.githubusercontent.com/SwordBird2002/fiz_mat_info_dv/refs/heads/main/favicon.png" class="img-fluid rounded shadow">
+      </div>
+
+      
+    </div>
+
+    <footer class="footer">
+      <span class="footer-text">© 2026 · ФизМатИнфо</span>
+      
+    </footer>
+  </div>
+</body>
+</html>
