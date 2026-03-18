@@ -1,280 +1,130 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>404 — страница не найдена</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — ФизМатИнфо</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --red: #e8272a;
+        }
 
-  <!-- СКОПИРУЙ СЮДА ИЗ index.html ВСЁ: <link>, <style>, шрифты, CSS-переменные -->
-  <!-- пример структуры, реальный код возьми из index.html -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        * { box-sizing: border-box; }
 
-  <style>
-    :root {
-      --bg: #050816;
-      --bg-alt: #0b1020;
-      --accent: #ffaf40;
-      --accent-soft: rgba(255, 175, 64, 0.16);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --border-subtle: rgba(148, 163, 184, 0.25);
-      --radius-lg: 18px;
-      --radius-full: 999px;
-      --shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.8);
-      --blur: 18px;
-    }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        /* ФОНОВЫЕ ШАРЫ */
+        .background-orbs {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            pointer-events: none;
+        }
+        .orb {
+            position: absolute; border-radius: 50%; opacity: 0.5; filter: blur(60px);
+        }
+        .orb-1 { width: 400px; height: 400px; background: radial-gradient(#4f46e5, #0ea5e9);
+            top: -10%; left: -10%; animation: moveDiagonal 15s infinite alternate ease-in-out; }
+        .orb-2 { width: 300px; height: 300px; background: radial-gradient(#06b6d4, #3b82f6);
+            bottom: 10%; right: -5%; animation: moveVertical 12s infinite alternate ease-in-out; }
+        .orb-3 { width: 250px; height: 250px; background: radial-gradient(#8b5cf6, #6366f1);
+            top: 40%; left: 40%; animation: moveCircular 20s infinite linear; }
+        .orb-4 { width: 200px; height: 200px; background: radial-gradient(#f59e0b, #ef4444);
+            bottom: 20%; left: 20%; animation: moveWild 16s infinite ease-in-out; opacity: 0.4; }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #0b1120 0, #020617 42%, #000 100%);
-      color: var(--text-main);
-    }
+        @keyframes moveDiagonal { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(300px,200px) scale(1.1); } }
+        @keyframes moveVertical { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-150px) scale(1.1); } }
+        @keyframes moveCircular { 0% { transform: rotate(0deg) translateX(120px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); } }
+        @keyframes moveWild { 0%,100% { transform: translate(0,0) scale(1); } 25% { transform: translate(100px,-100px) scale(1.2); } 50% { transform: translate(200px,50px) scale(0.9); } 75% { transform: translate(-50px,150px) scale(1.1); } }
 
-    body {
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 24px;
-    }
+        /* ГЛАВНАЯ КАРТОЧКА */
+        .hero-404 { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+        .glass-card {
+            background: var(--card-bg); backdrop-filter: blur(20px); border: var(--glass-border);
+            border-radius: 24px; box-shadow: var(--shadow); padding: 3rem 2.5rem; max-width: 500px; width: 100%;
+            position: relative; overflow: hidden;
+        }
+        .glass-card::before {
+            content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top left, rgba(79,70,229,0.15), transparent);
+            pointer-events: none;
+        }
+        .glass-card-inner { position: relative; z-index: 2; }
 
-    .page {
-      width: 100%;
-      max-width: 1500px;
-      border-radius: 28px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background:
-        radial-gradient(circle at top left, rgba(96, 165, 250, 0.12), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(251, 191, 36, 0.12), transparent 55%),
-        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
-      backdrop-filter: blur(26px);
-      box-shadow:
-        0 22px 80px rgba(15, 23, 42, 0.95),
-        0 0 0 1px rgba(15, 23, 42, 0.9);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      isolation: isolate;
-    }
+        .error-code {
+            font-size: 6rem; font-weight: 900; background: linear-gradient(135deg, #4f46e5 0%, #ec4899 50%, #f59e0b 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin: 0 0 1rem; animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow { 0% { filter: drop-shadow(0 0 20px rgba(79,70,229,0.6)); } 100% { filter: drop-shadow(0 0 40px rgba(236,72,153,0.8)); } }
 
-    .page::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(135deg, rgba(148, 163, 184, 0.16), transparent 40%),
-        radial-gradient(circle at 10% 0%, rgba(59, 130, 246, 0.24), transparent 55%),
-        radial-gradient(circle at 90% 100%, rgba(245, 158, 11, 0.18), transparent 55%);
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-      z-index: -1;
-    }
+        .error-title { font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; }
+        .error-desc { opacity: 0.9; margin-bottom: 2.5rem; line-height: 1.6; }
 
-    .page-inner {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.1fr);
-      gap: 26px;
-      padding: 22px 24px 24px;
-    }
+        .btn-home {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9); border: none; color: white !important;
+            border-radius: 16px; padding: 1.25rem 2.5rem; font-weight: 700; font-size: 1.1rem;
+            box-shadow: 0 16px 40px rgba(56,189,248,0.4); transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.75rem;
+        }
+        .btn-home:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 24px 60px rgba(56,189,248,0.6); }
 
-    .left-column{
-      align-items: center;   
-      display: flex;
-      flex-direction: column;
-      align-items: center;    /* центрирует всё внутри по горизонтали */
-      gap: 14px; /* центрирует всё внутри по горизонтали */
-    },
-    
-    .card {
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.96));
-      border-radius: 22px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-soft);
-      padding: 18px 18px 16px;
-      position: relative;
-      overflow: hidden;
-    }
+        .logo-footer {
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-weight: 900; font-size: 1.2rem; padding: 1rem 2rem; border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at top, rgba(148, 163, 184, 0.24), transparent 55%),
-        linear-gradient(145deg, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.95));
-      mix-blend-mode: soft-light;
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .card-inner {
-      position: relative;
-      z-index: 1;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 11px;
-      border-radius: 999px;
-      background: radial-gradient(circle at top, rgba(59, 130, 246, 0.12), rgba(15, 23, 42, 0.92));
-      border: 1px solid rgba(55, 65, 81, 0.8);
-      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.9);
-      font-size: 11px;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      color: rgba(209, 213, 219, 0.92);
-    }
-
-    .badge-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: radial-gradient(circle at center, #c54e22, #a32d16);
-      box-shadow: 0 0 0 6px rgba(197, 148, 34, 0.16);
-    }
-
-    .headline {
-      font-size: 32px;
-      line-height: 1.1;
-      letter-spacing: -0.04em;
-      margin: 14px 0 8px;
-      color: #f9fafb;
-    }
-
-    .headline span {
-      color: var(--accent);
-      text-shadow: 0 0 22px rgba(251, 191, 36, 0.65);
-    }
-
-    .subheadline {
-      font-size: 13px;
-      line-height: 1.6;
-      color: rgba(209, 213, 219, 0.85);
-      max-width: 420px;
-    }
-
-    .primary-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 16px;
-      padding: 9px 18px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(251, 191, 36, 0.55);
-      background:
-        radial-gradient(circle at top left, rgba(251, 191, 36, 0.26), rgba(245, 158, 11, 0.85)),
-        linear-gradient(135deg, rgba(21, 24, 40, 0.8), rgba(15, 23, 42, 0.98));
-      color: #111827;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow:
-        0 14px 45px rgba(245, 158, 11, 0.7),
-        0 0 0 1px rgba(161, 98, 7, 0.7);
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, background 0.12s ease-out;
-      cursor: pointer;
-    }
-
-    .primary-button span {
-      color: #111827;
-    }
-
-    .primary-button:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 22px 60px rgba(245, 158, 11, 0.8),
-        0 0 0 1px rgba(180, 83, 9, 0.9);
-    }
-
-    .primary-button-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 22px 14px;
-      border-top: 1px solid rgba(15, 23, 42, 0.92);
-      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 1));
-    }
-
-    .footer-text {
-      font-size: 11px;
-      color: rgba(148, 163, 184, 0.9);
-    }
-    .box-shadow {
-      display: block;
-      margin: 10px auto 0;    /* центр по горизонтали */
-    }
-    @media (max-width: 900px) {
-      body {
-        padding: 12px;
-      }
-      .page-inner {
-        grid-template-columns: minmax(0, 1fr);
-        padding: 16px 14px 18px;
-        gap: 16px;
-      }
-    }
-  </style>
+        @media (max-width: 576px) {
+            .glass-card { margin: 1rem; padding: 2rem 1.5rem; }
+            .error-code { font-size: 4rem; }
+            .hero-404 { padding: 1rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="page">
-    <div class="page-inner">
-      <div class="left-column">
-        <div class="card">
-          <div class="card-inner">
-            <div class="badge">
-              <div class="badge-dot"></div>
-              <span>Ошибка 404</span>
-            </div>
-            <h1 class="headline">
-              Страница <span>не найдена</span>
-            </h1>
-            <p class="subheadline">
-              Похоже, вы перешли по неверной ссылке или страница была удалена. 
-             
-            </p>
-            <a href="index.html" class="primary-button">
-              <span>На главную</span>
-              
-              <span class="primary-button-icon">↩</span>
-              
-            </a>
-            
-          </div>
-        </div>
-        <img class="box-shadow" width="300" src="https://raw.githubusercontent.com/SwordBird2002/fiz_mat_info_dv/refs/heads/main/favicon.png" class="img-fluid rounded shadow">
-      </div>
-
-      
+    <!-- ШАРЫ -->
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
     </div>
 
-    <footer class="footer">
-      <span class="footer-text">© 2026 · ФизМатИнфо</span>
-      
-    </footer>
-  </div>
+    <div class="hero-404">
+        <div class="glass-card">
+            <div class="glass-card-inner">
+                <i class="bi bi-exclamation-triangle display-3 text-warning mb-4"></i>
+                <div class="error-code">404</div>
+                <h1 class="error-title mb-3">Страница не найдена</h1>
+                <p class="error-desc fs-5 mb-5">
+                    Запрашиваемая страница не существует. 
+                    Возможно, ссылка устарела или страница была удалена.
+                </p>
+                <a href="index.html" class="btn-home">
+                    <i class="bi bi-house-door-fill"></i>
+                    Вернуться на главную
+                    <img class="box-shadow" width="50" height="50" src="favicon.png">
+                </a>
+            </div>
+        </div>
+        
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -315,7 +315,109 @@
             background: #f9fafb;
             color: #111827;
         }
-        
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column !important;  /* Стек вертикально */
+                align-items: flex-start !important;  /* Выравнивание слева */
+                text-align: left;
+                gap: 1rem;
+            }
+            .page-header .d-flex.flex-wrap {  /* Блок с чипами */
+                justify-content: flex-start !important;  /* Слева, не растягивать */
+                width: 100%;
+            }
+            .page-title {
+                font-size: 1.5rem !important;  /* Уменьшить заголовок */
+                margin-bottom: 0.5rem;
+            }
+            .python-logo {
+                width: 44px !important;  /* Уменьшить иконку */
+                height: 44px !important;
+            }
+            .tool-chip {
+                font-size: 0.75rem;  /* Чипы поменьше */
+                padding: 0.3rem 0.6rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header {
+                margin-top: 5rem;  /* Меньше отступ от навбара */
+                padding: 0 1rem;  /* Отступы по бокам */
+            }
+        }
+        @media (max-width: 991px) {
+        body {
+            padding-top: 70px;  /* Меньше на мобильных (toggler) */
+        }
+    }
+        @media (max-width: 576px) {
+            .d-flex.gap-2 {  /* Блок с кнопками Запустить/Очистить/Пример/Черепашка */
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .btn-glass.btn-glass-sm,
+            .btn-glass-green {
+                flex: 0 1 auto;  /* Не растягивать, подстраивать под контент */
+                max-width: 100%; /* Не шире контейнера */
+                white-space: normal; /* Разрешить перенос текста */
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            /* Специально для черепашки - укоротить текст */
+            .btn-glass-green {
+                min-width: fit-content;
+            }
+        }
+
+        @media (max-width: 991px) {
+    .navbar-collapse {
+        display: none !important;  /* Навсегда скрыть до клика на toggler */
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+    }
+    .navbar-collapse.show {  /* Только при .show (открыт пользователем) */
+        display: block !important;
+        opacity: 1;
+        height: auto;
+        transition: all 0.3s ease;
+    }
+    
+    /* Toggler всегда видим */
+    .navbar-toggler {
+        display: block !important;
+    }
+    
+    body {
+        padding-top: 70px;  /* Отступ для навбара */
+    }
+}
+@media (max-width: 991px) {
+    #nav.navbar-collapse {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        opacity: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        max-height: 0 !important;
+        transition: none !important;  /* Без анимации при загрузке */
+    }
+    #nav.navbar-collapse.show {
+        display: flex !important;
+        visibility: visible !important;
+        height: auto !important;
+        opacity: 1 !important;
+        padding: 1rem 0 !important;
+        max-height: 500px !important;
+        transition: max-height 0.3s ease !important;
+    }
+    body {
+        padding-top: 70px;
+    }
+}
 
 
 
@@ -704,6 +806,22 @@ await micropip.install("${name}")
             installPackage();
         }
     });
+    // Фикс навбара на мобильных
+if (window.innerWidth <= 991) {
+    const navCollapse = document.getElementById('nav');
+    navCollapse.classList.remove('show', 'collapsing');
+    navCollapse.style.display = 'none';
+}
+
+// При ресайзе
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 991) {
+        document.getElementById('nav').classList.add('show');
+    } else {
+        document.getElementById('nav').classList.remove('show', 'collapsing');
+    }
+});
+
 </script>
 </body>
 </html>

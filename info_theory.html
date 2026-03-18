@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ЕГЭ Информатика: Задание 17 (Обработка последовательностей)</title>
+    <title>ЕГЭ Информатика</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -85,6 +85,29 @@
             color: rgb(65, 71, 65);
         }
         /* ПЛАВАЮЩИЕ КНОПКИ ДЛЯ ПК */
+        /* Размеры сниппета под тему */
+        
+        /* Убираем padding у сниппета */
+        #snippetImageWrapper {
+            padding: 0 !important;
+            margin: 0 auto;
+        }
+
+        #snippetImageWrapper img {
+            display: block;
+            margin: 0 auto;  /* центрируем */
+            padding: 1px !important;  /* минимальный отступ только внутри */
+        }
+
+        .snippet-day, .snippet-night {
+            width: 650px !important;
+            height: 650px !important;
+            max-width: 100%;
+            max-height: 650px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
         .top-controls {
             position: fixed;
             top: 20px;
@@ -324,6 +347,45 @@
                 display: none !important;
             }
         }
+        /* Десктоп остаётся прежним */
+        @media (min-width: 993px) {
+            #snippetImage {
+                width: 650px !important;
+                height: 650px !important;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+        }
+        /* МОБИЛЬНАЯ ВЕРСИЯ: сниппет на всю ширину */
+@media (max-width: 992px) {
+    #snippetImageWrapper {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    #snippetImageWrapper > div {
+        padding: 0 !important;  /* убираем все отступы */
+    }
+    
+    #snippetImage {
+        width: 100vw !important;     /* вся ширина экрана */
+        height: auto !important;     /* пропорционально */
+        max-height: 60vh !important; /* не больше 60% высоты viewport */
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0;            /* углы прямые на мобилке */
+        box-shadow: none !important; /* тень мешает */
+    }
+    
+    /* Контейнер тоже без отступов */
+    #snippetImageWrapper .content-card {
+        margin: 0 !important;
+        padding: 10px !important;
+        border-radius: 0 !important;
+        }
+    }
+
+
+    
     </style>
 </head>
 
@@ -363,13 +425,14 @@
                         <i class="bi bi-code-square"></i> Навигатор
                     </h5>
                     <div class="nav flex-column nav-pills">
-                        <a href="#" class="nav-link active bg-primary bg-opacity-10 text-primary fw-bold mb-2">
-                            <i class="bi bi-code-slash me-2"></i>Задание 17
-                        </a>
+                        
                         <a href="#" class="nav-link text-dark mb-2"><i><svg viewBox="0 0 32 32" width="32" height="32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#444444" d="M13.275 15.88h5.417c1.508 0 2.712-1.241 2.712-2.756v-5.164c0-1.47-1.24-2.574-2.712-2.819-0.932-0.155-1.898-0.226-2.825-0.221s-1.813 0.083-2.592 0.221c-2.295 0.405-2.712 1.254-2.712 2.819v2.067h5.423v0.689h-7.459c-1.576 0-2.956 0.947-3.388 2.75-0.498 2.066-0.52 3.355 0 5.512 0.385 1.606 1.306 2.75 2.882 2.75h1.865v-2.478c0-1.79 1.549-3.369 3.388-3.369zM12.933 8.649c-0.562 0-1.018-0.461-1.018-1.030 0-0.572 0.455-1.037 1.018-1.037 0.56 0 1.018 0.465 1.018 1.037 0 0.57-0.457 1.030-1.018 1.030zM26.826 13.465c-0.389-1.569-1.133-2.75-2.712-2.75h-2.035v2.408c0 1.867-1.583 3.439-3.388 3.439h-5.417c-1.484 0-2.712 1.27-2.712 2.756v5.164c0 1.47 1.278 2.334 2.712 2.756 1.717 0.505 3.363 0.596 5.417 0 1.365-0.395 2.712-1.191 2.712-2.756v-2.067h-5.417v-0.689h8.129c1.576 0 2.163-1.099 2.712-2.75 0.566-1.699 0.542-3.332 0-5.512zM19.033 23.794c0.562 0 1.018 0.461 1.018 1.030 0 0.572-0.456 1.037-1.018 1.037-0.56 0-1.018-0.465-1.018-1.037 0-0.57 0.457-1.030 1.018-1.030z"></path> </g></svg></i>Python</a>
                         <a href="#" class="nav-link text-dark mb-2"><i class="bi bi-code-slash me-2"></i>Задание 1</a>
                         <a href="#" class="nav-link text-dark mb-2"><i class="bi bi-code-slash me-2"></i>Задание 2</a>
                         <a href="#" class="nav-link text-dark mb-2"><i class="bi bi-code-slash me-2"></i>Задание 3</a>
+                        <a href="#" class="nav-link active bg-primary bg-opacity-10 text-primary fw-bold mb-2">
+                            <i class="bi bi-code-slash me-2"></i>Задание 17
+                        </a>
                     </div>
                 </div>
             </div>
@@ -414,12 +477,35 @@
 
                 <!-- VISUAL CODE TREEVIEW -->
                 <div class="content-card">
-                    <h4 class="mb-4 fw-bold text-success">
-                        <i class="bi bi-tree me-2"></i>Разбор решения
-                    </h4>
-                    <p class="mb-3">Задача: Найти количество пар, сумма которых делится на 3, и максимальную из таких сумм.</p>
-                    
-                    <div class="code-tree-container shadow-lg" id="codeContainer">
+    <h4 class="mb-4 fw-bold text-success">
+        <i class="bi bi-tree me-2"></i>Разбор решения
+    </h4>
+    <p class="mb-3">Задача: Найти количество пар, сумма которых делится на 3, и максимальную из таких сумм.</p>
+
+    <!-- Кнопка переключения режима -->
+    <div class="mb-3">
+        <button class="btn btn-outline-secondary btn-sm" id="snippetViewToggle">
+            <i class="bi bi-card-image me-1"></i>
+            Показать сниппет
+        </button>
+    </div>
+
+    <!-- Контейнер с двумя режимами -->
+    <div id="solutionView">
+
+        <!-- Режим 1: картинка сниппета -->
+        <div id="snippetImageWrapper" class="d-none text-center">
+            <img id="snippetImage"
+                 src="img/snippet_day.png"
+                 alt="Кодовый сниппет"
+                
+                 class="img-fluid rounded shadow snippet-day">
+                
+        </div>
+
+        <!-- Режим 2: твой текущий treeview -->
+        <div id="codeTreeWrapper">
+            <div class="code-tree-container shadow-lg" id="codeContainer">
                         
                         <!-- Панель кнопок (Копировать / Скрыть) -->
                         <div class="code-actions">
@@ -511,7 +597,11 @@
                             <div class="expl-node">Выводим ответ: кол-во и максимум</div>
                         </div>
                     </div>
-                </div>
+        </div>
+
+    </div>
+</div>
+
 
             </div>
         </div>
@@ -600,6 +690,89 @@
                 console.error('Ошибка копирования: ', err);
             });
         });
+        // === НАСТРОЙКИ СНИППЕТА ===
+        // === 1. ELEMENTS (оставляем) ===
+        const snippetImgEl = document.getElementById('snippetImage');
+        const snippetWrapper = document.getElementById('snippetImageWrapper');
+        const codeTreeWrapper = document.getElementById('codeTreeWrapper');
+        const snippetToggleBtn = document.getElementById('snippetViewToggle');
+
+        // === 2. УНИВЕРСАЛЬНЫЕ ФУНКЦИИ (замена статичных путей) ===
+        function getSnippetPath(taskNum, theme) {
+            return `img/${taskNum}/snippet-${theme}.png`;
+        }
+
+        function getTaskNumber() {
+            const wrapper = document.getElementById('snippetImageWrapper');
+            if (wrapper) return wrapper.dataset.task || '17';
+            
+            const title = document.title.toLowerCase();
+            const match = title.match(/задание\s*(\d+)/i);
+            return match ? match[1] : '17';
+        }
+
+        function updateSnippetImageByTheme() {
+            const taskNum = getTaskNumber();
+            const isDark = bodyEl.classList.contains('dark-theme');
+            const theme = isDark ? 'night' : 'day';
+            
+            if (snippetImgEl) {
+                snippetImgEl.src = getSnippetPath(taskNum, theme);
+                snippetImgEl.alt = `Кодовый сниппет задания ${taskNum}`;
+                
+                // ПЕРЕКЛЮЧЕНИЕ РАЗМЕРА И СТИЛЯ ПО ТЕМЕ
+                snippetImgEl.className = `img-fluid rounded shadow snippet-${theme}`;
+            }
+        }
+
+
+        // === 3. АВТОТЕМА ПО ВРЕМЕНИ (оставляем как есть) ===
+        (function autoSetInitialTheme() {
+            if (!localStorage.getItem('theme')) {
+                const hour = new Date().getHours();
+                const shouldBeDark = hour < 7 || hour >= 20;
+                if (shouldBeDark) {
+                    bodyEl.classList.add('dark-theme');
+                    localStorage.setItem('theme', 'dark');
+                    themeToggles.forEach(btn => {
+                        if (btn) btn.innerHTML = '<i class="bi bi-sun"></i>';
+                    });
+                }
+            }
+        })();
+
+        // === 4. ИНИЦИАЛИЗАЦИЯ (обновлённая) ===
+        if (snippetImgEl) updateSnippetImageByTheme();
+
+        // === 5. СИНХРОНИЗАЦИЯ С ТЕМОЙ (обновлённая) ===
+        themeToggles.forEach(btn => {
+            if (btn) {
+                const originalHandler = btn.onclick || btn._originalClick;
+                btn.addEventListener('click', () => {
+                    // Твоя тема переключается здесь (не трогаем)
+                    setTimeout(updateSnippetImageByTheme, 50);  // после смены класса
+                });
+            }
+        });
+
+        // === 6. ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ (оставляем как есть) ===
+        if (snippetToggleBtn) {
+            snippetToggleBtn.addEventListener('click', () => {
+                const showingImage = !snippetWrapper.classList.contains('d-none');
+                
+                if (showingImage) {
+                    snippetWrapper.classList.add('d-none');
+                    codeTreeWrapper.classList.remove('d-none');
+                    snippetToggleBtn.innerHTML = '<i class="bi bi-card-image me-1"></i> Показать сниппет';
+                } else {
+                    codeTreeWrapper.classList.add('d-none');
+                    snippetWrapper.classList.remove('d-none');
+                    snippetToggleBtn.innerHTML = '<i class="bi bi-code-slash me-1"></i> Показать разбор';
+                }
+            });
+        }
+
+
     </script>
 </body>
 </html>

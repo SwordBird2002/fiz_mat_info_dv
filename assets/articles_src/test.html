@@ -507,7 +507,7 @@ img { display: block; max-width: 100%; }
     </nav>
     <div class="hdr-right">
       <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Переключить тему">🌙</button>
-      <button class="hdr-cta" onclick="window.location.href='https://swordbird2002.github.io/fiz_mat_info_dv/redsquare_fmi.html'">На Главную</button>
+      <button class="hdr-cta" onclick="window.location.href='http://fizmatinfo.ru/redsquare_fmi.html'">На Главную</button>
 
     </div>
   </div>
@@ -860,18 +860,59 @@ function toggleLike() {
 }
 
 /* ── COPY LINK ── */
-function copyLink() {
-  navigator.clipboard.writeText(window.location.href).catch(() => {});
-  showToast('🔗 Ссылка скопирована в буфер');
+function copyText(text) {
+  // 1. Пробуем Clipboard API (только HTTPS + не iframe)
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Скопировано ✓');
+    }).catch(err => {
+      console.warn('Clipboard API failed:', err);
+      fallbackCopy(text);
+    });
+    return;
+  }
+  
+  // 2. Fallback execCommand (работает везде)
+  fallbackCopy(text);
 }
 
-/* ── COPY CODE ── */
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-999999px';
+  ta.style.top = '10px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    const success = document.execCommand('copy');
+    if (success) {
+      showToast('Скопировано ✓');
+    } else {
+      showToast('Выделите текст вручную');
+    }
+  } catch (err) {
+    console.error('Fallback failed:', err);
+    showToast('Ошибка копирования');
+  } finally {
+    document.body.removeChild(ta);
+  }
+}
+
+// Переопределяем твои функции
+function copyLink() {
+  copyText(window.location.href);
+}
+
 function copyCode(btn) {
   const block = btn.closest('.code-label').nextElementSibling;
-  navigator.clipboard.writeText(block.innerText).catch(() => {});
+  const code = block.textContent || block.innerText;
+  copyText(code);
   btn.textContent = 'Скопировано ✓';
   setTimeout(() => btn.textContent = 'Скопировать', 2000);
 }
+
 
 /* ── FAKE VIEWS COUNT ── */
 (function() {
