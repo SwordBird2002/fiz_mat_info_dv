@@ -3016,7 +3016,7 @@ svg, img {
     <h2 class="text-dark" style="font-family: 'Times New Roman', serif;">Справочные данные</h2>
     
     <style>
-        /* Стили специально для имитации бланка ЕГЭ */
+        
         .kim-sheet {
             font-family: 'Times New Roman', serif;
             color: #000;
@@ -3025,8 +3025,8 @@ svg, img {
         .kim-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
             font-size: 0.95rem;
+            min-width: 500px; /* Таблица не будет сжиматься меньше 500px */
         }
         .kim-table th, .kim-table td {
             border: 1px solid #000; /* Черные тонкие рамки */
@@ -3046,158 +3046,202 @@ svg, img {
             margin-bottom: 5px;
             text-decoration: underline;
         }
+
+        /* --- НОВЫЕ СТИЛИ ДЛЯ АДАПТИВНОСТИ --- */
+        
+        /* Контейнер для скролла */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+            margin-bottom: 15px;
+        }
+        
+        /* Убираем нижний отступ у таблицы внутри обертки, чтобы не было двойного */
+        .table-responsive .kim-table {
+            margin-bottom: 0;
+        }
+
+        /* Для двухколоночных таблиц (плотность/теплоемкость) отключаем принудительный скролл */
+        .table-responsive-no-scroll {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .table-responsive-no-scroll .kim-table {
+            min-width: auto; /* Позволяем таблице сжиматься на телефонах */
+            margin-bottom: 0;
+        }
+
+        /* Отступы для колонок при переносе на мобильных */
+        @media (max-width: 767px) {
+            .row > .col-md-6 {
+                margin-bottom: 15px;
+            }
+        }
     </style>
 
     <div class="kim-sheet">
         
         <!-- 1. ДЕСЯТИЧНЫЕ ПРИСТАВКИ -->
         <div class="kim-section-title">1. Десятичные приставки</div>
-        <table class="kim-table">
-            <thead>
-                <tr>
-                    <th>Множитель</th>
-                    <th>Приставка</th>
-                    <th>Обозначение</th>
-                    <th>Множитель</th>
-                    <th>Приставка</th>
-                    <th>Обозначение</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>\( 10^9 \)</td><td>гига</td><td>Г</td>
-                    <td>\( 10^{-1} \)</td><td>деци</td><td>д</td>
-                </tr>
-                <tr>
-                    <td>\( 10^6 \)</td><td>мега</td><td>М</td>
-                    <td>\( 10^{-2} \)</td><td>санти</td><td>с</td>
-                </tr>
-                <tr>
-                    <td>\( 10^3 \)</td><td>кило</td><td>к</td>
-                    <td>\( 10^{-3} \)</td><td>милли</td><td>м</td>
-                </tr>
-                <tr>
-                    <td>\( 10^2 \)</td><td>гекто</td><td>г</td>
-                    <td>\( 10^{-6} \)</td><td>микро</td><td>мк</td>
-                </tr>
-                <tr>
-                    <td>\( 10^1 \)</td><td>дека</td><td>да</td>
-                    <td>\( 10^{-9} \)</td><td>нано</td><td>н</td>
-                </tr>
-                <tr>
-                    <td>—</td><td>—</td><td>—</td>
-                    <td>\( 10^{-12} \)</td><td>пико</td><td>п</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="kim-table">
+                <thead>
+                    <tr>
+                        <th>Множитель</th>
+                        <th>Приставка</th>
+                        <th>Обозначение</th>
+                        <th>Множитель</th>
+                        <th>Приставка</th>
+                        <th>Обозначение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>\( 10^9 \)</td><td>гига</td><td>Г</td>
+                        <td>\( 10^{-1} \)</td><td>деци</td><td>д</td>
+                    </tr>
+                    <tr>
+                        <td>\( 10^6 \)</td><td>мега</td><td>М</td>
+                        <td>\( 10^{-2} \)</td><td>санти</td><td>с</td>
+                    </tr>
+                    <tr>
+                        <td>\( 10^3 \)</td><td>кило</td><td>к</td>
+                        <td>\( 10^{-3} \)</td><td>милли</td><td>м</td>
+                    </tr>
+                    <tr>
+                        <td>\( 10^2 \)</td><td>гекто</td><td>г</td>
+                        <td>\( 10^{-6} \)</td><td>микро</td><td>мк</td>
+                    </tr>
+                    <tr>
+                        <td>\( 10^1 \)</td><td>дека</td><td>да</td>
+                        <td>\( 10^{-9} \)</td><td>нано</td><td>н</td>
+                    </tr>
+                    <tr>
+                        <td>—</td><td>—</td><td>—</td>
+                        <td>\( 10^{-12} \)</td><td>пико</td><td>п</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- 2. ФУНДАМЕНТАЛЬНЫЕ КОНСТАНТЫ -->
         <div class="kim-section-title">2. Константы</div>
-        <table class="kim-table">
-            <tbody>
-                <tr>
-                    <td class="text-left">Число \(\pi\)</td>
-                    <td>\(\pi \approx 3,14\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Ускорение свободного падения (на Земле)</td>
-                    <td>\(g \approx 10 \text{ м/с}^2\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Гравитационная постоянная</td>
-                    <td>\(G \approx 6,7 \cdot 10^{-11} \text{ Н}\cdot\text{м}^2/\text{кг}^2\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Скорость света в вакууме</td>
-                    <td>\(c = 3 \cdot 10^8 \text{ м/с}\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Элементарный электрический заряд</td>
-                    <td>\(e = 1,6 \cdot 10^{-19} \text{ Кл}\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Постоянная Авогадро</td>
-                    <td>\(N_A = 6 \cdot 10^{23} \text{ моль}^{-1}\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Постоянная Больцмана</td>
-                    <td>\(k = 1,38 \cdot 10^{-23} \text{ Дж/К}\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Универсальная газовая постоянная</td>
-                    <td>\(R = 8,31 \text{ Дж}/(\text{моль}\cdot\text{К})\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Постоянная Планка</td>
-                    <td>\(h = 6,6 \cdot 10^{-34} \text{ Дж}\cdot\text{с}\)</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="kim-table">
+                <tbody>
+                    <tr>
+                        <td class="text-left">Число \(\pi\)</td>
+                        <td>\(\pi \approx 3,14\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Ускорение свободного падения (на Земле)</td>
+                        <td>\(g \approx 10 \text{ м/с}^2\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Гравитационная постоянная</td>
+                        <td>\(G \approx 6,7 \cdot 10^{-11} \text{ Н}\cdot\text{м}^2/\text{кг}^2\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Скорость света в вакууме</td>
+                        <td>\(c = 3 \cdot 10^8 \text{ м/с}\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Элементарный электрический заряд</td>
+                        <td>\(e = 1,6 \cdot 10^{-19} \text{ Кл}\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Постоянная Авогадро</td>
+                        <td>\(N_A = 6 \cdot 10^{23} \text{ моль}^{-1}\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Постоянная Больцмана</td>
+                        <td>\(k = 1,38 \cdot 10^{-23} \text{ Дж/К}\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Универсальная газовая постоянная</td>
+                        <td>\(R = 8,31 \text{ Дж}/(\text{моль}\cdot\text{К})\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Постоянная Планка</td>
+                        <td>\(h = 6,6 \cdot 10^{-34} \text{ Дж}\cdot\text{с}\)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- 3. МАССЫ ЧАСТИЦ -->
-        <table class="kim-table">
-            <thead>
-                <tr>
-                    <th>Частица</th>
-                    <th>Масса (кг)</th>
-                    <th>Масса (а.е.м.)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-left">Электрон</td>
-                    <td>\(9,1 \cdot 10^{-31}\)</td>
-                    <td>—</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Протон</td>
-                    <td>\(1,673 \cdot 10^{-27}\)</td>
-                    <td>\(\approx 1,007\)</td>
-                </tr>
-                <tr>
-                    <td class="text-left">Нейтрон</td>
-                    <td>\(1,675 \cdot 10^{-27}\)</td>
-                    <td>\(\approx 1,008\)</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="kim-table">
+                <thead>
+                    <tr>
+                        <th>Частица</th>
+                        <th>Масса (кг)</th>
+                        <th>Масса (а.е.м.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-left">Электрон</td>
+                        <td>\(9,1 \cdot 10^{-31}\)</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Протон</td>
+                        <td>\(1,673 \cdot 10^{-27}\)</td>
+                        <td>\(\approx 1,007\)</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">Нейтрон</td>
+                        <td>\(1,675 \cdot 10^{-27}\)</td>
+                        <td>\(\approx 1,008\)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- 4. ПЛОТНОСТЬ И ТЕПЛОЕМКОСТЬ (СМЕШАННАЯ ТАБЛИЦА) -->
         <div class="row">
             <div class="col-md-6">
                 <div class="kim-section-title">Плотность \( \rho \) (\( \text{кг/м}^3 \))</div>
-                <table class="kim-table">
-                    <tr><td class="text-left">Вода (чистая)</td><td>1000</td></tr>
-                    <tr><td class="text-left">Масло / Керосин</td><td>800</td></tr>
-                    <tr><td class="text-left">Ртуть</td><td>13600</td></tr>
-                    <tr><td class="text-left">Алюминий</td><td>2700</td></tr>
-                    <tr><td class="text-left">Сталь / Железо</td><td>7800</td></tr>
-                    <tr><td class="text-left">Медь</td><td>8900</td></tr>
-                </table>
+                <div class="table-responsive-no-scroll">
+                    <table class="kim-table">
+                        <tr><td class="text-left">Вода (чистая)</td><td>1000</td></tr>
+                        <tr><td class="text-left">Масло / Керосин</td><td>800</td></tr>
+                        <tr><td class="text-left">Ртуть</td><td>13600</td></tr>
+                        <tr><td class="text-left">Алюминий</td><td>2700</td></tr>
+                        <tr><td class="text-left">Сталь / Железо</td><td>7800</td></tr>
+                        <tr><td class="text-left">Медь</td><td>8900</td></tr>
+                    </table>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="kim-section-title">Уд. теплоемкость \( c \) (\( \text{Дж}/(\text{кг}\cdot\text{К}) \))</div>
-                <table class="kim-table">
-                    <tr><td class="text-left">Вода</td><td>4200</td></tr>
-                    <tr><td class="text-left">Лёд</td><td>2100</td></tr>
-                    <tr><td class="text-left">Алюминий</td><td>900</td></tr>
-                    <tr><td class="text-left">Сталь / Железо</td><td>460</td></tr>
-                    <tr><td class="text-left">Медь</td><td>380</td></tr>
-                    <tr><td class="text-left">Свинец</td><td>130</td></tr>
-                </table>
+                <div class="table-responsive-no-scroll">
+                    <table class="kim-table">
+                        <tr><td class="text-left">Вода</td><td>4200</td></tr>
+                        <tr><td class="text-left">Лёд</td><td>2100</td></tr>
+                        <tr><td class="text-left">Алюминий</td><td>900</td></tr>
+                        <tr><td class="text-left">Сталь / Железо</td><td>460</td></tr>
+                        <tr><td class="text-left">Медь</td><td>380</td></tr>
+                        <tr><td class="text-left">Свинец</td><td>130</td></tr>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- 5. МОЛЯРНАЯ МАССА -->
         <div class="kim-section-title">Молярная масса \( M \) (\( \text{кг/моль} \))</div>
-        <table class="kim-table">
-            <tr>
-                <th>Вещество</th><th>Водород (\(H_2\))</th><th>Гелий (\(He\))</th><th>Азот (\(N_2\))</th><th>Кислород (\(O_2\))</th><th>Воздух</th><th>Вода (\(H_2O\))</th>
-            </tr>
-            <tr>
-                <td>\( M \cdot 10^{-3} \)</td><td>2</td><td>4</td><td>28</td><td>32</td><td>29</td><td>18</td>
-            </tr>
-        </table>
+        <div class="table-responsive">
+            <table class="kim-table">
+                <tr>
+                    <th>Вещество</th><th>Водород (\(H_2\))</th><th>Гелий (\(He\))</th><th>Азот (\(N_2\))</th><th>Кислород (\(O_2\))</th><th>Воздух</th><th>Вода (\(H_2O\))</th>
+                </tr>
+                <tr>
+                    <td>\( M \cdot 10^{-3} \)</td><td>2</td><td>4</td><td>28</td><td>32</td><td>29</td><td>18</td>
+                </tr>
+            </table>
+        </div>
         
         <div class="small mt-2">
             * <strong>Нормальные условия (н.у.):</strong> Давление \( 10^5 \text{ Па} \), Температура \( 0^\circ C \) (\( 273 \text{ К} \)).
@@ -3275,15 +3319,7 @@ svg, img {
                 <h5 class="fw-bold text-primary">Количественные</h5>
                 <p class="small text-muted mb-2">"Найдите значение...", "Во сколько раз..."</p>
                 
-                <div class="d-flex align-items-start mb-2">
-                    <span class="badge bg-primary me-2">1</span>
-                    <div class="small"><strong>Подстановка:</strong> Есть формула \( F=ma \). Дано \( m=2, a=3 \). Найти \( F \). <br>\( F = 2 \cdot 3 = 6 \).</div>
-                </div>
-                <div class="d-flex align-items-start">
-                    <span class="badge bg-primary me-2">2</span>
-                    <div class="small"><strong>Отношение:</strong> Дано \( p_2 = 2p_1, V_2 = 3V_1 \). Найти \( T_2/T_1 \).<br>
-                    $$ \frac{p_2 V_2}{T_2} = \frac{p_1 V_1}{T_1} \Rightarrow \frac{T_2}{T_1} = \frac{p_2}{p_1} \cdot \frac{V_2}{V_1} = 2 \cdot 3 = 6 $$</div>
-                </div>
+                
             </div>
         </div>
 
@@ -3293,19 +3329,8 @@ svg, img {
                 <h5 class="fw-bold text-success">Качественные</h5>
                 <p class="small text-muted mb-2">"Как изменится...", "Опишите явление..."</p>
                 
-                <div class="alert alert-white border small mb-2">
-                    <strong>Алгоритм ответа:</strong>
-                    <ol class="mb-0 ps-3">
-                        <li>Назови <strong>физическое явление</strong> (напр. "Электромагнитная индукция").</li>
-                        <li>Напиши <strong>закон/формулу</strong>, связывающую величины.</li>
-                        <li>Сделай <strong>логический вывод</strong> ("Так как ток вырос, то сила Ампера увеличилась...").</li>
-                        <li>Дай <strong>ответ</strong> на вопрос задачи.</li>
-                    </ol>
-                </div>
-                <div class="small fst-italic text-muted">
-                    Пример: "Почему при нагревании давление газа в закрытом сосуде растет?"<br>
-                    Ответ: 1) Изохорный процесс (V=const). 2) Закон Шарля \( p/T = const \). 3) T растет \(\to\) p растет.
-                </div>
+                
+                
             </div>
         </div>
     </div>
