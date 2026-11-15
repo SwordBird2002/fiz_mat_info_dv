@@ -908,52 +908,56 @@ svg, img {
                         </span>    
                 </div>
                 <div class="row mt-4 justify-content-center">
-                    <div class="col-md-8">
-                        <div class="d-flex align-items-center bg-white border rounded p-3">
-                            <svg width="200" height="200" viewBox="0 0 200 200" class="me-4 flex-shrink-0">
-                                <!-- Стакан -->
-                                <line x1="50" y1="20" x2="50" y2="180" stroke="#333" stroke-width="2"/>
-                                <line x1="150" y1="20" x2="150" y2="180" stroke="#333" stroke-width="2"/>
-                                <line x1="50" y1="180" x2="150" y2="180" stroke="#333" stroke-width="2"/>
-                                
-                                <!-- Вода -->
-                                <path d="M 50 60 L 150 60 L 150 180 L 50 180 Z" fill="rgba(13, 110, 253, 0.2)" />
-                                <path d="M 50 60 Q 100 65 150 60" fill="none" stroke="#0d6efd" />
+    <div class="col-md-8">
+        
+            <div class="d-flex flex-column align-items-center bg-white border rounded p-3 text-start">
                 
-                                <!-- Тело (Кубик) -->
-                                <rect x="80" y="80" width="40" height="40" fill="#adb5bd" stroke="#333" />
+                <!-- Убрали me-4, добавили mb-4 (отступ снизу) -->
+                <svg width="200" height="200" viewBox="0 0 200 200" class="mb-4 flex-shrink-0">
+                    <!-- Стакан -->
+                    <line x1="50" y1="20" x2="50" y2="180" stroke="#333" stroke-width="2"/>
+                    <line x1="150" y1="20" x2="150" y2="180" stroke="#333" stroke-width="2"/>
+                    <line x1="50" y1="180" x2="150" y2="180" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- Вода -->
+                    <path d="M 50 60 L 150 60 L 150 180 L 50 180 Z" fill="rgba(13, 110, 253, 0.2)" />
+                    <path d="M 50 60 Q 100 65 150 60" fill="none" stroke="#0d6efd" />
+        
+                    <!-- Тело (Кубик) -->
+                    <rect x="80" y="80" width="40" height="40" fill="#adb5bd" stroke="#333" />
+        
+                    <!-- Векторы сил -->
+                    <!-- Сила Архимеда (Вверх) -->
+                    <line x1="100" y1="80" x2="100" y2="40" stroke="#dc3545" stroke-width="3" marker-end="url(#arrow_red)" />
+                    <text x="125" y="45" fill="#dc3545" font-weight="bold" font-size="14">Fₐ</text>
+                    
+                    <!-- Сила Тяжести (Вниз) -->
+                    <line x1="100" y1="100" x2="100" y2="150" stroke="#333" stroke-width="3" marker-end="url(#arrow_black)" />
+                    <text x="125" y="145" fill="#333" font-weight="bold" font-size="14">mg</text>
+        
+                    <!-- Стрелки (маркеры) -->
+                    <defs>
+                        <marker id="arrow_red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#dc3545" />
+                        </marker>
+                        <marker id="arrow_black" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+                        </marker>
+                    </defs>
+                </svg>
                 
-                                <!-- Векторы сил -->
-                                <!-- Сила Архимеда (Вверх) -->
-                                <line x1="100" y1="80" x2="100" y2="40" stroke="#dc3545" stroke-width="3" marker-end="url(#arrow_red)" />
-                                <text x="125" y="45" fill="#dc3545" font-weight="bold" font-size="14">Fₐ</text>
-                                
-                                <!-- Сила Тяжести (Вниз) -->
-                                <line x1="100" y1="100" x2="100" y2="150" stroke="#333" stroke-width="3" marker-end="url(#arrow_black)" />
-                                <text x="125" y="145" fill="#333" font-weight="bold" font-size="14">mg</text>
-                                
-                                <!-- Стрелки (маркеры) -->
-                                <defs>
-                                    <marker id="arrow_red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-                                        <path d="M0,0 L0,6 L9,3 z" fill="#dc3545" />
-                                    </marker>
-                                    <marker id="arrow_black" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
-                                        <path d="M0,0 L0,6 L9,3 z" fill="#333" />
-                                    </marker>
-                                </defs>
-                            </svg>
-                            
-                            <div>
-                                <h5>Условия плавания тел</h5>
-                                <ul class="list-unstyled mb-0">
-                                    <li class="mb-2"><strong>1. Тонет:</strong> \( mg > F_{\text{А}} \) <br><span class="text-muted small">(\( \rho_{\text{тела}} > \rho_{\text{жид}} \))</span></li>
-                                    <li class="mb-2"><strong>2. Всплывает:</strong> \( mg < F_{\text{А}} \) <br><span class="text-muted small">(\( \rho_{\text{тела}} < \rho_{\text{жид}} \))</span></li>
-                                    <li><strong>3. Плавает:</strong> \( mg = F_{\text{А}} \) <br><span class="text-muted small">Сила тяжести уравновешена силой Архимеда.</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Текст -->
+                <div>
+                    <h5>Условия плавания тел</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><strong>1. Тонет:</strong> \( mg > F_{\text{А}} \) <br><span class="text-muted small">(\( \rho_{\text{тела}} > \rho_{\text{жид}} \))</span></li>
+                        <li class="mb-2"><strong>2. Всплывает:</strong> \( mg < F_{\text{А}} \) <br><span class="text-muted small">(\( \rho_{\text{тела}} < \rho_{\text{жид}} \))</span></li>
+                        <li><strong>3. Плавает:</strong> \( mg = F_{\text{А}} \) <br><span class="text-muted small">Сила тяжести уравновешена силой Архимеда.</span></li>
+                    </ul>
                 </div>
+            </div>
+        </div>
+    </div>
                 <!-- ВИЗУАЛИЗАЦИЯ: РЫЧАГ, ДАВЛЕНИЕ, КРУГ -->
 <div class="row mt-4 g-3">
     
