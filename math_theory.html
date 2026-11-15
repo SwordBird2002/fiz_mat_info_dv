@@ -352,19 +352,19 @@
                     <a class="nav-link" href="#task2">№2 Векторы</a>
                     <a class="nav-link" href="#task3">№3 Стереометрия</a>
                     <a class="nav-link" href="#task4">№4-5 Вероятность</a>
-                    
+                    <a class="nav-link" href="#task6">№6 Статистика</a>
                     <div class="nav-header">Уравнения и Функции</div>
-                    <a class="nav-link" href="#task6">№6 Уравнения</a>
-                    <a class="nav-link" href="#task7">№7 Выражения</a>
-                    <a class="nav-link" href="#task8">№8 Производная (Анализ)</a>
-                    <a class="nav-link" href="#task9">№9 Формулы</a>
-                    <a class="nav-link" href="#task10">№10 Текстовая задача</a>
-                    <a class="nav-link" href="#task11">№11 Графики функций</a>
-                    <a class="nav-link" href="#task12">№12 Исследование</a>
+                    <a class="nav-link" href="#task7">№7 Уравнения</a>
+                    <a class="nav-link" href="#task8">№8 Выражения</a>
+                    <a class="nav-link" href="#task9">№9 Производная (Анализ)</a>
+                    <a class="nav-link" href="#task10">№10 Формулы</a>
+                    <a class="nav-link" href="#task11">№11 Текстовая задача</a>
+                    <a class="nav-link" href="#task12">№12 Графики функций</a>
+                    <a class="nav-link" href="#task13">№13 Финансы</a>
                     
                     <div class="nav-header">Вторая часть</div>
-                    <a class="nav-link" href="#task13">№13 Уравнение</a>
-                    <a class="nav-link" href="#task16">№16 Финансы</a>
+                    <a class="nav-link" href="#task14">№14 Уравнение</a>
+                    
                     <a class="nav-link" href="#task18">№18 Параметры</a>
                 </nav>
             </div>
@@ -861,10 +861,37 @@
 <!-- Скрипт для работы вкладок (если Bootstrap JS не подключен отдельно, он нужен) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            
             <!-- №6 УРАВНЕНИЯ -->
             <div id="task6" class="content-card card-algebra">
-                <h2>№6. Уравнения</h2>
+                <h2>№6. Статистика</h2>
+                <div class="formula-box">
+                    
+                    <div class="formula-row"><strong>Математическое ожидание:</strong> \( E(X) = \sum\limits_{i=1}^{n} x_i \cdot p_i \), где \( x_i \) — значение случайной величины, \( p_i \) — его вероятность, \( \sum p_i = 1 \)</div>
+                      <table style="border-collapse: collapse; margin: 8px 0 12px; width: auto; table-layout: auto;">
+                        <tr>
+                            <th style="border: 1px solid #c9c9c9; padding: 6px 12px; background: #f2f2f2; text-align: center;">\( x_i \)</th>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( x_1 \)</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( x_2 \)</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( x_3 \)</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">...</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( x_n \)</td>
+                        </tr>
+                        <tr>
+                            <th style="border: 1px solid #c9c9c9; padding: 6px 12px; background: #f2f2f2; text-align: center;">\( p_i \)</th>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( p_1 \)</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( p_2 \)</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( p_3 \)</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">...</td>
+                            <td style="border: 1px solid #c9c9c9; padding: 6px 12px; text-align: center;">\( p_n \)</td>
+                        </tr>
+                    </table>
+                    <div class="formula-row"><strong>Дисперсия:</strong> \( D(X) = E(X^2) - \big(E(X)\big)^2  \)</div>
+                    <div class="formula-row"><strong>Стандартное отклонение:</strong> \( \sigma(X) = \sqrt{D(X)}  \)</div>
+                </div>
+            </div>
+            <!-- №6 УРАВНЕНИЯ -->
+            <div id="task7" class="content-card card-algebra">
+                <h2>№7. Уравнения</h2>
                 <div class="formula-box">
                     <div class="formula-row"><strong>Показательные:</strong> \( a^{f(x)} = a^{g(x)} \Rightarrow f(x) = g(x) \)</div>
                     <div class="formula-row"><strong>Логарифмические:</strong> \( \log_a f(x) = b \Rightarrow f(x) = a^b \) (Проверять ОДЗ: \( f(x)>0 \))</div>
@@ -873,8 +900,8 @@
             </div>
 
             <!-- №7 ВЫРАЖЕНИЯ -->
-            <div id="task7" class="content-card card-algebra">
-                <h2>№7. Выражения (Степени и Логарифмы)</h2>
+            <div id="task8" class="content-card card-algebra">
+                <h2>№8. Выражения (Степени и Логарифмы)</h2>
                 <div class="formula-box">
                     <div class="formula-row">$$ a^x \cdot a^y = a^{x+y}, \quad (a^x)^y = a^{xy} $$</div>
                     <div class="formula-row">$$ \log_a b^n = n \log_a b, \quad \log_{a^k} b = \frac{1}{k} \log_a b $$</div>
@@ -884,8 +911,8 @@
             </div>
 
             <!-- №8 ПРОИЗВОДНАЯ (ГРАФИКА) -->
-            <div id="task8" class="content-card card-analysis">
-                <h2>№8. Производная: Графический анализ</h2>
+            <div id="task9" class="content-card card-analysis">
+                <h2>№9. Производная: Графический анализ</h2>
                 <p>Ключевое правило: <strong>Знак производной определяет поведение функции.</strong></p>
                 
                 <div class="row">
@@ -1022,8 +1049,8 @@
             </div>
 
             <!-- №9 ФОРМУЛЫ -->
-            <div id="task9" class="content-card card-algebra">
-                <h2>№9. Вычисления по формулам</h2>
+            <div id="task10" class="content-card card-algebra">
+                <h2>№10. Вычисления по формулам</h2>
                 <p>Задача на подстановку чисел в физическую формулу. Главные правила:</p>
                 <ul>
                     <li>Внимательно смотрите на <strong>единицы измерения</strong> (км/ч или м/с?).</li>
@@ -1033,8 +1060,8 @@
             </div>
 
             <!-- №10 ТЕКСТОВАЯ ЗАДАЧА -->
-            <div id="task10" class="content-card card-algebra">
-                <h2>№10. Текстовые задачи</h2>
+            <div id="task11" class="content-card card-algebra">
+                <h2>№11. Текстовые задачи</h2>
                 <div class="formula-box">
                     <div class="formula-row"><strong>Движение:</strong> \( S = v \cdot t \)</div>
                     <div class="formula-row"><strong>Работа:</strong> \( A = P \cdot t \) (или \( 1 = (1/t_1 + 1/t_2) \cdot t_{\text{общ}} \))</div>
@@ -1048,8 +1075,8 @@
             </div>
 
             <!-- №11 ГРАФИКИ ФУНКЦИЙ -->
-            <div id="task11" class="content-card card-algebra">
-                <h2>№11. Чтение графиков</h2>
+            <div id="task12" class="content-card card-algebra">
+                <h2>№12. Чтение графиков</h2>
                 <div class="formula-box">
                     <div class="formula-row"><strong>Прямая:</strong> \( y = kx + b \). \(k\) — тангенс угла наклона, \(b\) — точка пересечения с осью Y.</div>
                     <div class="formula-row"><strong>Парабола:</strong> \( x_{\text{верш}} = \frac{-b}{2a} \). Если \( a>0 \), ветви вверх.</div>
@@ -1171,7 +1198,7 @@
 
             <!-- №12 ИССЛЕДОВАНИЕ ФУНКЦИИ -->
             <div id="task12" class="content-card card-analysis">
-                <h2>№12. Исследование функции</h2>
+                <h2 style="color: #9f9f9f;">Исследование функции [2026] (Заменено в 2027)</h2>
                 <div class="formula-box">
                     <div class="formula-row">\( (uv)' = u'v + uv' \) (Произведение)</div>
                     <div class="formula-row">\( (\frac{u}{v})' = \frac{u'v - uv'}{v^2} \) (Частное)</div>
@@ -1247,10 +1274,18 @@
                     <strong>Лайфхак для №12:</strong> Если просят найти <strong>значение функции</strong> (Y) и в формуле есть \( e^x, \ln x, \pi \), то ответ должен быть целым. Часто это возможно, только если показатель степени равен 0 или аргумент логарифма равен 1. Попробуйте подставить такой X (например, \( x=0 \) для \( e^{2x} \)).
                 </div>
             </div>
-
-            <!-- №13 ТРИГОНОМЕТРИЯ -->
             <div id="task13" class="content-card card-hard">
-                <h2>№13. Тригонометрия (Часть 2)</h2>
+                <h2>№13. Финансы</h2>
+                <div class="formula-box">
+                    <div class="formula-row"><strong>Аннуитет:</strong> Долг уменьшается по закону геометрической прогрессии. Платеж \( X \) постоянный.</div>
+                    <div class="formula-row">Формула долга: \( S_{new} = S_{old} \cdot k - X \), где \( k = 1 + r/100 \).</div>
+                    <div class="formula-row"><strong>Дифференцированный:</strong> Долг уменьшается равномерно на \( S/n \).</div>
+                    <div class="formula-row">Переплата = Сумма процентов на остаток долга.</div>
+                </div>
+            </div>
+            <!-- №13 ТРИГОНОМЕТРИЯ -->
+            <div id="task14" class="content-card card-hard">
+                <h2>№14. Тригонометрия (Часть 2)</h2>
                 <div class="formula-box">
                     <div class="formula-row">$$ \sin 2x = 2\sin x \cos x $$</div>
                     <div class="formula-row">$$ \cos 2x = \cos^2 x - \sin^2 x = 2\cos^2 x - 1 $$</div>
@@ -1260,16 +1295,7 @@
                 </div>
             </div>
 
-            <!-- №16 ФИНАНСЫ -->
-            <div id="task16" class="content-card card-hard">
-                <h2>№16. Финансы</h2>
-                <div class="formula-box">
-                    <div class="formula-row"><strong>Аннуитет:</strong> Долг уменьшается по закону геометрической прогрессии. Платеж \( X \) постоянный.</div>
-                    <div class="formula-row">Формула долга: \( S_{new} = S_{old} \cdot k - X \), где \( k = 1 + r/100 \).</div>
-                    <div class="formula-row"><strong>Дифференцированный:</strong> Долг уменьшается равномерно на \( S/n \).</div>
-                    <div class="formula-row">Переплата = Сумма процентов на остаток долга.</div>
-                </div>
-            </div>
+            
 
             <!-- №18 ПАРАМЕТРЫ -->
             <div id="task18" class="content-card card-hard">
